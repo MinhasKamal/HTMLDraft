@@ -201,10 +201,10 @@
 
     <div id="left-panel">
         <div id="toolbar">
-            <button id="theme-btn" class="toolbar-btn" title="Toggle Theme">Theme: 🌙</button>
-            <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap">Wrap: Off →</button>
-            <button id="console-btn" class="toolbar-btn" title="Toggle Console View">Console: Off 💻</button>
-            <button id="format-btn" class="toolbar-btn" title="Format & Indent Code">Format 🧹</button>
+            <button id="theme-btn" class="toolbar-btn" title="Toggle Theme">🌙</button>
+            <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap">➡</button>
+            <button id="console-btn" class="toolbar-btn" title="Toggle Console View">☮</button>
+            <button id="format-btn" class="toolbar-btn" title="Format & Indent Code">Format 🪄</button>
             <button id="run-btn" class="toolbar-btn" title="Run Code">Run ▶</button>
         </div>
         <div id="editor-container">
@@ -255,6 +255,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify-html.min.js"></script>
 
     <script>
+        const consoleOutput = document.getElementById("console-output");
+        
         // --- 1. INITIALIZE EDITOR ---
         const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
             mode: "htmlmixed",
@@ -267,6 +269,8 @@
 
         // --- 2. RUN CODE & CONSOLE OVERRIDE ---
         function updateOutput() {
+            consoleOutput.innerHTML = "";
+            
             const userCode = editor.getValue();
             const iframe = document.getElementById("output-frame");
             const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -338,7 +342,7 @@
             isConsoleOpen = !isConsoleOpen;
             miniConsole.style.display = isConsoleOpen ? "flex" : "none";
             hDivider.style.display = isConsoleOpen ? "flex" : "none";
-            consoleBtn.innerText = isConsoleOpen ? "Console: On 💻" : "Console: Off 💻";
+            consoleBtn.innerText = isConsoleOpen ? "💻" : "☮";
             //consoleBtn.style.backgroundColor = isConsoleOpen ? "#4CAF50" : "";
             //consoleBtn.style.borderColor = isConsoleOpen ? "#45a049" : "";
         });
@@ -426,7 +430,7 @@
         wrapBtn.addEventListener("click", () => {
             isWrapped = !isWrapped;
             editor.setOption("lineWrapping", isWrapped);
-            wrapBtn.innerText = isWrapped ? "Wrap: On ↵" : "Wrap: Off →";
+            wrapBtn.innerText = isWrapped ? "↩" : "➡";
         });
 
         // --- 8. THEME TOGGLE ---
@@ -435,7 +439,7 @@
         themeBtn.addEventListener("click", () => {
             isDark = !isDark;
             editor.setOption("theme", isDark ? "monokai" : "default");
-            themeBtn.innerText = isDark ? "Theme: 🌙" : "Theme: ☀️";
+            themeBtn.innerText = isDark ? "🌙" : "☀️";
             if (isDark) {
                 document.body.classList.remove("light-theme");
                 document.body.style.backgroundColor = "#272822";
