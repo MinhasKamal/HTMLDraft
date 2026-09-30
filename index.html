@@ -273,8 +273,14 @@
             consoleOutput.innerHTML = "";
             
             const userCode = editor.getValue();
-            const iframe = document.getElementById("output-frame");
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            
+            // Completely destroy the old iframe and create a new one to wipe JS memory
+            const oldIframe = document.getElementById("output-frame");
+            const newIframe = document.createElement("iframe");
+            newIframe.id = "output-frame";
+            oldIframe.parentNode.replaceChild(newIframe, oldIframe);
+            
+            const iframeDoc = newIframe.contentDocument || newIframe.contentWindow.document;
             
             const consoleInterceptor = `
                 <script>
@@ -343,14 +349,11 @@
             miniConsole.style.display = isConsoleOpen ? "flex" : "none";
             hDivider.style.display = isConsoleOpen ? "flex" : "none";
             consoleBtn.innerHTML = isConsoleOpen ? '<i class="fas fa-laptop-code"></i>' : '<i class="fas fa-laptop"></i>';
-            //consoleBtn.style.backgroundColor = isConsoleOpen ? "#4CAF50" : "";
-            //consoleBtn.style.borderColor = isConsoleOpen ? "#45a049" : "";
         });
 
         // --- 5. RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
         const vDivider = document.getElementById("divider");
         const leftPanel = document.getElementById("left-panel");
-        const iframe = document.getElementById("output-frame");
         
         let isVDragging = false;
         let isHDragging = false;
@@ -359,14 +362,14 @@
         vDivider.addEventListener("mousedown", (e) => {
             isVDragging = true;
             vDivider.classList.add("dragging");
-            iframe.style.pointerEvents = "none"; 
+            document.getElementById("output-frame").style.pointerEvents = "none"; 
         });
 
         // Horizontal Resize (Up/Down)
         hDivider.addEventListener("mousedown", (e) => {
             isHDragging = true;
             hDivider.classList.add("dragging");
-            iframe.style.pointerEvents = "none";
+            document.getElementById("output-frame").style.pointerEvents = "none";
         });
 
         document.addEventListener("mousemove", (e) => {
@@ -392,7 +395,7 @@
                 isHDragging = false;
                 vDivider.classList.remove("dragging");
                 hDivider.classList.remove("dragging");
-                iframe.style.pointerEvents = "auto";
+                document.getElementById("output-frame").style.pointerEvents = "auto";
             }
         });
 
