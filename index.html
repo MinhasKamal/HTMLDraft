@@ -8,7 +8,8 @@
     <!-- CodeMirror Core CSS and Monokai Theme -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         body {
             margin: 0;
@@ -201,11 +202,11 @@
 
     <div id="left-panel">
         <div id="toolbar">
-            <button id="theme-btn" class="toolbar-btn" title="Toggle Theme">🌙</button>
-            <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap">➡</button>
-            <button id="console-btn" class="toolbar-btn" title="Toggle Console View">☮</button>
-            <button id="format-btn" class="toolbar-btn" title="Format & Indent Code">Format 🪄</button>
-            <button id="run-btn" class="toolbar-btn" title="Run Code">Run ▶</button>
+            <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+            <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button>
+            <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button>
+            <button id="format-btn" class="toolbar-btn" title="Format & Indent Code">Format <i class="fas fa-broom"></i></button>
+            <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
         </div>
         <div id="editor-container">
             <textarea id="code-editor">
@@ -240,7 +241,7 @@
         <div id="mini-console">
             <div id="console-header">
                 <span>Console Output</span>
-                <button id="clear-console-btn" class="toolbar-btn">Clear 🚫</button>
+                <button id="clear-console-btn" class="toolbar-btn">Clear <i class="fas fa-trash"></i></button>
             </div>
             <div id="console-output"></div>
         </div>
@@ -308,7 +309,6 @@
 
         document.getElementById("run-btn").addEventListener("click", updateOutput);
 
-        const consoleOutput = document.getElementById("console-output");
         window.addEventListener("message", (event) => {
             if (event.data && event.data.source === "mini-console") {
                 const msgDiv = document.createElement("div");
@@ -342,7 +342,7 @@
             isConsoleOpen = !isConsoleOpen;
             miniConsole.style.display = isConsoleOpen ? "flex" : "none";
             hDivider.style.display = isConsoleOpen ? "flex" : "none";
-            consoleBtn.innerText = isConsoleOpen ? "💻" : "☮";
+            consoleBtn.innerHTML = isConsoleOpen ? '<i class="fas fa-laptop-code"></i>' : '<i class="fas fa-laptop"></i>';
             //consoleBtn.style.backgroundColor = isConsoleOpen ? "#4CAF50" : "";
             //consoleBtn.style.borderColor = isConsoleOpen ? "#45a049" : "";
         });
@@ -430,7 +430,7 @@
         wrapBtn.addEventListener("click", () => {
             isWrapped = !isWrapped;
             editor.setOption("lineWrapping", isWrapped);
-            wrapBtn.innerText = isWrapped ? "↩" : "➡";
+            wrapBtn.innerHTML = isWrapped ? '<i class="fas fa-arrows-left-right-to-line"></i>' : '<i class="fas fa-arrow-right-long"></i>';
         });
 
         // --- 8. THEME TOGGLE ---
@@ -439,7 +439,7 @@
         themeBtn.addEventListener("click", () => {
             isDark = !isDark;
             editor.setOption("theme", isDark ? "monokai" : "default");
-            themeBtn.innerText = isDark ? "🌙" : "☀️";
+            themeBtn.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
             if (isDark) {
                 document.body.classList.remove("light-theme");
                 document.body.style.backgroundColor = "#272822";
