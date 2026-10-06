@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Editor</title>
+    <title>HTML Draft</title>
     
     <!-- CodeMirror Core CSS and Monokai Theme -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
@@ -248,7 +248,7 @@
 	
     <div id="left-panel">
         <div id="toolbar">
-            <div id="title" title="by Minhas Kamal"><a href="https://github.com/MinhasKamal/HTMLEditor" target="_blank">HTML Editor</a></div>
+            <div id="title" title="by Minhas Kamal"><a href="https://github.com/MinhasKamal/HTMLDraft" target="_blank">HTML Draft</a></div>
             <div id="button-group">
                 <button id="format-btn" class="toolbar-btn" title="Format & Indent Code">Format <i class="fas fa-broom"></i></button>
                 <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
@@ -259,10 +259,11 @@
         </div>
         <div id="editor-container" style="position: relative;">
             
-            <!-- Floating Search Box -->
+            <!-- Floating Search Box with Stats -->
             <div id="search-box">
                 <input type="text" id="search-input" placeholder="Find text...">
-                <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px;">
+                <span id="search-stats" style="color:#aaa; font-size:12px; margin: 0 4px; white-space:nowrap;"></span>
+                <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px; margin-right:4px;">
                     <input type="checkbox" id="match-case-cb"> Match Case
                 </label>
                 <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
@@ -272,24 +273,24 @@
             
             <textarea id="code-editor">
 <div class="container">
-    <h2>Hello from Minhas!</h2>
-    <p>You can wite, format, and debug your HTML, CSS, and JS code here.</p>
-    <div class="footer"><a href="https://github.com/MinhasKamal/HTMLEditor" target="_blank">HTML Editor</a> by <a href="https://minhaskamal.github.io" target="_blank">Minhas Kamal</a></div>
+  <h2>Hello from Minhas!</h2>
+  <p>You can wite, format, and debug your HTML, CSS, and JS code here.</p>
+  <div class="footer"><a href="https://github.com/MinhasKamal/HTMLDraft" target="_blank">HTML Draft</a> by <a href="https://minhaskamal.github.io" target="_blank">Minhas Kamal</a></div>
 </div>
 
 <style>
-    body { font-family: sans-serif; background-color: #FFFDDF; }
-    .container { text-align: center; margin-top: 50px; }
-    h2 { color: #A44A4A; }
-    p { color: #9B9B7B; }
-    a { color: inherit; } 
-    .footer { color: #BBBB9B; font-size: 0.8em; position: fixed; bottom: 5px; width: 100%;}
+  body { font-family: sans-serif; background-color: #FFFDDF; }
+  .container { text-align: center; margin-top: 50px; }
+  h2 { color: #A44A4A; }
+  p { color: #9B9B7B; }
+  a { color: inherit; } 
+  .footer { color: #BBBB9B; font-size: 0.8em; position: fixed; bottom: 5px; width: 100%;}
 </style>
 
 <script>
-    console.log("You can see...");
-    console.warn("...your logs...");
-    console.error("...here.");
+  console.log("You can see...");
+  console.warn("...your logs...");
+  console.error("...here.");
 </script>
             </textarea>
         </div>
@@ -347,24 +348,36 @@
             cm.setSelection({line: from + 1, ch: 0}, {line: to + 1, ch: null});
         }
 
-        // --- 2. SEARCH & HIGHLIGHT LOGIC ---
+        // --- 2. SEARCH, HIGHLIGHT & STATS LOGIC ---
         const searchBox = document.getElementById("search-box");
         const searchInput = document.getElementById("search-input");
         const matchCaseCb = document.getElementById("match-case-cb");
+        const searchStats = document.getElementById("search-stats");
+        
         let searchCursor = null;
         let searchMarks = [];
+        let allMatches = []; // Keeps track of match locations for numbering
 
         function clearSearchMarks() {
             searchMarks.forEach(m => m.clear());
             searchMarks = [];
+            allMatches = [];
+            searchStats.textContent = "";
         }
 
         function highlightAllMatches(query, caseFold) {
             clearSearchMarks();
             if (!query) return;
+            
             let cursor = editor.getSearchCursor(query, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: caseFold});
             while (cursor.findNext()) {
                 searchMarks.push(editor.markText(cursor.from(), cursor.to(), {className: "search-highlight"}));
+                allMatches.push(cursor.from());
+            }
+            if(allMatches.length > 0) {
+                searchStats.textContent = `0 of ${allMatches.length}`;
+            } else {
+                searchStats.textContent = `0 of 0`;
             }
         }
 
@@ -374,8 +387,8 @@
             const selection = cm.getSelection();
             if (selection) {
                 searchInput.value = selection; 
-                doSearch(false, true);
             }
+            doSearch(false, true);
         }
 
         function doSearch(reverse = false, forceNew = false) {
@@ -387,9 +400,8 @@
                 return;
             }
             
-            highlightAllMatches(query, caseFold);
-            
             if (forceNew || !searchCursor || searchCursor.query !== query || searchCursor.caseFold !== caseFold) {
+                highlightAllMatches(query, caseFold);
                 searchCursor = editor.getSearchCursor(query, editor.getCursor(), {caseFold: caseFold});
                 searchCursor.query = query;
                 searchCursor.caseFold = caseFold;
@@ -407,6 +419,15 @@
             if (found) {
                 editor.setSelection(searchCursor.from(), searchCursor.to());
                 editor.scrollIntoView({from: searchCursor.from(), to: searchCursor.to()}, 50);
+                
+                // Update stats counter (find which index the cursor is currently on)
+                const currentPos = searchCursor.from();
+                let index = allMatches.findIndex(p => p.line === currentPos.line && p.ch === currentPos.ch);
+                if (index !== -1) {
+                    searchStats.textContent = `${index + 1} of ${allMatches.length}`;
+                }
+            } else {
+                searchStats.textContent = `0 of 0`;
             }
         }
 
@@ -414,9 +435,13 @@
         matchCaseCb.addEventListener("change", () => doSearch(false, true));
 
         searchInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") doSearch(e.shiftKey); 
+            if (e.key === "Enter") {
+                e.preventDefault();
+                doSearch(e.shiftKey); 
+            }
             if (e.key === "Escape") closeSearch();
         });
+        
         document.getElementById("search-next").addEventListener("click", () => doSearch(false));
         document.getElementById("search-prev").addEventListener("click", () => doSearch(true));
         document.getElementById("search-close").addEventListener("click", closeSearch);
@@ -428,27 +453,39 @@
         }
 
         // --- 3. INITIALIZE EDITOR & AUTO-DETECT INDENT ---
-        const savedCode = localStorage.getItem("my-html-editor-code");
+        const savedCode = localStorage.getItem("HTMLDraft_Code");
         let initialCode = "";
         
-        if (savedCode !== null && savedCode.trim() !== "") {
+        if (savedCode !== null && savedCode.trim().length > 3) {
             initialCode = savedCode;
             document.getElementById("code-editor").value = initialCode;
         } else {
             initialCode = document.getElementById("code-editor").value;
         }
 
+        // Smarter Indent Sniffing: finds the smallest indentation level in the file
         function detectIndent(code) {
             const lines = code.split('\n');
-            let tabs = 0, spaces2 = 0, spaces4 = 0;
+            let minSpaces = Infinity;
+            let usesTabs = false;
+            
             for (let line of lines) {
-                if (line.startsWith('\t')) tabs++;
-                else if (line.startsWith('    ')) spaces4++;
-                else if (line.startsWith('  ') && !line.startsWith('   ')) spaces2++;
+                if (line.match(/^\t/)) {
+                    usesTabs = true;
+                    break;
+                }
+                const match = line.match(/^(\s+)\S/); // Captures leading spaces before text
+                if (match) {
+                    const spaces = match[1].length;
+                    if (spaces > 0 && spaces < minSpaces) {
+                        minSpaces = spaces;
+                    }
+                }
             }
-            if (tabs > spaces4 && tabs > spaces2) return { useTabs: true, size: 4 };
-            if (spaces2 > spaces4) return { useTabs: false, size: 2 };
-            return { useTabs: false, size: 4 };
+            
+            if (usesTabs) return { useTabs: true, size: 4 };
+            if (minSpaces === 2) return { useTabs: false, size: 2 };
+            return { useTabs: false, size: 4 }; // Default fallback
         }
         
         const indentConfig = detectIndent(initialCode);
@@ -473,17 +510,15 @@
         });
 
         editor.on("change", () => {
-            localStorage.setItem("my-html-editor-code", editor.getValue());
+            localStorage.setItem("HTMLDraft_Code", editor.getValue());
         });
 
 
         // --- 4. RUN CODE & CONSOLE OVERRIDE ---
         function updateOutput() {
             consoleOutput.innerHTML = "";
-            
             const userCode = editor.getValue();
             
-            // Completely destroy the old iframe and create a new one to wipe JS memory
             const oldIframe = document.getElementById("output-frame");
             const newIframe = document.createElement("iframe");
             newIframe.id = "output-frame";
@@ -531,6 +566,10 @@
                 msgDiv.textContent = `> ${event.data.payload}`;
                 consoleOutput.appendChild(msgDiv);
                 consoleOutput.scrollTop = consoleOutput.scrollHeight;
+				
+                if (event.data.level === "error" && document.getElementById("mini-console").style.display !== "flex") {
+                    document.getElementById("console-btn").click();
+                }
             }
         });
 
@@ -543,6 +582,7 @@
         // --- 5. FORMAT CODE ---
         document.getElementById("format-btn").addEventListener("click", () => {
             const unformattedCode = editor.getValue();
+            // Automatically uses the detected indentation size for beautification
             const formattedCode = html_beautify(unformattedCode, { indent_size: indentConfig.size, wrap_line_length: 0, preserve_newlines: true });
             editor.setValue(formattedCode);
         });
@@ -567,14 +607,12 @@
         let isVDragging = false;
         let isHDragging = false;
 
-        // Vertical Resize (Left/Right)
         vDivider.addEventListener("mousedown", (e) => {
             isVDragging = true;
             vDivider.classList.add("dragging");
             document.getElementById("output-frame").style.pointerEvents = "none"; 
         });
 
-        // Horizontal Resize (Up/Down)
         hDivider.addEventListener("mousedown", (e) => {
             isHDragging = true;
             hDivider.classList.add("dragging");
@@ -582,12 +620,10 @@
         });
 
         document.addEventListener("mousemove", (e) => {
-            // Handle X-axis dragging
             if (isVDragging) {
                 let newWidth = (e.clientX / window.innerWidth) * 100;
                 if (newWidth > 10 && newWidth < 90) leftPanel.style.flex = `0 0 ${newWidth}%`;
             }
-            // Handle Y-axis dragging
             if (isHDragging) {
                 let newHeight = window.innerHeight - e.clientY;
                 if (newHeight > 50 && newHeight < window.innerHeight - 50) {
