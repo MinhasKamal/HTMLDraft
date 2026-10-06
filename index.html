@@ -196,6 +196,32 @@
         .log-msg.error { color: #ff6b6b; }
         .log-msg.warn { color: #feca57; }
 
+        /* Search Box Styling */
+        #search-box {
+            display: none; /* Hidden until Ctrl+F is pressed */
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 100;
+            background: #1e1e1e;
+            padding: 6px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            border: 1px solid #444;
+            align-items: center;
+            gap: 5px;
+        }
+        #search-input {
+            padding: 5px 8px;
+            border: 1px solid #555;
+            background: #2d2d2d;
+            color: #fff;
+            border-radius: 4px;
+            outline: none;
+            font-family: inherit;
+        }
+        #search-input:focus { border-color: #4CAF50; }
+
         /* Light Theme Adjustments */
         body.light-theme #divider, body.light-theme #horizontal-divider { background-color: #ccc; }
         body.light-theme #toolbar { background-color: #f5f5f5; border-bottom: 1px solid #ddd; }
@@ -208,6 +234,9 @@
         body.light-theme #clear-console-btn { color: #333; border-color: #999; }
         body.light-theme #clear-console-btn:hover { background: #d0d0d0; }
         body.light-theme .log-msg { border-bottom: 1px solid #eee; }
+        
+        body.light-theme #search-box { background: #f5f5f5; border-color: #ddd; }
+        body.light-theme #search-input { background: #fff; color: #333; border-color: #ccc; }
         
         a { color: inherit; text-decoration: inherit; }
     </style>
@@ -227,7 +256,15 @@
                 <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
             </div>
         </div>
-        <div id="editor-container">
+        <div id="editor-container" style="position: relative;">
+            <!-- Floating Search Box -->
+            <div id="search-box">
+                <input type="text" id="search-input" placeholder="Find text...">
+                <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
+                <button id="search-next" class="toolbar-btn" title="Next"><i class="fas fa-chevron-down"></i></button>
+                <button id="search-close" class="toolbar-btn" title="Close"><i class="fas fa-times"></i></button>
+            </div>
+            
             <textarea id="code-editor">
 <div class="container">
     <h2>Hello, World!</h2>
@@ -278,11 +315,83 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify-html.min.js"></script>
+    
+    <!-- CodeMirror Addons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/comment/comment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/searchcursor.min.js"></script>
 
     <script>
         const consoleOutput = document.getElementById("console-output");
         
-        // --- 1. INITIALIZE EDITOR ---
+        // --- 1. CUSTOM KEYBOARD SHORTCUT LOGIC ---
+        function moveLineUp(cm) {
+            const from = cm.getCursor("from").line;
+            const to = cm.getCursor("to").line;
+            if (from === 0) return;
+            const lineAbove = cm.getLine(from - 1);
+            const text = cm.getRange({line: from, ch: 0}, {line: to + 1, ch: 0});
+            cm.replaceRange(text + lineAbove + "\n", {line: from - 1, ch: 0}, {line: to + 1, ch: 0});
+            cm.setSelection({line: from - 1, ch: 0}, {line: to - 1, ch: null});
+        }
+
+        function moveLineDown(cm) {
+            const from = cm.getCursor("from").line;
+            const to = cm.getCursor("to").line;
+            if (to >= cm.lineCount() - 1) return;
+            const lineBelow = cm.getLine(to + 1);
+            const text = cm.getRange({line: from, ch: 0}, {line: to + 1, ch: 0});
+            cm.replaceRange(lineBelow + "\n" + text, {line: from, ch: 0}, {line: to + 2, ch: 0});
+            cm.setSelection({line: from + 1, ch: 0}, {line: to + 1, ch: null});
+        }
+
+        const searchBox = document.getElementById("search-box");
+        const searchInput = document.getElementById("search-input");
+        let searchCursor = null;
+
+        function openSearch(cm) {
+            searchBox.style.display = "flex";
+            searchInput.focus();
+            const selection = cm.getSelection();
+            if (selection) searchInput.value = selection; 
+        }
+
+        function doSearch(reverse = false) {
+            const query = searchInput.value;
+            if (!query) return;
+            
+            if (!searchCursor || searchCursor.query !== query) {
+                searchCursor = editor.getSearchCursor(query, editor.getCursor());
+                searchCursor.query = query;
+            }
+
+            let found = searchCursor.find(reverse);
+            if (!found) {
+                const resetPos = reverse ? CodeMirror.Pos(editor.lastLine()) : CodeMirror.Pos(editor.firstLine(), 0);
+                searchCursor = editor.getSearchCursor(query, resetPos);
+                searchCursor.query = query;
+                found = searchCursor.find(reverse);
+            }
+
+            if (found) {
+                editor.setSelection(searchCursor.from(), searchCursor.to());
+                editor.scrollIntoView({from: searchCursor.from(), to: searchCursor.to()}, 50);
+            }
+        }
+
+        function closeSearch() {
+            searchBox.style.display = "none";
+            editor.focus();
+        }
+
+        searchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") doSearch(e.shiftKey); 
+            if (e.key === "Escape") closeSearch();
+        });
+        document.getElementById("search-next").addEventListener("click", () => doSearch(false));
+        document.getElementById("search-prev").addEventListener("click", () => doSearch(true));
+        document.getElementById("search-close").addEventListener("click", closeSearch);
+
+        // --- 2. INITIALIZE EDITOR ---
         const savedCode = localStorage.getItem("my-html-editor-code");
         
         if (savedCode !== null && savedCode.trim() !== "") {
@@ -295,7 +404,16 @@
             lineNumbers: true,
             lineWrapping: false,
             indentUnit: 4,
-            tabSize: 4
+            tabSize: 4,
+            extraKeys: {
+                "Shift-Tab": "indentLess",               // Unindent
+                "Ctrl-/": "toggleComment",               // Comment toggle (Windows/Linux)
+                "Cmd-/": "toggleComment",                // Comment toggle (Mac)
+                "Ctrl-F": openSearch,                    // Find (Windows/Linux)
+                "Cmd-F": openSearch,                     // Find (Mac)
+                "Alt-Up": moveLineUp,                    // Move line up
+                "Alt-Down": moveLineDown                 // Move line down
+            }
         });
 
         editor.on("change", () => {
@@ -303,7 +421,7 @@
         });
 
 
-        // --- 2. RUN CODE & CONSOLE OVERRIDE ---
+        // --- 3. RUN CODE & CONSOLE OVERRIDE ---
         function updateOutput() {
             consoleOutput.innerHTML = "";
             
@@ -366,14 +484,14 @@
 
         updateOutput();
 
-        // --- 3. FORMAT CODE ---
+        // --- 4. FORMAT CODE ---
         document.getElementById("format-btn").addEventListener("click", () => {
             const unformattedCode = editor.getValue();
             const formattedCode = html_beautify(unformattedCode, { indent_size: 4, wrap_line_length: 0, preserve_newlines: true });
             editor.setValue(formattedCode);
         });
 
-        // --- 4. CONSOLE TOGGLE ---
+        // --- 5. CONSOLE TOGGLE ---
         const consoleBtn = document.getElementById("console-btn");
         const miniConsole = document.getElementById("mini-console");
         const hDivider = document.getElementById("horizontal-divider");
@@ -386,7 +504,7 @@
             consoleBtn.innerHTML = isConsoleOpen ? '<i class="fas fa-laptop-code"></i>' : '<i class="fas fa-laptop"></i>';
         });
 
-        // --- 5. RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
+        // --- 6. RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
         const vDivider = document.getElementById("divider");
         const leftPanel = document.getElementById("left-panel");
         
@@ -434,7 +552,7 @@
             }
         });
 
-        // --- 6. VIEW TOGGLE ---
+        // --- 7. VIEW TOGGLE ---
         const viewBtn = document.getElementById("view-btn");
         const rightPanel = document.getElementById("right-panel");
         let viewState = 0; 
@@ -462,7 +580,7 @@
             setTimeout(() => editor.refresh(), 10);
         });
 
-        // --- 7. WRAP TOGGLE ---
+        // --- 8. WRAP TOGGLE ---
         const wrapBtn = document.getElementById("wrap-btn");
         let isWrapped = false;
         wrapBtn.addEventListener("click", () => {
@@ -471,7 +589,7 @@
             wrapBtn.innerHTML = isWrapped ? '<i class="fas fa-arrows-left-right-to-line"></i>' : '<i class="fas fa-arrow-right-long"></i>';
         });
 
-        // --- 8. THEME TOGGLE ---
+        // --- 9. THEME TOGGLE ---
         const themeBtn = document.getElementById("theme-btn");
         let isDark = true;
         themeBtn.addEventListener("click", () => {
