@@ -221,7 +221,8 @@
             font-family: inherit;
         }
         #search-input:focus { border-color: #4CAF50; }
-        .search-highlight { background-color: rgba(255, 255, 0, 0.4); }
+        .search-highlight { background-color: rgba(220, 250, 80, 0.3); }
+        .CodeMirror-selected { background-color: rgba(255, 180, 0, 0.8) !important; }
 
         /* Light Theme Adjustments */
         body.light-theme #divider, body.light-theme #horizontal-divider { background-color: #ccc; }
@@ -264,7 +265,7 @@
                 <input type="text" id="search-input" placeholder="Find text...">
                 <span id="search-stats" style="color:#aaa; font-size:12px; margin: 0 4px; white-space:nowrap;"></span>
                 <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px; margin-right:4px;">
-                    <input type="checkbox" id="match-case-cb"> Match Case
+                    <input type="checkbox" id="match-case-cb"> <div style="color:#aaa;">Match Case</div>
                 </label>
                 <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
                 <button id="search-next" class="toolbar-btn" title="Next"><i class="fas fa-chevron-down"></i></button>
