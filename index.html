@@ -262,10 +262,10 @@
             
             <!-- Floating Search Box with Stats -->
             <div id="search-box">
-                <input type="text" id="search-input" placeholder="Find text...">
-                <span id="search-stats" style="color:#aaa; font-size:12px; margin: 0 4px; white-space:nowrap;"></span>
-                <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px; margin-right:4px;">
-                    <input type="checkbox" id="match-case-cb"> <div style="color:#aaa;">Match Case</div>
+                <input type="text" id="search-input" placeholder="Find...">
+                <span id="search-stats" style="color:#aaa; font-size:12px; margin: 0 4px; white-space:nowrap;">0/0</span>
+                <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px; margin-right:4px;" title="Match Case">
+                    <input type="checkbox" id="match-case-cb"> <div style="color:#aaa; font-weight:bold;">Aa</div>
                 </label>
                 <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
                 <button id="search-next" class="toolbar-btn" title="Next"><i class="fas fa-chevron-down"></i></button>
@@ -376,9 +376,9 @@
                 allMatches.push(cursor.from());
             }
             if(allMatches.length > 0) {
-                searchStats.textContent = `0 of ${allMatches.length}`;
+                searchStats.textContent = `0/${allMatches.length}`;
             } else {
-                searchStats.textContent = `0 of 0`;
+                searchStats.textContent = `0/0`;
             }
         }
 
@@ -403,7 +403,7 @@
             
             if (forceNew || !searchCursor || searchCursor.query !== query || searchCursor.caseFold !== caseFold) {
                 highlightAllMatches(query, caseFold);
-                searchCursor = editor.getSearchCursor(query, editor.getCursor(), {caseFold: caseFold});
+                searchCursor = editor.getSearchCursor(query, editor.getCursor("from"), {caseFold: caseFold});
                 searchCursor.query = query;
                 searchCursor.caseFold = caseFold;
             }
@@ -425,10 +425,10 @@
                 const currentPos = searchCursor.from();
                 let index = allMatches.findIndex(p => p.line === currentPos.line && p.ch === currentPos.ch);
                 if (index !== -1) {
-                    searchStats.textContent = `${index + 1} of ${allMatches.length}`;
+                    searchStats.textContent = `${index + 1}/${allMatches.length}`;
                 }
             } else {
-                searchStats.textContent = `0 of 0`;
+                searchStats.textContent = `0/0`;
             }
         }
 
