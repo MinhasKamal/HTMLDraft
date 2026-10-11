@@ -1,9 +1,10 @@
 # HTML Draft
-### Edit, Format, View, and Test HTML, CSS, and JavaScript Code
+### Write, Format, and Test HTML, CSS, and JavaScript Code
 
 <!-- <img width="1914" height="949" alt="image" src="https://github.com/user-attachments/assets/30600b6e-029d-4967-96a0-9b6abe8fd019" /> -->
 <!-- <img width="1913" height="941" alt="image" src="https://github.com/user-attachments/assets/e7a7015d-9867-482e-aafd-6c81eff604d8" /> -->
-<img width="1920" height="953" alt="image" src="https://github.com/user-attachments/assets/c2968b4f-b0c6-4a19-a1ca-2bf08a34e10c" />
+<!-- <img width="1920" height="953" alt="image" src="https://github.com/user-attachments/assets/c2968b4f-b0c6-4a19-a1ca-2bf08a34e10c" /> -->
+<img width="1920" height="967" alt="image" src="https://github.com/user-attachments/assets/c72c3192-21b8-48a6-91eb-20bc9f7f3741" />
 
 
 MIT License (initially coded by LLMs then refined by Minhas Kamal)
