@@ -274,8 +274,8 @@
             
             <textarea id="code-editor">
 <div class="container">
-  <h2>Hello from Minhas!</h2>
-  <p>You can wite, format, and debug your HTML, CSS, and JS code here.</p>
+  <h2>Hello, world!</h2>
+  <p>You can write, format, and test your HTML, CSS, and JS code here.</p>
   <p>As there are no servers, your data is saved in the local storage and never leaves your device. So, it is private, safe, and free for all kinds of usage.</p>
   <div class="footer"><a href="https://github.com/MinhasKamal/HTMLDraft" target="_blank">HTML Draft</a> by <a href="https://minhaskamal.github.io" target="_blank">Minhas Kamal</a></div>
 </div>
@@ -390,6 +390,7 @@
             if (selection) {
                 searchInput.value = selection; 
             }
+			searchInput.select();
             doSearch(false, true);
         }
 
@@ -486,8 +487,8 @@
             }
             
             if (usesTabs) return { useTabs: true, size: 4 };
-            if (minSpaces === 2) return { useTabs: false, size: 2 };
-            return { useTabs: false, size: 4 }; // Default fallback
+            if (minSpaces === 4) return { useTabs: false, size: 4 };
+            return { useTabs: false, size: 2 }; // Default fallback
         }
         
         const indentConfig = detectIndent(initialCode);
@@ -501,7 +502,17 @@
             tabSize: indentConfig.size,
             indentWithTabs: indentConfig.useTabs,
             extraKeys: {
-                "Shift-Tab": "indentLess",               
+                "Tab": function(cm) {
+                    if (cm.somethingSelected()) {
+                        cm.indentSelection("add");
+                    } else {
+                        cm.replaceSelection(indentConfig.useTabs ? "\t" : " ".repeat(indentConfig.size));
+                    }
+                },
+                // "Shift-Tab": "indentLess",               
+                "Shift-Tab": function(cm) {
+                    cm.indentSelection("subtract");
+                },
                 "Ctrl-/": "toggleComment",               
                 "Cmd-/": "toggleComment",                
                 "Ctrl-F": openSearch,                    
@@ -514,7 +525,6 @@
         editor.on("change", () => {
             localStorage.setItem("HTMLDraft_Code", editor.getValue());
         });
-
 
         // --- 4. RUN CODE & CONSOLE OVERRIDE ---
         function updateOutput() {
