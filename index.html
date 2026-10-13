@@ -311,6 +311,7 @@
             <div id="console-header">
                 <span>Console Output</span>
                 <button id="clear-console-btn" class="toolbar-btn">Clear <i class="fas fa-trash"></i></button>
+                <button id="hide-console-btn" class="toolbar-btn">Hide <i class="fas fa-minus-circle"></i></button>
             </div>
             <div id="console-output"></div>
         </div>
@@ -601,6 +602,7 @@
 
         // --- 6. CONSOLE TOGGLE ---
         const consoleBtn = document.getElementById("console-btn");
+		const hideConsoleBtn = document.getElementById("hide-console-btn");
         const miniConsole = document.getElementById("mini-console");
         const hDivider = document.getElementById("horizontal-divider");
         let isConsoleOpen = false;
@@ -610,6 +612,13 @@
             miniConsole.style.display = isConsoleOpen ? "flex" : "none";
             hDivider.style.display = isConsoleOpen ? "flex" : "none";
             consoleBtn.innerHTML = isConsoleOpen ? '<i class="fas fa-laptop-code"></i>' : '<i class="fas fa-laptop"></i>';
+        });
+
+		hideConsoleBtn.addEventListener("click", () => {
+            isConsoleOpen = false;
+            miniConsole.style.display = "none";
+            hDivider.style.display = "none";
+            consoleBtn.innerHTML = '<i class="fas fa-laptop"></i>';
         });
 
         // --- 7. RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
