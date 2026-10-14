@@ -177,14 +177,14 @@
             font-size: 12px;
         }
 
-        #clear-console-btn {
+        #clear-console-btn, #hide-console-btn {
             background: transparent;
             border: 1px solid #777;
             color: #ddd;
             padding: 2px 8px;
             font-size: 11px;
         }
-        #clear-console-btn:hover { background: #444; }
+        #clear-console-btn:hover, #hide-console-btn:hover { background: #444; }
 
         #console-output {
             flex: 1;
@@ -310,8 +310,10 @@
         <div id="mini-console">
             <div id="console-header">
                 <span>Console Output</span>
-                <button id="clear-console-btn" class="toolbar-btn">Clear <i class="fas fa-trash"></i></button>
-                <button id="hide-console-btn" class="toolbar-btn">Hide <i class="fas fa-minus-circle"></i></button>
+				<div>
+	                <button id="clear-console-btn" class="toolbar-btn">Clear <i class="fas fa-trash"></i></button>
+	                <button id="hide-console-btn" class="toolbar-btn">Hide <i class="fas fa-minus-circle"></i></button>
+				</div>
             </div>
             <div id="console-output"></div>
         </div>
