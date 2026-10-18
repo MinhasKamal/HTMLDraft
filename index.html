@@ -138,6 +138,29 @@
             border: none;
             background: #fff;
         }
+		
+		/* Browser Title Bar Styling */
+        #browser-title-bar {
+            display: none; /* Hidden by default */
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 8px 15px;
+            font-size: 13px;
+            align-items: center;
+            border-bottom: 1px solid #444;
+            gap: 8px;
+        }
+        #browser-favicon {
+            width: 14px;
+            height: 14px;
+            display: none; /* Hidden until a custom favicon is found */
+        }        
+        body.light-theme #browser-title-bar {
+            background-color: #e0e0e0;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+        }
+
 
         /* Horizontal Draggable Divider (Console Resizer) */
         #horizontal-divider {
@@ -241,6 +264,45 @@
         body.light-theme #search-input { background: #fff; color: #333; border-color: #ccc; }
         
         a { color: inherit; text-decoration: inherit; }
+		
+		/* Auto-highlight selected text matches */
+        .auto-highlight { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+        body.light-theme .auto-highlight { background-color: rgba(0, 0, 0, 0.15); }
+
+		/* --- WHITESPACE VISIBILITY --- */
+        /* Spaces: A tiny gray dot repeating every 1 character width */
+        .show-whitespaces .cm-space {
+            background-image: radial-gradient(circle at center, rgba(136, 136, 136, 0.5) 1px, transparent 1.5px);
+            background-size: 1ch 100%;
+        }
+
+        /* Tabs: A right arrow */
+        .show-whitespaces .cm-tab {
+            position: relative;
+        }
+        .show-whitespaces .cm-tab::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: rgba(136, 136, 136, 0.5);
+            pointer-events: none;
+            /* FIX: Inherit the exact line height of the code */
+            line-height: inherit;
+        }
+
+        /* Newlines: A down-left arrow at the end of every line */
+        .show-whitespaces .CodeMirror-line::after {
+            content: "↵";
+            color: rgba(136, 136, 136, 0.5);
+            padding-left: 2px;
+            pointer-events: none;
+            line-height: 0;
+            font-size: 0.9em;
+            vertical-align: baseline;
+        }
+
     </style>
 </head>
 <body>
@@ -254,8 +316,10 @@
                 <button id="format-btn" class="toolbar-btn" title="Format & Indent Code">Format <i class="fas fa-broom"></i></button>
                 <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
                 <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button>
-                <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button>
-                <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
+                <button id="whitespace-btn" class="toolbar-btn" title="Show Whitespaces"><i class="fas fa-paragraph"></i></button>
+				<button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button>
+                <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button>
+				<button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
             </div>
         </div>
         <div id="editor-container" style="position: relative;">
@@ -301,6 +365,13 @@
     <div id="divider"></div>
 
     <div id="right-panel">
+		<!-- Browser Title Bar -->
+        <div id="browser-title-bar">
+            <i id="default-favicon" class="fas fa-globe"></i>
+            <img id="browser-favicon" src="" alt="favicon">
+            <span id="browser-title-text">Untitled</span>
+        </div>
+		
         <iframe id="output-frame"></iframe>
         
         <!-- Horizontal Resizer -->
@@ -332,7 +403,7 @@
     <script>
         const consoleOutput = document.getElementById("console-output");
         
-        // --- 1. CUSTOM KEYBOARD SHORTCUT LOGIC ---
+        // --- CUSTOM KEYBOARD SHORTCUT LOGIC ---
         function moveLineUp(cm) {
             const from = cm.getCursor("from").line;
             const to = cm.getCursor("to").line;
@@ -353,7 +424,7 @@
             cm.setSelection({line: from + 1, ch: 0}, {line: to + 1, ch: null});
         }
 
-        // --- 2. SEARCH, HIGHLIGHT & STATS LOGIC ---
+        // --- SEARCH, HIGHLIGHT & STATS LOGIC ---
         const searchBox = document.getElementById("search-box");
         const searchInput = document.getElementById("search-input");
         const matchCaseCb = document.getElementById("match-case-cb");
@@ -458,7 +529,7 @@
             editor.focus();
         }
 
-        // --- 3. INITIALIZE EDITOR & AUTO-DETECT INDENT ---
+        // --- INITIALIZE EDITOR & AUTO-DETECT INDENT ---
         const savedCode = localStorage.getItem("HTMLDraft_Code");
         let initialCode = "";
         
@@ -529,7 +600,7 @@
             localStorage.setItem("HTMLDraft_Code", editor.getValue());
         });
 
-        // --- 4. RUN CODE & CONSOLE OVERRIDE ---
+        // --- RUN CODE & CONSOLE OVERRIDE ---
         function updateOutput() {
             consoleOutput.innerHTML = "";
             const userCode = editor.getValue();
@@ -570,6 +641,24 @@
             iframeDoc.open();
             iframeDoc.write(consoleInterceptor + userCode);
             iframeDoc.close();
+			
+			// Extract Title and Favicon for the Browser Title Bar
+            const titleText = iframeDoc.title || "Untitled";
+            document.getElementById("browser-title-text").textContent = titleText;
+
+            // Look for <link rel="icon"> or <link rel="shortcut icon">
+            const faviconLink = iframeDoc.querySelector("link[rel~='icon']");
+            const faviconImg = document.getElementById("browser-favicon");
+            const defaultFavicon = document.getElementById("default-favicon");
+
+            if (faviconLink && faviconLink.getAttribute("href")) {
+                faviconImg.src = faviconLink.getAttribute("href");
+                faviconImg.style.display = "block";
+                defaultFavicon.style.display = "none";
+            } else {
+                faviconImg.style.display = "none";
+                defaultFavicon.style.display = "block";
+            }
         }
 
         document.getElementById("run-btn").addEventListener("click", updateOutput);
@@ -594,7 +683,7 @@
 
         updateOutput();
 
-        // --- 5. FORMAT CODE ---
+        // --- FORMAT CODE ---
         document.getElementById("format-btn").addEventListener("click", () => {
             const unformattedCode = editor.getValue();
             // Automatically uses the detected indentation size for beautification
@@ -602,7 +691,7 @@
             editor.setValue(formattedCode);
         });
 
-        // --- 6. CONSOLE TOGGLE ---
+        // --- CONSOLE TOGGLE ---
         const consoleBtn = document.getElementById("console-btn");
 		const hideConsoleBtn = document.getElementById("hide-console-btn");
         const miniConsole = document.getElementById("mini-console");
@@ -622,8 +711,20 @@
             hDivider.style.display = "none";
             consoleBtn.innerHTML = '<i class="fas fa-laptop"></i>';
         });
+		
+		// --- TITLE BAR TOGGLE LOGIC ---
+        const titleToggleBtn = document.getElementById("title-toggle-btn");
+        const browserTitleBar = document.getElementById("browser-title-bar");
+        let isTitleBarOpen = false;
 
-        // --- 7. RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
+        titleToggleBtn.addEventListener("click", () => {
+            isTitleBarOpen = !isTitleBarOpen;
+            browserTitleBar.style.display = isTitleBarOpen ? "flex" : "none";
+			titleToggleBtn.innerHTML = isTitleBarOpen ? '<i class="fas fa-window-maximize"></i>' : '<i class="fas fa-window-maximize fa-rotate-180"></i>';
+        });
+
+
+        // --- RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
         const vDivider = document.getElementById("divider");
         const leftPanel = document.getElementById("left-panel");
         
@@ -665,7 +766,7 @@
             }
         });
 
-        // --- 8. VIEW TOGGLE ---
+        // --- VIEW TOGGLE ---
         const viewBtn = document.getElementById("view-btn");
         const rightPanel = document.getElementById("right-panel");
         let viewState = 0; 
@@ -693,7 +794,7 @@
             setTimeout(() => editor.refresh(), 10);
         });
 
-        // --- 9. WRAP TOGGLE ---
+        // --- WRAP TOGGLE ---
         const wrapBtn = document.getElementById("wrap-btn");
         let isWrapped = false;
         wrapBtn.addEventListener("click", () => {
@@ -701,8 +802,41 @@
             editor.setOption("lineWrapping", isWrapped);
             wrapBtn.innerHTML = isWrapped ? '<i class="fas fa-arrows-left-right-to-line"></i>' : '<i class="fas fa-arrow-right-long"></i>';
         });
+		
 
-        // --- 10. THEME TOGGLE ---
+		// --- WHITESPACE TOGGLE LOGIC ---
+        const whitespaceBtn = document.getElementById("whitespace-btn");
+        let isWhitespaceVisible = false;
+
+        // CodeMirror Overlay to specifically target space characters
+        const whitespaceOverlay = {
+            token: function(stream) {
+                if (stream.eatWhile(/ /)) return "space";
+                stream.next();
+                return null;
+            }
+        };
+
+        whitespaceBtn.addEventListener("click", () => {
+            isWhitespaceVisible = !isWhitespaceVisible;
+            
+            if (isWhitespaceVisible) {
+                // Apply the overlay and CSS class
+                editor.addOverlay(whitespaceOverlay);
+                editor.getWrapperElement().classList.add("show-whitespaces");
+                whitespaceBtn.style.backgroundColor = "#555"; 
+                whitespaceBtn.style.borderColor = "#777";
+            } else {
+                // Remove the overlay and CSS class
+                editor.removeOverlay(whitespaceOverlay);
+                editor.getWrapperElement().classList.remove("show-whitespaces");
+                whitespaceBtn.style.backgroundColor = ""; 
+                whitespaceBtn.style.borderColor = "";
+            }
+        });
+
+		
+        // --- THEME TOGGLE ---
         const themeBtn = document.getElementById("theme-btn");
         let isDark = true;
         themeBtn.addEventListener("click", () => {
@@ -717,6 +851,36 @@
                 document.body.style.backgroundColor = "#e0e0e0";
             }
         });
+		
+		
+		// --- AUTO-HIGHLIGHT SELECTION LOGIC ---
+        let autoSelectionMarks = [];
+        
+        editor.on("cursorActivity", () => {
+            // 1. Clear any previous auto-highlights
+            autoSelectionMarks.forEach(m => m.clear());
+            autoSelectionMarks = [];
+            
+            // 2. Skip if the Search Box is open (to prevent conflicting highlights)
+            if (document.getElementById("search-box").style.display === "flex") return;
+
+            // 3. Get the text the user just highlighted
+            const selectedText = editor.getSelection();
+            
+            // 4. Only highlight if they selected 2 or more characters (and ignore multi-line selections)
+            if (selectedText.length >= 2 && !selectedText.includes('\n')) {
+                
+                // Search the document for exact matches (case-sensitive)
+                let cursor = editor.getSearchCursor(selectedText, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: false});
+                
+                while (cursor.findNext()) {
+                    // Apply the CSS class to every match found
+                    let mark = editor.markText(cursor.from(), cursor.to(), {className: "auto-highlight"});
+                    autoSelectionMarks.push(mark);
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
