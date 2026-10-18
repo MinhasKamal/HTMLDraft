@@ -33,7 +33,7 @@
             background: rgba(30, 30, 30, 0.9);
             color: #fff;
             border: 1px solid #555;
-            padding: 6px 12px;
+            padding: 4px 8px;
             cursor: pointer;
             border-radius: 6px;
             font-size: 13px;
@@ -49,7 +49,7 @@
             color: #409050;
             font-size: 18px;
             font-weight: bold;
-            padding: 2px 12px;
+            padding: 2px 6px;
         }
 
         /* Buttons General Styling */
@@ -57,7 +57,7 @@
             background-color: #444;
             color: #fff;
             border: 1px solid #555;
-            padding: 6px 12px;
+            padding: 4px 8px;
             cursor: pointer;
             border-radius: 4px;
             font-size: 13px;
@@ -81,7 +81,7 @@
 
         #toolbar {
             background-color: #1e1e1e;
-            padding: 10px 15px 10px 50px;
+            padding: 10px 15px 10px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -93,8 +93,18 @@
             display: flex;
             justify-content: flex-end;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 4px;
             transition: background-color 0.3s;
+        }
+      
+        #indent-label{
+            font-size: 13px;
+            color: #888;
+            padding: 6px 0px;
+        }
+  
+        #indent-input{
+            margin-right: 0px;
         }
 
         /* --- TOOLBAR INPUT --- */
@@ -225,14 +235,14 @@
             font-size: 12px;
         }
 
-        .console-btn {
+        .console-bar-btn {
             background: transparent;
             border: 1px solid #777;
             color: #ddd;
             padding: 2px 8px;
             font-size: 11px;
         }
-        .console-btn:hover { background: #444; }
+        .console-bar-btn:hover { background: #444; }
 
         #console-output {
             flex: 1;
@@ -281,8 +291,8 @@
 
         body.light-theme #mini-console { background-color: #f9f9f9; color: #333; }
         body.light-theme #console-header { background: #e0e0e0; border-bottom: 1px solid #ccc; color: #333; }
-        body.light-theme #console-btn { color: #333; border-color: #999; }
-        body.light-theme #console-btn:hover { background: #d0d0d0; }
+        body.light-theme #console-bar-btn { color: #333; border-color: #999; }
+        body.light-theme #console-bar-btn:hover { background: #d0d0d0; }
         body.light-theme .log-msg { border-bottom: 1px solid #eee; }
 
         body.light-theme #search-box { background: #f5f5f5; border-color: #ddd; }
@@ -377,15 +387,15 @@
         <div id="toolbar">
             <div id="title" title="by Minhas Kamal"><a href="https://github.com/MinhasKamal/HTMLDraft" target="_blank">HTML Draft</a></div>
             <div id="button-group">
-                <span class="toolbar-label" style="color: #888; font-size: 12px; margin-right: 2px;">Indent:</span>
-                <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" />
+                <span id="indent-label"><i class="fas fa-indent"></i></span>
+                <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" /> |
                 <button id="format-btn" class="toolbar-btn" title="Apply Proper Line Breaks, Spacing, and Indentation"><i class="fas fa-broom"></i></button>
-                <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button>
+                <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button> |
                 <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
                 <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button>
-                <button id="whitespace-btn" class="toolbar-btn" title="Show Whitespaces"><i class="fas fa-paragraph"></i></button>
+                <button id="whitespace-btn" class="toolbar-btn" title="Toggle Show Whitespaces"><i class="fas fa-eraser"></i></button> |
                 <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button>
-                <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button>
+                <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button> |
                 <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
             </div>
         </div>
@@ -450,8 +460,8 @@
             <div id="console-header">
                 <span>Console Output</span>
                 <div>
-                    <button id="clear-console-btn" class="toolbar-btn console-btn">Clear <i class="fas fa-trash"></i></button>
-                    <button id="hide-console-btn" class="toolbar-btn console-btn">Hide <i class="fas fa-minus-circle"></i></button>
+                    <button id="clear-console-btn" class="toolbar-btn console-bar-btn">Clear <i class="fas fa-trash"></i></button>
+                    <button id="hide-console-btn" class="toolbar-btn console-bar-btn">Hide <i class="fas fa-minus-circle"></i></button>
                 </div>
             </div>
             <div id="console-output"></div>
@@ -628,7 +638,7 @@
         }
 
         // --- INITIALIZE EDITOR & AUTO-DETECT INDENT ---
-        const savedCode = "";//localStorage.getItem("HTMLDraft_Code");
+        const savedCode = localStorage.getItem("HTMLDraft_Code");
         let initialCode = "";
 
         if (savedCode !== null && savedCode.trim().length > 3) {
@@ -1017,14 +1027,12 @@
                 // Apply the overlay and CSS class
                 editor.addOverlay(whitespaceOverlay);
                 editor.getWrapperElement().classList.add("show-whitespaces");
-                whitespaceBtn.style.backgroundColor = "#555";
-                whitespaceBtn.style.borderColor = "#777";
+                whitespaceBtn.innerHTML = '<i class="fas fa-paragraph"></i>';
             } else {
                 // Remove the overlay and CSS class
                 editor.removeOverlay(whitespaceOverlay);
                 editor.getWrapperElement().classList.remove("show-whitespaces");
-                whitespaceBtn.style.backgroundColor = "";
-                whitespaceBtn.style.borderColor = "";
+                whitespaceBtn.innerHTML = '<i class="fas fa-eraser"></i>';
             }
         });
 
