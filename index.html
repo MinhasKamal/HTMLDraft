@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +51,7 @@
             font-weight: bold;
             padding: 2px 12px;
         }
-        
+
         /* Buttons General Styling */
         .toolbar-btn {
             background-color: #444;
@@ -66,7 +67,7 @@
         }
 
         .toolbar-btn:hover { background-color: #555; border-color: #777; }
-        
+
         #run-btn { background-color: #409050; border-color: #45a049; }
         #run-btn:hover { background-color: #4FAF5F; }
 
@@ -80,20 +81,43 @@
 
         #toolbar {
             background-color: #1e1e1e;
-            padding: 10px 15px 10px 50px; 
+            padding: 10px 15px 10px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 8px;
         }
-        
+
         #button-group {
             display: flex;
             justify-content: flex-end;
             flex-wrap: wrap;
             gap: 8px;
             transition: background-color 0.3s;
+        }
+
+        /* --- TOOLBAR INPUT --- */
+        .toolbar-input {
+            width: 35px;
+            background-color: #333;
+            color: #ccc;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 4px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 13px;
+            margin-right: 8px;
+            outline: none;
+        }
+        .toolbar-input:focus {
+            border-color: #4CAF50;
+        }
+        body.light-theme .toolbar-input {
+            background-color: #fff;
+            color: #333;
+            border-color: #ccc;
         }
 
         /* Vertical Draggable Divider */
@@ -125,7 +149,7 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .CodeMirror {
             flex: 1;
             height: 100% !important;
@@ -139,8 +163,8 @@
             border: none;
             background: #fff;
         }
-		
-		/* Browser Title Bar Styling */
+
+        /* Browser Title Bar Styling */
         #browser-title-bar {
             display: none; /* Hidden by default */
             background-color: #2d2d2d;
@@ -155,7 +179,7 @@
             width: 14px;
             height: 14px;
             display: none; /* Hidden until a custom favicon is found */
-        }        
+        }
         body.light-theme #browser-title-bar {
             background-color: #e0e0e0;
             color: #333;
@@ -254,23 +278,23 @@
         body.light-theme .toolbar-btn { background-color: #e0e0e0; color: #333; border-color: #ccc; }
         body.light-theme .toolbar-btn:hover { background-color: #d0d0d0; }
         body.light-theme #run-btn { background-color: #4CAF50; color: white; border-color: #4CAF50; }
-        
+
         body.light-theme #mini-console { background-color: #f9f9f9; color: #333; }
         body.light-theme #console-header { background: #e0e0e0; border-bottom: 1px solid #ccc; color: #333; }
         body.light-theme #console-btn { color: #333; border-color: #999; }
         body.light-theme #console-btn:hover { background: #d0d0d0; }
         body.light-theme .log-msg { border-bottom: 1px solid #eee; }
-        
+
         body.light-theme #search-box { background: #f5f5f5; border-color: #ddd; }
         body.light-theme #search-input { background: #fff; color: #333; border-color: #ccc; }
-        
+
         a { color: inherit; text-decoration: inherit; }
-		
-		/* Auto-highlight selected text matches */
+
+        /* Auto-highlight selected text matches */
         .auto-highlight { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
         body.light-theme .auto-highlight { background-color: rgba(0, 0, 0, 0.15); }
 
-		/* --- WHITESPACE VISIBILITY --- */
+        /* --- WHITESPACE VISIBILITY --- */
         /* Spaces: A tiny gray dot repeating every 1 character width */
         .show-whitespaces .cm-space {
             background-image: radial-gradient(circle at center, rgba(128, 128, 128, 0.3) 1px, transparent 1.5px);
@@ -303,7 +327,7 @@
             font-size: 0.9em;
             vertical-align: baseline;
         }
-      
+
         /* --- TOAST NOTIFICATIONS --- */
         #toast-container {
             position: fixed;
@@ -344,6 +368,7 @@
 
     </style>
 </head>
+
 <body>
 
     <button id="view-btn" title="Toggle View Layout">◫</button>
@@ -352,6 +377,8 @@
         <div id="toolbar">
             <div id="title" title="by Minhas Kamal"><a href="https://github.com/MinhasKamal/HTMLDraft" target="_blank">HTML Draft</a></div>
             <div id="button-group">
+                <span class="toolbar-label" style="color: #888; font-size: 12px; margin-right: 2px;">Indent:</span>
+                <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" />
                 <button id="format-btn" class="toolbar-btn" title="Apply Proper Line Breaks, Spacing, and Indentation"><i class="fas fa-broom"></i></button>
                 <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button>
                 <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
@@ -363,19 +390,20 @@
             </div>
         </div>
         <div id="editor-container" style="position: relative;">
-            
+
             <!-- Floating Search Box with Stats -->
             <div id="search-box">
                 <input type="text" id="search-input" placeholder="Find...">
                 <span id="search-stats" style="color:#aaa; font-size:12px; margin: 0 4px; white-space:nowrap;">0/0</span>
                 <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px; margin-right:4px;" title="Match Case">
-                    <input type="checkbox" id="match-case-cb"> <div style="color:#aaa; font-weight:bold;">Aa</div>
+                    <input type="checkbox" id="match-case-cb">
+                    <div style="color:#aaa; font-weight:bold;">Aa</div>
                 </label>
                 <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
                 <button id="search-next" class="toolbar-btn" title="Next"><i class="fas fa-chevron-down"></i></button>
                 <button id="search-close" class="toolbar-btn" title="Close"><i class="fas fa-times"></i></button>
             </div>
-            
+
             <textarea id="code-editor">
 <div class="container">
   <h2>Hello, world!</h2>
@@ -389,7 +417,7 @@
   .container { text-align: center; margin-top: 50px; }
   h2 { color: #A44A4A; }
   p { color: #9B9B7B; }
-  a { color: inherit; } 
+  a { color: inherit; }
   .footer { color: #BBBB9B; font-size: 0.8em; position: fixed; bottom: 5px; width: 100%;}
 </style>
 
@@ -405,15 +433,15 @@
     <div id="divider"></div>
 
     <div id="right-panel">
-		<!-- Browser Title Bar -->
+        <!-- Browser Title Bar -->
         <div id="browser-title-bar">
             <i id="default-favicon" class="fas fa-globe"></i>
             <img id="browser-favicon" src="" alt="favicon">
             <span id="browser-title-text">Untitled</span>
         </div>
-		
+
         <iframe id="output-frame"></iframe>
-        
+
         <!-- Horizontal Resizer -->
         <div id="horizontal-divider"></div>
 
@@ -421,10 +449,10 @@
         <div id="mini-console">
             <div id="console-header">
                 <span>Console Output</span>
-				<div>
-	                <button id="clear-console-btn" class="toolbar-btn console-btn">Clear <i class="fas fa-trash"></i></button>
-	                <button id="hide-console-btn" class="toolbar-btn console-btn">Hide <i class="fas fa-minus-circle"></i></button>
-				</div>
+                <div>
+                    <button id="clear-console-btn" class="toolbar-btn console-btn">Clear <i class="fas fa-trash"></i></button>
+                    <button id="hide-console-btn" class="toolbar-btn console-btn">Hide <i class="fas fa-minus-circle"></i></button>
+                </div>
             </div>
             <div id="console-output"></div>
         </div>
@@ -450,7 +478,7 @@
 
     <script>
         const consoleOutput = document.getElementById("console-output");
-        
+
         // --- CUSTOM KEYBOARD SHORTCUT LOGIC ---
         function moveLineUp(cm) {
             const from = cm.getCursor("from").line;
@@ -471,26 +499,26 @@
             cm.replaceRange(lineBelow + "\n" + text, {line: from, ch: 0}, {line: to + 2, ch: 0});
             cm.setSelection({line: from + 1, ch: 0}, {line: to + 1, ch: null});
         }
-      
+
         // --- TOAST NOTIFICATION UTILITY ---
         function showToast(message) {
             const container = document.getElementById("toast-container");
             const toast = document.createElement("div");
             toast.className = "toast";
             toast.textContent = message;
-            
+
             container.appendChild(toast);
-            
+
             // Trigger the slide-in animation
             requestAnimationFrame(() => {
                 toast.classList.add("show");
             });
-            
+
             // Remove the toast after 3 seconds
             setTimeout(() => {
                 toast.classList.remove("show");
                 // Wait for the fade-out animation to finish before removing from DOM
-                setTimeout(() => toast.remove(), 300); 
+                setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
 
@@ -499,7 +527,7 @@
         const searchInput = document.getElementById("search-input");
         const matchCaseCb = document.getElementById("match-case-cb");
         const searchStats = document.getElementById("search-stats");
-        
+
         let searchCursor = null;
         let searchMarks = [];
         let allMatches = []; // Keeps track of match locations for numbering
@@ -514,7 +542,7 @@
         function highlightAllMatches(query, caseFold) {
             clearSearchMarks();
             if (!query) return;
-            
+
             let cursor = editor.getSearchCursor(query, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: caseFold});
             while (cursor.findNext()) {
                 searchMarks.push(editor.markText(cursor.from(), cursor.to(), {className: "search-highlight"}));
@@ -532,21 +560,21 @@
             searchInput.focus();
             const selection = cm.getSelection();
             if (selection) {
-                searchInput.value = selection; 
+                searchInput.value = selection;
             }
-			searchInput.select();
+            searchInput.select();
             doSearch(false, true);
         }
 
         function doSearch(reverse = false, forceNew = false) {
             const query = searchInput.value;
             const caseFold = !matchCaseCb.checked;
-            
+
             if (!query) {
                 clearSearchMarks();
                 return;
             }
-            
+
             if (forceNew || !searchCursor || searchCursor.query !== query || searchCursor.caseFold !== caseFold) {
                 highlightAllMatches(query, caseFold);
                 searchCursor = editor.getSearchCursor(query, editor.getCursor("from"), {caseFold: caseFold});
@@ -566,7 +594,7 @@
             if (found) {
                 editor.setSelection(searchCursor.from(), searchCursor.to());
                 editor.scrollIntoView({from: searchCursor.from(), to: searchCursor.to()}, 50);
-                
+
                 // Update stats counter (find which index the cursor is currently on)
                 const currentPos = searchCursor.from();
                 let index = allMatches.findIndex(p => p.line === currentPos.line && p.ch === currentPos.ch);
@@ -584,15 +612,15 @@
         searchInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
-                doSearch(e.shiftKey); 
+                doSearch(e.shiftKey);
             }
             if (e.key === "Escape") closeSearch();
         });
-        
+
         document.getElementById("search-next").addEventListener("click", () => doSearch(false));
         document.getElementById("search-prev").addEventListener("click", () => doSearch(true));
         document.getElementById("search-close").addEventListener("click", closeSearch);
-        
+
         function closeSearch() {
             searchBox.style.display = "none";
             clearSearchMarks();
@@ -600,9 +628,9 @@
         }
 
         // --- INITIALIZE EDITOR & AUTO-DETECT INDENT ---
-        const savedCode = localStorage.getItem("HTMLDraft_Code");
+        const savedCode = "";//localStorage.getItem("HTMLDraft_Code");
         let initialCode = "";
-        
+
         if (savedCode !== null && savedCode.trim().length > 3) {
             initialCode = savedCode;
             document.getElementById("code-editor").value = initialCode;
@@ -615,7 +643,7 @@
             const lines = code.split('\n');
             let minSpaces = Infinity;
             let usesTabs = false;
-            
+
             for (let line of lines) {
                 if (line.match(/^\t/)) {
                     usesTabs = true;
@@ -629,13 +657,44 @@
                     }
                 }
             }
-            
+
             if (usesTabs) return { useTabs: true, size: 4 };
             if (minSpaces === 4) return { useTabs: false, size: 4 };
             return { useTabs: false, size: 2 }; // Default fallback
         }
-        
+
         const indentConfig = detectIndent(initialCode);
+
+        const indentInput = document.getElementById("indent-input");
+        indentInput.value = indentConfig.useTabs ? "tab" : indentConfig.size;
+
+        // --- INDENTATION INPUT LOGIC ---
+        indentInput.addEventListener("change", (e) => {
+            const val = e.target.value.trim().toLowerCase();
+            console.log(val)
+            if (val === "tab" || val === "tabs") {
+                indentConfig.useTabs = true;
+                indentConfig.size = 4; // Fallback size for CodeMirror tab width
+            } else {
+                const parsed = parseInt(val, 10);
+                if (!isNaN(parsed) && parsed > 0) {
+                    indentConfig.useTabs = false;
+                    indentConfig.size = parsed;
+                } else {
+                    // Invalid input: revert to previous state
+                    indentInput.value = indentConfig.useTabs ? "tab" : indentConfig.size;
+                    showToast("Invalid indent size.");
+                    return;
+                }
+            }
+
+            // Dynamically update CodeMirror settings
+            editor.setOption("indentUnit", indentConfig.size);
+            editor.setOption("tabSize", indentConfig.size);
+            editor.setOption("indentWithTabs", indentConfig.useTabs);
+            
+            showToast(`Indentation updated to ${indentConfig.useTabs ? 'Tabs' : indentConfig.size + ' spaces'}`);
+        });
 
         const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
             mode: "htmlmixed",
@@ -661,16 +720,16 @@
                         cm.replaceSelection(indentConfig.useTabs ? "\t" : " ".repeat(indentConfig.size));
                     }
                 },
-                // "Shift-Tab": "indentLess",               
+                // "Shift-Tab": "indentLess",
                 "Shift-Tab": function(cm) {
                     cm.indentSelection("subtract");
                 },
-                "Ctrl-/": "toggleComment",               
-                "Cmd-/": "toggleComment",                
-                "Ctrl-F": openSearch,                    
-                "Cmd-F": openSearch,                     
-                "Alt-Up": moveLineUp,                    
-                "Alt-Down": moveLineDown                 
+                "Ctrl-/": "toggleComment",
+                "Cmd-/": "toggleComment",
+                "Ctrl-F": openSearch,
+                "Cmd-F": openSearch,
+                "Alt-Up": moveLineUp,
+                "Alt-Down": moveLineDown
             }
         });
 
@@ -682,14 +741,14 @@
         function updateOutput() {
             consoleOutput.innerHTML = "";
             const userCode = editor.getValue();
-            
+
             const oldIframe = document.getElementById("output-frame");
             const newIframe = document.createElement("iframe");
             newIframe.id = "output-frame";
             oldIframe.parentNode.replaceChild(newIframe, oldIframe);
-            
+
             const iframeDoc = newIframe.contentDocument || newIframe.contentWindow.document;
-            
+
             const consoleInterceptor = `
                 <script>
                     (function() {
@@ -708,19 +767,19 @@
                         console.log = function(...args) { postLog('log', args); origLog.apply(console, args); };
                         console.warn = function(...args) { postLog('warn', args); origWarn.apply(console, args); };
                         console.error = function(...args) { postLog('error', args); origError.apply(console, args); };
-                        
+
                         window.onerror = function(message, source, lineno, colno, error) {
                             postLog('error', [message + ' (Line: ' + lineno + ')']);
                         };
                     })();
                 <\/script>
             `;
-            
+
             iframeDoc.open();
             iframeDoc.write(consoleInterceptor + userCode);
             iframeDoc.close();
-			
-			// Extract Title and Favicon for the Browser Title Bar
+
+             // Extract Title and Favicon for the Browser Title Bar
             const titleText = iframeDoc.title || "Untitled";
             document.getElementById("browser-title-text").textContent = titleText;
 
@@ -748,7 +807,7 @@
                 msgDiv.textContent = `> ${event.data.payload}`;
                 consoleOutput.appendChild(msgDiv);
                 consoleOutput.scrollTop = consoleOutput.scrollHeight;
-				
+
                 if (event.data.level === "error" && document.getElementById("mini-console").style.display !== "flex") {
                     document.getElementById("console-btn").click();
                 }
@@ -764,10 +823,11 @@
         // --- FORMAT CODE ---
         document.getElementById("format-btn").addEventListener("click", () => {
             const unformattedCode = editor.getValue();
-            const formattedCode = html_beautify(unformattedCode, { 
-                indent_size: indentConfig.size, 
-                wrap_line_length: 0, 
-                preserve_newlines: true 
+            const formattedCode = html_beautify(unformattedCode, {
+                indent_size: indentConfig.size,
+                indent_with_tabs: indentConfig.useTabs, // Tells beautifier to use \t instead of spaces
+                wrap_line_length: 0,
+                preserve_newlines: true
             });
 
             // If the code is already perfect, do nothing
@@ -780,8 +840,8 @@
             const scrollInfo = editor.getScrollInfo();
             editor.operation(() => {
                 editor.replaceRange(
-                    formattedCode, 
-                    { line: 0, ch: 0 }, 
+                    formattedCode,
+                    { line: 0, ch: 0 },
                     { line: editor.lineCount(), ch: 0 }
                 );
             });
@@ -789,31 +849,31 @@
             showToast("Applied proper line breaks, spacing, and indentation.");
         });
 
-      
+
         // --- TRIM TRAILING WHITESPACE LOGIC ---
         document.getElementById("trim-btn").addEventListener("click", () => {
-            // editor.operation groups all these changes into a single "Undo" step 
+            // editor.operation groups all these changes into a single "Undo" step
             // and prevents the editor from visually flickering while it works.
             editor.operation(() => {
                 const lineCount = editor.lineCount();
                 let linesTrimmed = 0;
-                
+
                 for (let i = 0; i < lineCount; i++) {
                     const text = editor.getLine(i);
                     // Match 1 or more spaces/tabs exactly at the end of the line
-                    const match = text.match(/[ \t]+$/); 
-                    
+                    const match = text.match(/[ \t]+$/);
+
                     if (match) {
                         // Delete just the matched whitespace at the end
                         editor.replaceRange(
-                            "", 
-                            { line: i, ch: text.length - match[0].length }, 
+                            "",
+                            { line: i, ch: text.length - match[0].length },
                             { line: i, ch: text.length }
                         );
                         linesTrimmed++;
                     }
                 }
-                
+
                 // Show the toast notification!
                 if (linesTrimmed > 0) {
                     showToast(`Trimmed trailing whitespace from ${linesTrimmed} line(s).`);
@@ -860,14 +920,14 @@
         // --- RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
         const vDivider = document.getElementById("divider");
         const leftPanel = document.getElementById("left-panel");
-        
+
         let isVDragging = false;
         let isHDragging = false;
 
         vDivider.addEventListener("mousedown", (e) => {
             isVDragging = true;
             vDivider.classList.add("dragging");
-            document.getElementById("output-frame").style.pointerEvents = "none"; 
+            document.getElementById("output-frame").style.pointerEvents = "none";
         });
 
         hDivider.addEventListener("mousedown", (e) => {
@@ -902,8 +962,8 @@
         // --- VIEW TOGGLE ---
         const viewBtn = document.getElementById("view-btn");
         const rightPanel = document.getElementById("right-panel");
-        let viewState = 0; 
-        
+        let viewState = 0;
+
         viewBtn.addEventListener("click", () => {
             viewState = (viewState + 1) % 3;
             if (viewState === 0) {
@@ -952,18 +1012,18 @@
 
         whitespaceBtn.addEventListener("click", () => {
             isWhitespaceVisible = !isWhitespaceVisible;
-            
+
             if (isWhitespaceVisible) {
                 // Apply the overlay and CSS class
                 editor.addOverlay(whitespaceOverlay);
                 editor.getWrapperElement().classList.add("show-whitespaces");
-                whitespaceBtn.style.backgroundColor = "#555"; 
+                whitespaceBtn.style.backgroundColor = "#555";
                 whitespaceBtn.style.borderColor = "#777";
             } else {
                 // Remove the overlay and CSS class
                 editor.removeOverlay(whitespaceOverlay);
                 editor.getWrapperElement().classList.remove("show-whitespaces");
-                whitespaceBtn.style.backgroundColor = ""; 
+                whitespaceBtn.style.backgroundColor = "";
                 whitespaceBtn.style.borderColor = "";
             }
         });
@@ -987,24 +1047,24 @@
 
         // --- AUTO-HIGHLIGHT SELECTION LOGIC ---
         let autoSelectionMarks = [];
-        
+
         editor.on("cursorActivity", () => {
             // 1. Clear any previous auto-highlights
             autoSelectionMarks.forEach(m => m.clear());
             autoSelectionMarks = [];
-            
+
             // 2. Skip if the Search Box is open (to prevent conflicting highlights)
             if (document.getElementById("search-box").style.display === "flex") return;
 
             // 3. Get the text the user just highlighted
             const selectedText = editor.getSelection();
-            
+
             // 4. Only highlight if they selected 2 or more characters (and ignore multi-line selections)
             if (selectedText.length >= 2 && !selectedText.includes('\n')) {
-                
+
                 // Search the document for exact matches (case-sensitive)
                 let cursor = editor.getSearchCursor(selectedText, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: false});
-                
+
                 while (cursor.findNext()) {
                     // Apply the CSS class to every match found
                     let mark = editor.markText(cursor.from(), cursor.to(), {className: "auto-highlight"});
@@ -1014,7 +1074,8 @@
         });
 
     </script>
-  <!-- Toast Notification Container -->
-  <div id="toast-container"></div>
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
 </body>
+
 </html>
