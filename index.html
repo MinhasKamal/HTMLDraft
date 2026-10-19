@@ -582,7 +582,7 @@
           <div id="menu-dropdown" class="menu-dropdown">
             <button id="theme-btn" class="menu-item"><i class="fas fa-moon"></i> Toggle Theme</button>
             <button id="wrap-btn" class="menu-item"><i class="fas fa-arrow-right-long"></i> Toggle Word Wrap</button>
-            <button id="whitespace-btn" class="menu-item"><i class="fas fa-eraser"></i> Toggle Show Whitespaces</button>
+            <button id="whitespace-btn" class="menu-item"><i class="fas fa-low-vision"></i> Toggle Show Whitespaces</button>
             <div class="menu-separator"></div>
             <button id="console-btn" class="menu-item"><i class="fas fa-laptop"></i> Toggle Console</button>
             <button id="title-toggle-btn" class="menu-item"><i class="fas fa-window-maximize fa-rotate-180"></i> Toggle Title Bar</button>
@@ -604,7 +604,7 @@
 <!--         <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button> | -->
 <!--         <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button> -->
 <!--         <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button> -->
-<!--         <button id="whitespace-btn" class="toolbar-btn" title="Toggle Show Whitespaces"><i class="fas fa-eraser"></i></button> | -->
+<!--         <button id="whitespace-btn" class="toolbar-btn" title="Toggle Show Whitespaces"><i class="fas fa-low-vision"></i></button> | -->
 <!--         <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button> -->
 <!--         <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button> | -->
         <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
@@ -910,7 +910,7 @@
     }
 
     // --- INITIALIZE EDITOR & AUTO-DETECT INDENT ---
-    const savedCode = "";//localStorage.getItem("HTMLDraft_Code");
+    const savedCode = localStorage.getItem("HTMLDraft_Code");
     let initialCode = "";
 
     if (savedCode !== null && savedCode.trim().length > 3) {
@@ -1299,12 +1299,12 @@
             // Apply the overlay and CSS class
             editor.addOverlay(whitespaceOverlay);
             editor.getWrapperElement().classList.add("show-whitespaces");
-            whitespaceBtn.innerHTML = '<i class="fas fa-paragraph"></i> Show Whitespaces';
+            whitespaceBtn.innerHTML = '<i class="fas fa-paragraph"></i> Toggle Show Whitespaces';
         } else {
             // Remove the overlay and CSS class
             editor.removeOverlay(whitespaceOverlay);
             editor.getWrapperElement().classList.remove("show-whitespaces");
-            whitespaceBtn.innerHTML = '<i class="fas fa-eraser"></i> Show Whitespaces';
+            whitespaceBtn.innerHTML = '<i class="fas fa-low-vision"></i> Toggle Show Whitespaces';
         }
     });
 
