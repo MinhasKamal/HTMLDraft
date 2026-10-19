@@ -2,419 +2,630 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Draft</title>
-    <link rel="icon" type="image/png" href="data:image/png;base64,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">
-    <!-- CodeMirror Core CSS, Monokai Theme, and Code Folding -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Draft</title>
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAV+QAAFfkBMo3WcwAAABl0RVh0U29mdHdhcmUATWljcm9zb2Z0IE9mZmljZX/tNXEAAAu8SURBVGhD5Vv3U1RZFmb239ia2qqtSes6QxBwMRCVoAgNAiKY42AAdY0YMM3oYMQARswBxYCYdURQR4yomMOojDphgz/s1m7NbnnY853Xt/vR3KYbeFSp+6q+eg397n3nuyff99qnqSPKPyUkskNqcURA7xfh/slvGPS2IsI/+T8RASkPowJSF3fzS/7YTsG7I9zPFsaDDzFe2yesN0/+lgIyAm9Y7p8iOqRs6uKX0M5Oye3xAa9UQVRgWn33oPR61qyaRHeDtxUsd0p9dFDf+siA1H+H+yXn2Lk1PPJ88n7DX5bFBGfWR/gLUd1k7xQiQTw4oz7ML+kbO03nEeqfVAiyfOF7QVYBygPpcN+kkXaq7LP+iVHdAtOZ6PuhWVdA00z8X10DEz8UwqzySoOwfsD7ANGyX/IKn1A/W1y4f9KvrF3thS0FL6L2/56AcaG+NkFL59CB0yvme87mnHSB/2GZdiFkx0/jqONncdT1i0SKCNBf5wpcG/RJLHX5PMFBGnOEtOvJc1ijjDBWrI89IreaMIQM+iSGOv0xnkb3n0F7ik/QwKRxIrDuejNANiowlQq+2kJlO87SkZJzVL6rinZvOEbD0ibJnLpxLcAb1nDryIb5OomO6jed9m/9lu5c/oHq7r+mr6aupg4fRWvHmRHI10zPXkTP7v6dai89p1sXnwnq7r2mtYt3y/e6cS0BCGu/8ASYnFmjB7adobtXfqDbl+voauVDunf1BS2cvoYCP47RjleAZYS0i6d9W07R7Ut1dKXygYwHMFdWv1xxEd3YFkA0rPvCLYQok+jcvheNGTCTDm6vYKIvRFgIeeWsIfD9ay/p69xCj4Rh8mmxX9L1c4/pWtUjB9mb3z2l02VXONikiMnrxrYA3hM2Ex07cJb4mo4ozhD86Z2/0YycxR4Jw+Rh+vevvWowBxZs+bzNlpozwzNhEIXQiJ7Zg/Po0M5Kusvmept9rRHRc4/ElOF/24oOUY/OmTJONy+AuaG9wxykblU/k3kUMAeCXsfPemjHthDuCZuJ5gyZzVGzUsjoiF4//1g0ArPcWFBK/RKyxe8wtqm09Kc/9KABthwm97QR2SN7zosMgG5sC9GYsEE0WlZ+3NA5dHh3lRBF9HQSfSDnGxee0P3rr+hyxX1atXA7pcaMlEAGrSAYuc7tCpjrsrmbZLHMCwjzXsD+702EbyachKEJaAVExw+bK7nw3tWXVFvtJKqAgAKi50/U0uK89ZQYPkiE9ybnKoR+YZOAdPrgZZlPaRf+D4vpE5fVrPm8hJMwUsPwPpPpWOl3WqL4DFPD6leUX6N5k1ZSXKcM1kL3FhUGwZ/G0si+Ux1pzMADcZn9W0/LnN5YSTNhEFa+cnJ/NT2s+bERUQiBRTi+7yLljsmXqghEu7R3H5A8ARF/DRcVcBd1H5xh3jPHLbE6OisYhLt+nkixIRlUdewG1Zx/Yl9tAxBi1/qjlD0oT1YcgrQ2LyKYxYT05fvdpBqOA+peCHqIB7bIIazhXtqxrYRBuAsTjuuUSeeOswAmwhCg+sw9mjpqoRTy/r+PajLNeAsEtnFD5kh6gxnLwvIZJemOtYflXrpxFsCuYdZYt6BUqjxSI35qNjEEEZSMZ8qv0txJK1rltwrBHBy3ri6Tec33gttMHDHfY7HSCqiglcQ5sadUNvBhrLQSQkFF5guIzLM3kC1isKQvjHOZtEmgUksIG0jV394VC8J9AFjWhZO1XKz0s8SK3EARNroe+M2I9Cm0d9NJJl3XgLjKvfA5lXuL8ndSeo8sCuY+FmboVe7lRULgc829MO+Ny0vZ3GO14yyCkzAAgSE8tGYQP6EhbpyhHQgNzWxedZAGJY+Xygn+6a46wvzIrZjXqMGN+YA7bN7ounB/3ViL0JCwgpN4D8nNaOaRL3XExcdRiXHexnXoiWGSSDuuGu/EuT41eoSMARTZGxe+p4rD1ziOpEk8wTjXsRZBT1hBiHOBoIiXFB8XzUAbrsRxxoIgEJVzOYr6G8TNgqNUnDd5pRQv5rH32FJWLtgm5o7rQBougvsivqjxFqBpwgpm4thyKdnYNHF89+jGT5SVOc3RvGMOLACakFqXzgjWMSTlz0ISyB27SO7RPzHHER8sIu4dYQVX4thzckf8AQe2+VNWObSGMf25i5K6ucpJFp3S8dKLMjd8H0GreMV+2d65yd8hffVPzJb7SmBsHfHmEVZwEOeuaGjqRDvx5w2II6AtyC1y5FRUaEtmb2wUnfF3/sx1js4IpDYxYbiHig9YlK2FlhBvGWEFRRztIIijBFXEoWFFGJrDVuvJA5cadUYIWBnxY9gCjHwOF9hYsE9igVoUJ/FnQnwATF0RZxlc5WoCrSOs4CQeJ74I4o9v/UzT2RcRrVFZIegZqaih75btqJBiRAkOFyj8Zgc9qf2LlJtmazAT31Z4SDYPmkncGsIKBnFj8xzCxHXOFO1CyyhSUDo2NOdXNGdigcOcAbSp0PgptgZEb90OSwPiRc0ibi1hBdwUQQrpBYjumE6VR2vEfCE0gP0vnHt3H9agLofpY8Ewx4Th86hs51lxEcOnNcSvOIljD8wD8bYhbAYqL7SWEEyRRYWFCm43px4sjE447IjAMmDuX2ZMk8CIjT70zyCqJc7fby8qtxM3UpzL3G1PGCu+edUBCUJmIWGuU7jt9NQZwSWk6uPACCKbVu53bhry2ZjT8PUGxNco4rHiJvbnU21LGNqJDx1AF0/fEeGUhvEZ/8N3uEY31hXQFDQGi8HG/eqF2+kS9+poZOAqIKyCnCKOAgf9Ndyms7Gh0LaEoT1sHkCbhiYM7ULb0DpWXzfOE0I4hSGvJ4QPovxZ6+jc8VtCHCnPlfjT239l/y6XdMeL1naEoRH4p5ShslFnEAaw+tjUh7Z0Y70Fgh02I7A9NSNniTwkAEl1HwDmja1muAaj7QhDmN7dh8tNzULA/CqP3pDIjQiuG9scwCV8fxchfvr1tEJpW833Q5V2pOS8KKBNCSO3Isc26ow4FyMnewpWngCCuEd81wHylBIbgrr2FSkNz8Hgw21m0ljNzu0T5EZqf1sB1daI9MmSNnRjPQFugmosudswWj5/M1Wfvus+cHEKQxrLm7BMdW1tQxhCZfYaI0KYzQtBBRUUUgR8SjdWBywgBEaQ69tzNK1dUiLzwXqw42Jo1EkUJHGvLasPUr+EsY5ChudqG8IwtUWz1kuuNIQxzAt/L51T7PUmOxYF7SIWcHDvCdIqYhER9eGr5rnNRJEBQNTZSzvmtJ6w0tyJfReln1XaBSAMWjwQcB1nBrShqqyszFzZOoJrILqDWGOiL2UhUJTAsrBIbh6zWk8YKzo0baLjaaMCigCkB0TmUMO8tABZLBqeXB4y1dGKoI5oMbeTGfGjJc2hItPNa4f1hBFQUAW5Fhvwt/lTVzXojHSA0LPGL6XvuWBw1ymBKHx3w/JS9ulRBlEPVmOHtYShve7Bfejskeuy8hASgJDXuTtKixkpAUQ3VgHmuGHZXiFlJorxWEQQXb9sj+yHo9f2kqiCtYQh7JiBM6V0VGQRPZGKSjefMkdLt4BLYE8LZmwQfewIUuuWllAfrqPh380kqiCELXkLD0QgxBbNM6MHNT/SjOzFXkVnpB/sacEFFFG8qwXrMIi27iE5E7bmTTwEGpBGdH5y6xcRFsB2LZ4Z9ezS36vOCGaK1IUUs2bRLtm4R1xAw6C7vnlApeWXVMV/WKJl+DDq59yx+fIqEgDNmtozj8DC4YEaiCIYefL55sB419LXFo0PERa9TQtiMD1oRaG5j1axcK15HKsD3qbl81N5X5pVXfF/8r70UoOwny2sW2Cf9+a3Dq5g7daHB/T+Z6Rvym+FMI4wf1vBe/mbhwDjNw+h/rYhdqqO4wO+YK/8qsX4+Y52gncJ8quWIJhy0jw7x8YHp6n8qA7v7O+WRF6DaN/6yA4p/wjzS86yU3N/sPpDIgJS9jJ+5gn+a5rwXcCvLHcdoyjMv9dHdkr2w8fnf3j8Xja/5kqPAAAAAElFTkSuQmCC">
+  <!-- CodeMirror Core CSS, Monokai Theme, and Code Folding -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #272822;
-            overflow: hidden;
-            transition: background-color 0.3s;
-        }
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #272822;
+      overflow: hidden;
+      transition: background-color 0.3s;
+    }
 
-        /* FLOATING VIEW BUTTON (Top-Left) */
-        #view-btn {
-            position: fixed;
-            top: 10px;
-            left: 15px;
-            z-index: 1000;
-            background: rgba(30, 30, 30, 0.9);
-            color: #fff;
-            border: 1px solid #555;
-            padding: 4px 8px;
-            cursor: pointer;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
-            transition: all 0.2s;
-        }
+    /* FLOATING VIEW BUTTON (Top-Left) */
+    #view-btn {
+      position: fixed;
+      top: 10px;
+      left: 15px;
+      z-index: 1000;
+      background: rgba(30, 30, 30, 0.9);
+      color: #fff;
+      border: 1px solid #555;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      transition: all 0.2s;
+    }
 
-        #view-btn:hover { background-color: #444; border-color: #777; }
+    #view-btn:hover { background-color: #444; border-color: #777; }
 
-        #title {
-            color: #409050;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 2px 6px;
-        }
+    #title {
+      color: #409050;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 2px 8px;
+    }
 
-        /* Buttons General Styling */
-        .toolbar-btn {
-            background-color: #444;
-            color: #fff;
-            border: 1px solid #555;
-            padding: 4px 8px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 13px;
-            font-weight: bold;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
+    /* Buttons General Styling */
+    .toolbar-btn {
+      background-color: #444;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: bold;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
 
-        .toolbar-btn:hover { background-color: #555; border-color: #777; }
+    .toolbar-btn:hover { background-color: #555; border-color: #777; }
 
-        #run-btn { background-color: #409050; border-color: #45a049; }
-        #run-btn:hover { background-color: #4FAF5F; }
+    #run-btn { background-color: #409050; border-color: #45a049; }
+    #run-btn:hover { background-color: #4FAF5F; }
 
-        /* Left Panel & Toolbar */
-        #left-panel {
-            flex: 0 0 50%;
-            display: flex;
-            flex-direction: column;
-            min-width: 10%;
-        }
+    /* Left Panel & Toolbar */
+    #left-panel {
+      flex: 0 0 50%;
+      display: flex;
+      flex-direction: column;
+      min-width: 10%;
+    }
 
-        #toolbar {
-            background-color: #1e1e1e;
-            padding: 10px 15px 10px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+    #toolbar {
+      background-color: #1e1e1e;
+      padding: 10px 15px 10px 45px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-        #button-group {
-            display: flex;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-            gap: 4px;
-            transition: background-color 0.3s;
-        }
-      
-        #indent-label{
-            font-size: 13px;
-            color: #888;
-            padding: 6px 0px;
-        }
-  
-        #indent-input{
-            margin-right: 0px;
-        }
+    #button-group {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      transition: background-color 0.3s;
+    }
 
-        /* --- TOOLBAR INPUT --- */
-        .toolbar-input {
-            width: 35px;
-            background-color: #333;
-            color: #ccc;
-            border: 1px solid #444;
-            border-radius: 4px;
-            padding: 4px;
-            text-align: center;
-            font-family: monospace;
-            font-size: 13px;
-            margin-right: 8px;
-            outline: none;
-        }
-        .toolbar-input:focus {
-            border-color: #4CAF50;
-        }
-        body.light-theme .toolbar-input {
-            background-color: #fff;
-            color: #333;
-            border-color: #ccc;
-        }
+    #indent-label{
+      font-size: 13px;
+      color: #888;
+      padding: 6px 0px;
+    }
 
-        /* Vertical Draggable Divider */
-        #divider {
-            width: 8px;
-            background-color: #1e1e1e;
-            cursor: col-resize;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.2s;
-            z-index: 10;
-        }
-        #divider:hover, #divider.dragging { background-color: #4CAF50 !important; }
-        #divider::after { content: "⋮"; color: #888; font-size: 20px; }
+    #indent-input{
+      margin-right: 0px;
+    }
 
-        /* Right Panel */
-        #right-panel {
-            flex: 1;
-            background-color: #fff;
-            min-width: 10%;
-            display: flex;
-            flex-direction: column;
-        }
+    /* --- TOOLBAR INPUT --- */
+    .toolbar-input {
+      width: 35px;
+      background-color: #333;
+      color: #ccc;
+      border: 1px solid #444;
+      border-radius: 4px;
+      padding: 4px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 13px;
+      margin-right: 8px;
+      outline: none;
+    }
+    .toolbar-input:focus {
+      border-color: #4CAF50;
+    }
+    body.light-theme .toolbar-input {
+      background-color: #fff;
+      color: #333;
+      border-color: #ccc;
+    }
 
-        #editor-container {
-            flex: 1;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+    /* --- MENU BAR DROPDOWN --- */
+    .menu-container {
+      position: relative;
+      display: inline-block;
+    }
 
-        .CodeMirror {
-            flex: 1;
-            height: 100% !important;
-            font-size: 15px;
-            font-family: 'Courier New', Courier, monospace;
-        }
+    .menu-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #2d2d2d;
+      min-width: 220px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.5);
+      z-index: 1000;
+      border-radius: 4px;
+      margin-top: 8px;
+      border: 1px solid #444;
+      padding: 8px 0;
+      flex-direction: column;
+    }
 
-        #output-frame {
-            flex: 1;
-            width: 100%;
-            border: none;
-            background: #fff;
-        }
+    .menu-dropdown.show {
+      display: flex;
+    }
 
-        /* Browser Title Bar Styling */
-        #browser-title-bar {
-            display: none; /* Hidden by default */
-            background-color: #2d2d2d;
-            color: #ccc;
-            padding: 8px 15px;
-            font-size: 13px;
-            align-items: center;
-            border-bottom: 1px solid #444;
-            gap: 8px;
-        }
-        #browser-favicon {
-            width: 14px;
-            height: 14px;
-            display: none; /* Hidden until a custom favicon is found */
-        }
-        body.light-theme #browser-title-bar {
-            background-color: #e0e0e0;
-            color: #333;
-            border-bottom: 1px solid #ccc;
-        }
+    .menu-item {
+      background: none;
+      color: #ccc;
+      border: none;
+      padding: 10px 20px;
+      text-align: left;
+      cursor: pointer;
+      font-family: sans-serif;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      transition: background 0.2s;
+    }
+
+    .menu-item i {
+      width: 16px; /* Aligns all the icons perfectly */
+      text-align: center;
+    }
+
+    .menu-item:hover {
+      background-color: #444;
+      color: #fff;
+    }
+
+    .menu-separator {
+      height: 1px;
+      background-color: #444;
+      margin: 4px 0;
+      width: 100%;
+    }
+
+    body.light-theme .menu-separator {
+      background-color: #ddd;
+    }
+
+    .menu-row {
+      padding: 12px 20px 4px 20px;
+      display: flex;
+      align-items: center;
+      color: #ccc;
+    }
+
+    /* Light Theme Adjustments */
+    body.light-theme .menu-dropdown {
+        background-color: #f9f9f9;
+        border-color: #ccc;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+    }
+    body.light-theme .menu-item,
+    body.light-theme .menu-row {
+        color: #333;
+    }
+    body.light-theme .menu-item:hover {
+        background-color: #e0e0e0;
+    }
+    body.light-theme .menu-row {
+        border-top-color: #ddd;
+    }
 
 
-        /* Horizontal Draggable Divider (Console Resizer) */
-        #horizontal-divider {
-            height: 8px;
-            background-color: #1e1e1e;
-            cursor: row-resize;
-            display: none; /* Hidden by default */
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.2s;
-            z-index: 10;
-        }
-        #horizontal-divider:hover, #horizontal-divider.dragging { background-color: #4CAF50 !important; }
-        #horizontal-divider::after { content: "⋯"; color: #888; font-size: 20px; line-height: 0px; margin-bottom: 6px; font-weight: bold;}
+    /* Vertical Draggable Divider */
+    #divider {
+      width: 8px;
+      background-color: #1e1e1e;
+      cursor: col-resize;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.2s;
+      z-index: 10;
+    }
+    #divider:hover, #divider.dragging { background-color: #4CAF50 !important; }
+    #divider::after { content: "⋮"; color: #888; font-size: 20px; }
 
-        /* Mini Console Styling */
-        #mini-console {
-            height: 30%; /* Default starting height */
-            background-color: #1e1e1e;
-            color: #ddd;
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 13px;
-            transition: background-color 0.3s;
-        }
+    /* Right Panel */
+    #right-panel {
+      flex: 1;
+      background-color: #fff;
+      min-width: 10%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
 
-        #console-header {
-            background: #2d2d2d;
-            padding: 6px 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #444;
-            font-weight: bold;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 12px;
-        }
+    /* --- INSTRUCTIONS PANE --- */
+    #instructions-pane {
+      display: none; 
+      position: absolute;
+      top: 20px;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background-color: #1e1e1e; 
+      color: #ccc;
+      z-index: 2000;
+      padding: 40px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      font-family: sans-serif;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border: 1px solid #444;
+    }
 
-        .console-bar-btn {
-            background: transparent;
-            border: 1px solid #777;
-            color: #ddd;
-            padding: 2px 8px;
-            font-size: 11px;
-        }
-        .console-bar-btn:hover { background: #444; }
+    #close-instructions-btn {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
 
-        #console-output {
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px;
-        }
+    #close-instructions-btn:hover {
+      color: #fff;
+    }
 
-        .log-msg { padding: 4px 0; border-bottom: 1px solid #333; word-wrap: break-word; }
-        .log-msg.error { color: #ff6b6b; }
-        .log-msg.warn { color: #feca57; }
+    .instructions-content h2 {
+      margin-top: 0;
+      color: #fff;
+      border-bottom: 1px solid #444;
+      padding-bottom: 10px;
+    }
 
-        /* Search Box Styling */
-        #search-box {
-            display: none; /* Hidden until Ctrl+F is pressed */
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            z-index: 100;
-            background: #1e1e1e;
-            padding: 6px;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            border: 1px solid #444;
-            align-items: center;
-            gap: 5px;
-        }
-        #search-input {
-            padding: 5px 8px;
-            border: 1px solid #555;
-            background: #2d2d2d;
-            color: #fff;
-            border-radius: 4px;
-            outline: none;
-            font-family: inherit;
-        }
-        #search-input:focus { border-color: #4CAF50; }
-        .search-highlight { background-color: rgba(250, 250, 10, 0.2); }
-        /*.CodeMirror-selected { background-color: rgba(255, 255, 255, 0.2) !important; }*/
+    .instructions-content h3 {
+      color: #4CAF50; /* Green accent */
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
 
-        /* Light Theme Adjustments */
-        body.light-theme #divider, body.light-theme #horizontal-divider { background-color: #ccc; }
-        body.light-theme #toolbar { background-color: #f5f5f5; border-bottom: 1px solid #ddd; }
-        body.light-theme .toolbar-btn { background-color: #e0e0e0; color: #333; border-color: #ccc; }
-        body.light-theme .toolbar-btn:hover { background-color: #d0d0d0; }
-        body.light-theme #run-btn { background-color: #4CAF50; color: white; border-color: #4CAF50; }
+    .instructions-content ul {
+      line-height: 1.8;
+      padding-left: 20px;
+    }
 
-        body.light-theme #mini-console { background-color: #f9f9f9; color: #333; }
-        body.light-theme #console-header { background: #e0e0e0; border-bottom: 1px solid #ccc; color: #333; }
-        body.light-theme #console-bar-btn { color: #333; border-color: #999; }
-        body.light-theme #console-bar-btn:hover { background: #d0d0d0; }
-        body.light-theme .log-msg { border-bottom: 1px solid #eee; }
+    .instructions-content kbd {
+      background-color: #333;
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-family: monospace;
+      box-shadow: 0 2px 0 #111;
+      color: #fff;
+    }
 
-        body.light-theme #search-box { background: #f5f5f5; border-color: #ddd; }
-        body.light-theme #search-input { background: #fff; color: #333; border-color: #ccc; }
+    /* Light Theme Adjustments */
+    body.light-theme #instructions-pane {
+      background-color: #ffffff;
+      color: #333;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      border-color: #ccc;
+    }
 
-        a { color: inherit; text-decoration: inherit; }
+    body.light-theme .instructions-content h2 {
+      color: #111;
+      border-bottom-color: #ddd;
+    }
+    body.light-theme .instructions-content h3 {
+      color: #2e7d32;
+    }
+    body.light-theme #close-instructions-btn:hover {
+      color: #000;
+    }
+    body.light-theme .instructions-content kbd {
+      background-color: #f0f0f0;
+      border-color: #ccc;
+      box-shadow: 0 2px 0 #aaa;
+      color: #333;
+    }
 
-        /* Auto-highlight selected text matches */
-        .auto-highlight { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
-        body.light-theme .auto-highlight { background-color: rgba(0, 0, 0, 0.15); }
 
-        /* --- WHITESPACE VISIBILITY --- */
-        /* Spaces: A tiny gray dot repeating every 1 character width */
-        .show-whitespaces .cm-space {
-            background-image: radial-gradient(circle at center, rgba(128, 128, 128, 0.3) 1px, transparent 1.5px);
-            background-size: 1ch 100%;
-        }
+    #editor-container {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* Tabs: A right arrow */
-        .show-whitespaces .cm-tab {
-            position: relative;
-        }
-        .show-whitespaces .cm-tab::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            color: rgba(128, 128, 128, 0.3);
-            pointer-events: none;
-            /* FIX: Inherit the exact line height of the code */
-            line-height: inherit;
-        }
+    .CodeMirror {
+      flex: 1;
+      height: 100% !important;
+      font-size: 15px;
+      font-family: 'Courier New', Courier, monospace;
+    }
 
-        /* Newlines: A down-left arrow at the end of every line */
-        .show-whitespaces .CodeMirror-line::after {
-            content: "↵";
-            color: rgba(128, 128, 128, 0.3);
-            padding-left: 2px;
-            pointer-events: none;
-            line-height: 0;
-            font-size: 0.9em;
-            vertical-align: baseline;
-        }
+    #output-frame {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
 
-        /* --- TOAST NOTIFICATIONS --- */
-        #toast-container {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none; /* Lets clicks pass through to the editor */
-        }
+    /* Browser Title Bar Styling */
+    #browser-title-bar {
+      display: none; /* Hidden by default */
+      background-color: #2d2d2d;
+      color: #ccc;
+      padding: 8px 15px;
+      font-size: 13px;
+      align-items: center;
+      border-bottom: 1px solid #444;
+      gap: 8px;
+    }
+    #browser-favicon {
+      width: 14px;
+      height: 14px;
+      display: none; /* Hidden until a custom favicon is found */
+    }
+    body.light-theme #browser-title-bar {
+      background-color: #e0e0e0;
+      color: #333;
+      border-bottom: 1px solid #ccc;
+    }
 
-        .toast {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 16px;
-            border-radius: 4px;
-            font-size: 13px;
-            font-family: sans-serif;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            border-left: 4px solid #4CAF50; /* Green accent */
-            opacity: 0;
-            transform: translateY(15px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    /* Horizontal Draggable Divider (Console Resizer) */
+    #horizontal-divider {
+      height: 8px;
+      background-color: #1e1e1e;
+      cursor: row-resize;
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.2s;
+      z-index: 10;
+    }
+    #horizontal-divider:hover, #horizontal-divider.dragging {
+      background-color: #4CAF50 !important;
+    }
+    #horizontal-divider::after {
+      content: "⋯";
+      color: #888;
+      font-size: 20px;
+      line-height: 0px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
 
-        /* Light Theme Adjustment */
-        body.light-theme .toast {
-            background-color: #fff;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    /* Mini Console Styling */
+    #mini-console {
+      height: 30%; /* Default starting height */
+      background-color: #1e1e1e;
+      color: #ddd;
+      display: none; /* Hidden by default */
+      flex-direction: column;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      transition: background-color 0.3s;
+    }
 
-    </style>
+    #console-header {
+      background: #2d2d2d;
+      padding: 6px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #444;
+      font-weight: bold;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 12px;
+    }
+
+    .console-bar-btn {
+      background: transparent;
+      border: 1px solid #777;
+      color: #ddd;
+      padding: 2px 8px;
+      font-size: 11px;
+    }
+    .console-bar-btn:hover { background: #444; }
+
+    #console-output {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .log-msg { padding: 4px 0; border-bottom: 1px solid #333; word-wrap: break-word; }
+    .log-msg.error { color: #ff6b6b; }
+    .log-msg.warn { color: #feca57; }
+
+    /* Search Box Styling */
+    #search-box {
+      display: none; /* Hidden until Ctrl+F is pressed */
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      z-index: 100;
+      background: #1e1e1e;
+      padding: 6px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      border: 1px solid #444;
+      align-items: center;
+      gap: 5px;
+    }
+    #search-input {
+      padding: 5px 8px;
+      border: 1px solid #555;
+      background: #2d2d2d;
+      color: #fff;
+      border-radius: 4px;
+      outline: none;
+      font-family: inherit;
+    }
+    #search-input:focus { border-color: #4CAF50; }
+    .search-highlight { background-color: rgba(250, 250, 10, 0.2); }
+    /*.CodeMirror-selected { background-color: rgba(255, 255, 255, 0.2) !important; }*/
+
+    /* Light Theme Adjustments */
+    body.light-theme #divider, body.light-theme #horizontal-divider { background-color: #ccc; }
+    body.light-theme #toolbar { background-color: #f5f5f5; border-bottom: 1px solid #ddd; }
+    body.light-theme .toolbar-btn { background-color: #e0e0e0; color: #333; border-color: #ccc; }
+    body.light-theme .toolbar-btn:hover { background-color: #d0d0d0; }
+    body.light-theme #run-btn { background-color: #4CAF50; color: white; border-color: #4CAF50; }
+
+    body.light-theme #mini-console { background-color: #f9f9f9; color: #333; }
+    body.light-theme #console-header { background: #e0e0e0; border-bottom: 1px solid #ccc; color: #333; }
+    body.light-theme #console-bar-btn { color: #333; border-color: #999; }
+    body.light-theme #console-bar-btn:hover { background: #d0d0d0; }
+    body.light-theme .log-msg { border-bottom: 1px solid #eee; }
+
+    body.light-theme #search-box { background: #f5f5f5; border-color: #ddd; }
+    body.light-theme #search-input { background: #fff; color: #333; border-color: #ccc; }
+
+    a { color: inherit; text-decoration: inherit; }
+
+    /* Auto-highlight selected text matches */
+    .auto-highlight { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+    body.light-theme .auto-highlight { background-color: rgba(0, 0, 0, 0.15); }
+
+    /* --- WHITESPACE VISIBILITY --- */
+    /* Spaces: A tiny gray dot repeating every 1 character width */
+    .show-whitespaces .cm-space {
+      background-image: radial-gradient(circle at center, rgba(128, 128, 128, 0.3) 1px, transparent 1.5px);
+      background-size: 1ch 100%;
+    }
+
+    /* Tabs: A right arrow */
+    .show-whitespaces .cm-tab {
+      position: relative;
+    }
+    .show-whitespaces .cm-tab::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: rgba(128, 128, 128, 0.3);
+      pointer-events: none;
+      /* FIX: Inherit the exact line height of the code */
+      line-height: inherit;
+    }
+
+    /* Newlines: A down-left arrow at the end of every line */
+    .show-whitespaces .CodeMirror-line::after {
+      content: "↵";
+      color: rgba(128, 128, 128, 0.3);
+      padding-left: 2px;
+      pointer-events: none;
+      line-height: 0;
+      font-size: 0.9em;
+      vertical-align: baseline;
+    }
+
+    /* --- TOAST NOTIFICATIONS --- */
+    #toast-container {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none; /* Lets clicks pass through to the editor */
+    }
+
+    .toast {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: sans-serif;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      border-left: 4px solid #4CAF50; /* Green accent */
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Light Theme Adjustment */
+    body.light-theme .toast {
+      background-color: #fff;
+      color: #333;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+  </style>
 </head>
 
 <body>
 
-    <button id="view-btn" title="Toggle View Layout">◫</button>
+  <button id="view-btn" title="Toggle View Layout">◫</button>
 
-    <div id="left-panel">
-        <div id="toolbar">
-            <div id="title" title="by Minhas Kamal"><a href="https://github.com/MinhasKamal/HTMLDraft" target="_blank">HTML Draft</a></div>
-            <div id="button-group">
-                <span id="indent-label"><i class="fas fa-indent"></i></span>
-                <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" /> |
-                <button id="format-btn" class="toolbar-btn" title="Apply Proper Line Breaks, Spacing, and Indentation"><i class="fas fa-broom"></i></button>
-                <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button> |
-                <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
-                <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button>
-                <button id="whitespace-btn" class="toolbar-btn" title="Toggle Show Whitespaces"><i class="fas fa-eraser"></i></button> |
-                <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button>
-                <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button> |
-                <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
+  <div id="left-panel">
+    <div id="toolbar">
+      <div id="title" title="by Minhas Kamal"><a href="https://github.com/MinhasKamal/HTMLDraft" target="_blank">HTML Draft</a></div>
+      <div id="button-group">
+        <!-- Dropdown Menu Container -->
+        <div class="menu-container">
+<!--           <button id="menu-btn" class="toolbar-btn" title="Open Menu"><i class="fas fa-bars"></i></button> -->
+          <div id="menu-dropdown" class="menu-dropdown">
+            <button id="theme-btn" class="menu-item"><i class="fas fa-moon"></i> Toggle Theme</button>
+            <button id="wrap-btn" class="menu-item"><i class="fas fa-arrow-right-long"></i> Toggle Word Wrap</button>
+            <button id="whitespace-btn" class="menu-item"><i class="fas fa-eraser"></i> Toggle Show Whitespaces</button>
+            <div class="menu-separator"></div>
+            <button id="console-btn" class="menu-item"><i class="fas fa-laptop"></i> Toggle Console</button>
+            <button id="title-toggle-btn" class="menu-item"><i class="fas fa-window-maximize fa-rotate-180"></i> Toggle Title Bar</button>
+            <div class="menu-separator"></div>
+            <div class="menu-row">
+              <span class="toolbar-label" style="font-size: 13px; margin-right: 8px;">Indent Size:</span>
+              <input type="text" id="indent-input" class="toolbar-input" title="Type a number or 'tab'" style="width: 50px;" />
             </div>
+            <button id="format-btn" class="menu-item"><i class="fas fa-broom"></i> Format Code</button>
+            <button id="trim-btn" class="menu-item"><i class="fas fa-strikethrough"></i> Trim Whitespace</button>
+            <div class="menu-separator"></div>
+            <button id="instructions-btn" class="menu-item"><i class="fas fa-info-circle"></i> Instructions</button>
+          </div>
         </div>
-        <div id="editor-container" style="position: relative;">
+        <button id="menu-btn" class="toolbar-btn" title="Open Menu"><i class="fas fa-bars"></i></button>
+<!--         <span id="indent-label"><i class="fas fa-indent"></i></span> -->
+<!--         <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" /> | -->
+<!--         <button id="format-btn" class="toolbar-btn" title="Apply Proper Line Breaks, Spacing, and Indentation"><i class="fas fa-broom"></i></button> -->
+<!--         <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button> | -->
+<!--         <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button> -->
+<!--         <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button> -->
+<!--         <button id="whitespace-btn" class="toolbar-btn" title="Toggle Show Whitespaces"><i class="fas fa-eraser"></i></button> | -->
+<!--         <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button> -->
+<!--         <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button> | -->
+        <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
+      </div>
+    </div>
+    <div id="editor-container" style="position: relative;">
 
-            <!-- Floating Search Box with Stats -->
-            <div id="search-box">
-                <input type="text" id="search-input" placeholder="Find...">
-                <span id="search-stats" style="color:#aaa; font-size:12px; margin: 0 4px; white-space:nowrap;">0/0</span>
-                <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px; margin-right:4px;" title="Match Case">
-                    <input type="checkbox" id="match-case-cb">
-                    <div style="color:#aaa; font-weight:bold;">Aa</div>
-                </label>
-                <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
-                <button id="search-next" class="toolbar-btn" title="Next"><i class="fas fa-chevron-down"></i></button>
-                <button id="search-close" class="toolbar-btn" title="Close"><i class="fas fa-times"></i></button>
-            </div>
+      <!-- Floating Search Box with Stats -->
+      <div id="search-box">
+        <input type="text" id="search-input" placeholder="Find...">
+        <span id="search-stats" style="color:#aaa; font-size:12px; margin: 0 4px; white-space:nowrap;">0/0</span>
+        <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px; margin-right:4px;" title="Match Case">
+          <input type="checkbox" id="match-case-cb">
+          <div style="color:#aaa; font-weight:bold;">Aa</div>
+        </label>
+        <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
+        <button id="search-next" class="toolbar-btn" title="Next"><i class="fas fa-chevron-down"></i></button>
+        <button id="search-close" class="toolbar-btn" title="Close"><i class="fas fa-times"></i></button>
+      </div>
 
-            <textarea id="code-editor">
+      <textarea id="code-editor">
 <div class="container">
   <h2>Hello, world!</h2>
   <p>You can write, format, and test your HTML, CSS, and JS code here.</p>
@@ -436,654 +647,715 @@
   console.warn("...your logs...");
   console.error("...here.");
 </script>
-            </textarea>
-        </div>
+      </textarea>
+    </div>
+  </div>
+
+  <div id="divider"></div>
+
+  <div id="right-panel">
+    <!-- Instructions Pane -->
+    <div id="instructions-pane">
+      <button id="close-instructions-btn" title="Close"><i class="fas fa-times"></i></button>
+      <div class="instructions-content">
+        <h2><i class="fas fa-info-circle" style="margin-right: 8px;"></i> Instructions</h2>
+        <p>You can write, format, and test your HTML, CSS, and JS code here.</p>
+        <p>As there are no servers, your data is saved in the local storage and never leaves your device. So, it is private, safe, and free for all kinds of usage.</p>
+
+        <h3><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h3>
+        <ul>
+          <li><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> Smart Indent</li>
+          <li><kbd>Ctrl</kbd> + <kbd>/</kbd> Toggle Comment</li>
+          <li><kbd>Ctrl</kbd> + <kbd>F</kbd> Find / Search</li>
+          <li><kbd>Alt</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> Move Line Up/Down</li>
+          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> / <kbd>Y</kbd> Undo / Redo</li>
+        </ul>
+
+        <h3><i class="fas fa-bolt"></i> Power Features</h3>
+        <ul>
+          <li><strong>Smart Indentation:</strong> The editor automatically sniffs your code on load to detect indentation: 2-space, 4-space, or Tab. You can also override this.</li>
+          <li><strong>Code Beautifier:</strong> Click "Format Code" to clean up messy HTML, CSS, and JS structure following your preferred indentation.</li>
+          <li><strong>Mini Console:</strong> Displays <code>console.log()</code> outputs and JavaScript runtime errors. Pops up automatically if your code crashes.</li>
+          <li><strong>Browser Title Bar:</strong> Simulates a real browser tab by extracting the <code>&lt;title&gt;</code> and <code>&lt;link rel="icon"&gt;</code> from your code.</li>
+          <li><strong>Auto-Save:</strong> Your code is silently saved to your browser's local storage as you type. It will be restored even after you restart your device.</li>
+        </ul>
+      </div>
     </div>
 
-    <div id="divider"></div>
-
-    <div id="right-panel">
-        <!-- Browser Title Bar -->
-        <div id="browser-title-bar">
-            <i id="default-favicon" class="fas fa-globe"></i>
-            <img id="browser-favicon" src="" alt="favicon">
-            <span id="browser-title-text">Untitled</span>
-        </div>
-
-        <iframe id="output-frame"></iframe>
-
-        <!-- Horizontal Resizer -->
-        <div id="horizontal-divider"></div>
-
-        <!-- Mini Console Drawer -->
-        <div id="mini-console">
-            <div id="console-header">
-                <span>Console Output</span>
-                <div>
-                    <button id="clear-console-btn" class="toolbar-btn console-bar-btn">Clear <i class="fas fa-trash"></i></button>
-                    <button id="hide-console-btn" class="toolbar-btn console-bar-btn">Hide <i class="fas fa-minus-circle"></i></button>
-                </div>
-            </div>
-            <div id="console-output"></div>
-        </div>
+    <!-- Browser Title Bar -->
+    <div id="browser-title-bar">
+      <i id="default-favicon" class="fas fa-globe"></i>
+      <img id="browser-favicon" src="" alt="favicon">
+      <span id="browser-title-text">Untitled</span>
     </div>
 
-    <!-- CodeMirror, Addons & Beautify JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify-html.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/comment/comment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/searchcursor.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/selection/active-line.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/matchbrackets.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/brace-fold.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/xml-fold.min.js"></script>
+    <iframe id="output-frame"></iframe>
 
-    <script>
-        const consoleOutput = document.getElementById("console-output");
+    <!-- Horizontal Resizer -->
+    <div id="horizontal-divider"></div>
 
-        // --- CUSTOM KEYBOARD SHORTCUT LOGIC ---
-        function moveLineUp(cm) {
-            const from = cm.getCursor("from").line;
-            const to = cm.getCursor("to").line;
-            if (from === 0) return;
-            const lineAbove = cm.getLine(from - 1);
-            const text = cm.getRange({line: from, ch: 0}, {line: to + 1, ch: 0});
-            cm.replaceRange(text + lineAbove + "\n", {line: from - 1, ch: 0}, {line: to + 1, ch: 0});
-            cm.setSelection({line: from - 1, ch: 0}, {line: to - 1, ch: null});
+    <!-- Mini Console Drawer -->
+    <div id="mini-console">
+      <div id="console-header">
+        <span>Console Output</span>
+        <div>
+          <button id="clear-console-btn" class="toolbar-btn console-bar-btn">Clear <i class="fas fa-trash"></i></button>
+          <button id="hide-console-btn" class="toolbar-btn console-bar-btn">Hide <i class="fas fa-minus-circle"></i></button>
+        </div>
+      </div>
+      <div id="console-output"></div>
+    </div>
+  </div>
+
+  <!-- CodeMirror, Addons & Beautify JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify-html.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/comment/comment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/searchcursor.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/selection/active-line.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/brace-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/xml-fold.min.js"></script>
+
+  <script>
+    const consoleOutput = document.getElementById("console-output");
+
+    // --- CUSTOM KEYBOARD SHORTCUT LOGIC ---
+    function moveLineUp(cm) {
+      const from = cm.getCursor("from").line;
+      const to = cm.getCursor("to").line;
+      if (from === 0) return;
+      const lineAbove = cm.getLine(from - 1);
+      const text = cm.getRange({line: from, ch: 0}, {line: to + 1, ch: 0});
+      cm.replaceRange(text + lineAbove + "\n", {line: from - 1, ch: 0}, {line: to + 1, ch: 0});
+      cm.setSelection({line: from - 1, ch: 0}, {line: to - 1, ch: null});
+    }
+
+    function moveLineDown(cm) {
+      const from = cm.getCursor("from").line;
+      const to = cm.getCursor("to").line;
+      if (to >= cm.lineCount() - 1) return;
+      const lineBelow = cm.getLine(to + 1);
+      const text = cm.getRange({line: from, ch: 0}, {line: to + 1, ch: 0});
+      cm.replaceRange(lineBelow + "\n" + text, {line: from, ch: 0}, {line: to + 2, ch: 0});
+      cm.setSelection({line: from + 1, ch: 0}, {line: to + 1, ch: null});
+    }
+
+    // --- MENU BAR LOGIC ---
+    const menuBtn = document.getElementById("menu-btn");
+    const menuDropdown = document.getElementById("menu-dropdown");
+
+    // Toggle menu on click
+    menuBtn.addEventListener("click", (e) => {
+      menuDropdown.classList.toggle("show");
+      e.stopPropagation(); // Prevents the document click listener below from instantly closing it
+    });
+
+    // Close menu when clicking anywhere else on the page
+    document.addEventListener("click", (e) => {
+      if (!menuDropdown.contains(e.target) && e.target !== menuBtn) {
+        menuDropdown.classList.remove("show");
+      }
+    });
+
+    // --- INSTRUCTIONS PANE LOGIC ---
+    const instructionsBtn = document.getElementById("instructions-btn");
+    const instructionsPane = document.getElementById("instructions-pane");
+    const closeInstructionsBtn = document.getElementById("close-instructions-btn");
+
+    // Open Instructions
+    instructionsBtn.addEventListener("click", () => {
+      instructionsPane.style.display = "block";
+      menuDropdown.classList.remove("show"); // Automatically close the dropdown menu
+    });
+
+    // Close Instructions
+    closeInstructionsBtn.addEventListener("click", () => {
+      instructionsPane.style.display = "none";
+    });
+
+    // --- TOAST NOTIFICATION UTILITY ---
+    function showToast(message) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = message;
+
+      container.appendChild(toast);
+
+      // Trigger the slide-in animation
+      requestAnimationFrame(() => {
+          toast.classList.add("show");
+      });
+
+      // Remove the toast after 3 seconds
+      setTimeout(() => {
+          toast.classList.remove("show");
+          // Wait for the fade-out animation to finish before removing from DOM
+          setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // --- SEARCH, HIGHLIGHT & STATS LOGIC ---
+    const searchBox = document.getElementById("search-box");
+    const searchInput = document.getElementById("search-input");
+    const matchCaseCb = document.getElementById("match-case-cb");
+    const searchStats = document.getElementById("search-stats");
+
+    let searchCursor = null;
+    let searchMarks = [];
+    let allMatches = []; // Keeps track of match locations for numbering
+
+    function clearSearchMarks() {
+      searchMarks.forEach(m => m.clear());
+      searchMarks = [];
+      allMatches = [];
+      searchStats.textContent = "";
+    }
+
+    function highlightAllMatches(query, caseFold) {
+      clearSearchMarks();
+      if (!query) return;
+
+      let cursor = editor.getSearchCursor(query, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: caseFold});
+      while (cursor.findNext()) {
+          searchMarks.push(editor.markText(cursor.from(), cursor.to(), {className: "search-highlight"}));
+          allMatches.push(cursor.from());
+      }
+      if(allMatches.length > 0) {
+          searchStats.textContent = `0/${allMatches.length}`;
+      } else {
+          searchStats.textContent = `0/0`;
+      }
+    }
+
+    function openSearch(cm) {
+      searchBox.style.display = "flex";
+      searchInput.focus();
+      const selection = cm.getSelection();
+      if (selection) {
+          searchInput.value = selection;
+      }
+      searchInput.select();
+      doSearch(false, true);
+    }
+
+    function doSearch(reverse = false, forceNew = false) {
+      const query = searchInput.value;
+      const caseFold = !matchCaseCb.checked;
+
+      if (!query) {
+          clearSearchMarks();
+          return;
+      }
+
+      if (forceNew || !searchCursor || searchCursor.query !== query || searchCursor.caseFold !== caseFold) {
+          highlightAllMatches(query, caseFold);
+          searchCursor = editor.getSearchCursor(query, editor.getCursor("from"), {caseFold: caseFold});
+          searchCursor.query = query;
+          searchCursor.caseFold = caseFold;
+      }
+
+      let found = searchCursor.find(reverse);
+      if (!found) {
+          const resetPos = reverse ? CodeMirror.Pos(editor.lastLine()) : CodeMirror.Pos(editor.firstLine(), 0);
+          searchCursor = editor.getSearchCursor(query, resetPos, {caseFold: caseFold});
+          searchCursor.query = query;
+          searchCursor.caseFold = caseFold;
+          found = searchCursor.find(reverse);
+      }
+
+      if (found) {
+          editor.setSelection(searchCursor.from(), searchCursor.to());
+          editor.scrollIntoView({from: searchCursor.from(), to: searchCursor.to()}, 50);
+
+          // Update stats counter (find which index the cursor is currently on)
+          const currentPos = searchCursor.from();
+          let index = allMatches.findIndex(p => p.line === currentPos.line && p.ch === currentPos.ch);
+          if (index !== -1) {
+              searchStats.textContent = `${index + 1}/${allMatches.length}`;
+          }
+      } else {
+          searchStats.textContent = `0/0`;
+      }
+    }
+
+    searchInput.addEventListener("input", () => doSearch(false, true));
+    matchCaseCb.addEventListener("change", () => doSearch(false, true));
+
+    searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            doSearch(e.shiftKey);
         }
+        if (e.key === "Escape") closeSearch();
+    });
 
-        function moveLineDown(cm) {
-            const from = cm.getCursor("from").line;
-            const to = cm.getCursor("to").line;
-            if (to >= cm.lineCount() - 1) return;
-            const lineBelow = cm.getLine(to + 1);
-            const text = cm.getRange({line: from, ch: 0}, {line: to + 1, ch: 0});
-            cm.replaceRange(lineBelow + "\n" + text, {line: from, ch: 0}, {line: to + 2, ch: 0});
-            cm.setSelection({line: from + 1, ch: 0}, {line: to + 1, ch: null});
-        }
+    document.getElementById("search-next").addEventListener("click", () => doSearch(false));
+    document.getElementById("search-prev").addEventListener("click", () => doSearch(true));
+    document.getElementById("search-close").addEventListener("click", closeSearch);
 
-        // --- TOAST NOTIFICATION UTILITY ---
-        function showToast(message) {
-            const container = document.getElementById("toast-container");
-            const toast = document.createElement("div");
-            toast.className = "toast";
-            toast.textContent = message;
+    function closeSearch() {
+        searchBox.style.display = "none";
+        clearSearchMarks();
+        editor.focus();
+    }
 
-            container.appendChild(toast);
+    // --- INITIALIZE EDITOR & AUTO-DETECT INDENT ---
+    const savedCode = "";//localStorage.getItem("HTMLDraft_Code");
+    let initialCode = "";
 
-            // Trigger the slide-in animation
-            requestAnimationFrame(() => {
-                toast.classList.add("show");
-            });
+    if (savedCode !== null && savedCode.trim().length > 3) {
+        initialCode = savedCode;
+        document.getElementById("code-editor").value = initialCode;
+    } else {
+        initialCode = document.getElementById("code-editor").value;
+    }
 
-            // Remove the toast after 3 seconds
-            setTimeout(() => {
-                toast.classList.remove("show");
-                // Wait for the fade-out animation to finish before removing from DOM
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
+    // Smarter Indent Sniffing: finds the smallest indentation level in the file
+    function detectIndent(code) {
+        const lines = code.split('\n');
+        let minSpaces = Infinity;
+        let usesTabs = false;
 
-        // --- SEARCH, HIGHLIGHT & STATS LOGIC ---
-        const searchBox = document.getElementById("search-box");
-        const searchInput = document.getElementById("search-input");
-        const matchCaseCb = document.getElementById("match-case-cb");
-        const searchStats = document.getElementById("search-stats");
-
-        let searchCursor = null;
-        let searchMarks = [];
-        let allMatches = []; // Keeps track of match locations for numbering
-
-        function clearSearchMarks() {
-            searchMarks.forEach(m => m.clear());
-            searchMarks = [];
-            allMatches = [];
-            searchStats.textContent = "";
-        }
-
-        function highlightAllMatches(query, caseFold) {
-            clearSearchMarks();
-            if (!query) return;
-
-            let cursor = editor.getSearchCursor(query, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: caseFold});
-            while (cursor.findNext()) {
-                searchMarks.push(editor.markText(cursor.from(), cursor.to(), {className: "search-highlight"}));
-                allMatches.push(cursor.from());
+        for (let line of lines) {
+            if (line.match(/^\t/)) {
+                usesTabs = true;
+                break;
             }
-            if(allMatches.length > 0) {
-                searchStats.textContent = `0/${allMatches.length}`;
+            const match = line.match(/^(\s+)\S/); // Captures leading spaces before text
+            if (match) {
+                const spaces = match[1].length;
+                if (spaces > 0 && spaces < minSpaces) {
+                    minSpaces = spaces;
+                }
+            }
+        }
+
+        if (usesTabs) return { useTabs: true, size: 4 };
+        if (minSpaces === 4) return { useTabs: false, size: 4 };
+        return { useTabs: false, size: 2 }; // Default fallback
+    }
+
+    const indentConfig = detectIndent(initialCode);
+
+    const indentInput = document.getElementById("indent-input");
+    indentInput.value = indentConfig.useTabs ? "tab" : indentConfig.size;
+
+    // --- INDENTATION INPUT LOGIC ---
+    indentInput.addEventListener("change", (e) => {
+        const val = e.target.value.trim().toLowerCase();
+        console.log(val)
+        if (val === "tab" || val === "tabs") {
+            indentConfig.useTabs = true;
+            indentConfig.size = 4; // Fallback size for CodeMirror tab width
+        } else {
+            const parsed = parseInt(val, 10);
+            if (!isNaN(parsed) && parsed > 0) {
+                indentConfig.useTabs = false;
+                indentConfig.size = parsed;
             } else {
-                searchStats.textContent = `0/0`;
-            }
-        }
-
-        function openSearch(cm) {
-            searchBox.style.display = "flex";
-            searchInput.focus();
-            const selection = cm.getSelection();
-            if (selection) {
-                searchInput.value = selection;
-            }
-            searchInput.select();
-            doSearch(false, true);
-        }
-
-        function doSearch(reverse = false, forceNew = false) {
-            const query = searchInput.value;
-            const caseFold = !matchCaseCb.checked;
-
-            if (!query) {
-                clearSearchMarks();
+                // Invalid input: revert to previous state
+                indentInput.value = indentConfig.useTabs ? "tab" : indentConfig.size;
+                showToast("Invalid indent size.");
                 return;
             }
+        }
 
-            if (forceNew || !searchCursor || searchCursor.query !== query || searchCursor.caseFold !== caseFold) {
-                highlightAllMatches(query, caseFold);
-                searchCursor = editor.getSearchCursor(query, editor.getCursor("from"), {caseFold: caseFold});
-                searchCursor.query = query;
-                searchCursor.caseFold = caseFold;
-            }
+        // Dynamically update CodeMirror settings
+        editor.setOption("indentUnit", indentConfig.size);
+        editor.setOption("tabSize", indentConfig.size);
+        editor.setOption("indentWithTabs", indentConfig.useTabs);
 
-            let found = searchCursor.find(reverse);
-            if (!found) {
-                const resetPos = reverse ? CodeMirror.Pos(editor.lastLine()) : CodeMirror.Pos(editor.firstLine(), 0);
-                searchCursor = editor.getSearchCursor(query, resetPos, {caseFold: caseFold});
-                searchCursor.query = query;
-                searchCursor.caseFold = caseFold;
-                found = searchCursor.find(reverse);
-            }
+        showToast(`Indentation updated to ${indentConfig.useTabs ? 'Tabs' : indentConfig.size + ' spaces'}`);
+    });
 
-            if (found) {
-                editor.setSelection(searchCursor.from(), searchCursor.to());
-                editor.scrollIntoView({from: searchCursor.from(), to: searchCursor.to()}, 50);
+    const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+        mode: "htmlmixed",
+        theme: "monokai",
+        lineNumbers: true,
+        lineWrapping: false,
+        indentUnit: indentConfig.size,
+        tabSize: indentConfig.size,
+        indentWithTabs: indentConfig.useTabs,
 
-                // Update stats counter (find which index the cursor is currently on)
-                const currentPos = searchCursor.from();
-                let index = allMatches.findIndex(p => p.line === currentPos.line && p.ch === currentPos.ch);
-                if (index !== -1) {
-                    searchStats.textContent = `${index + 1}/${allMatches.length}`;
+        styleActiveLine: true,       // Highlights current line
+        matchBrackets: true,         // Highlights matching {} [] ()
+        autoCloseBrackets: true,     // Auto-types closing brackets
+        autoCloseTags: true,         // Auto-types closing HTML tags
+        foldGutter: true,            // Enables the folding arrows
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // Draws the folding column
+
+        extraKeys: {
+            "Tab": function(cm) {
+                if (cm.somethingSelected()) {
+                    cm.indentSelection("add");
+                } else {
+                    cm.replaceSelection(indentConfig.useTabs ? "\t" : " ".repeat(indentConfig.size));
                 }
-            } else {
-                searchStats.textContent = `0/0`;
-            }
+            },
+            // "Shift-Tab": "indentLess",
+            "Shift-Tab": function(cm) {
+                cm.indentSelection("subtract");
+            },
+            "Ctrl-/": "toggleComment",
+            "Cmd-/": "toggleComment",
+            "Ctrl-F": openSearch,
+            "Cmd-F": openSearch,
+            "Alt-Up": moveLineUp,
+            "Alt-Down": moveLineDown
         }
+    });
 
-        searchInput.addEventListener("input", () => doSearch(false, true));
-        matchCaseCb.addEventListener("change", () => doSearch(false, true));
+    editor.on("change", () => {
+        localStorage.setItem("HTMLDraft_Code", editor.getValue());
+    });
 
-        searchInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                doSearch(e.shiftKey);
-            }
-            if (e.key === "Escape") closeSearch();
-        });
+    // --- RUN CODE & CONSOLE OVERRIDE ---
+    function updateOutput() {
+        consoleOutput.innerHTML = "";
+        const userCode = editor.getValue();
 
-        document.getElementById("search-next").addEventListener("click", () => doSearch(false));
-        document.getElementById("search-prev").addEventListener("click", () => doSearch(true));
-        document.getElementById("search-close").addEventListener("click", closeSearch);
+        const oldIframe = document.getElementById("output-frame");
+        const newIframe = document.createElement("iframe");
+        newIframe.id = "output-frame";
+        oldIframe.parentNode.replaceChild(newIframe, oldIframe);
 
-        function closeSearch() {
-            searchBox.style.display = "none";
-            clearSearchMarks();
-            editor.focus();
-        }
+        const iframeDoc = newIframe.contentDocument || newIframe.contentWindow.document;
 
-        // --- INITIALIZE EDITOR & AUTO-DETECT INDENT ---
-        const savedCode = localStorage.getItem("HTMLDraft_Code");
-        let initialCode = "";
+        const consoleInterceptor = `
+            <script>
+                (function() {
+                    const origLog = console.log;
+                    const origWarn = console.warn;
+                    const origError = console.error;
 
-        if (savedCode !== null && savedCode.trim().length > 3) {
-            initialCode = savedCode;
-            document.getElementById("code-editor").value = initialCode;
+                    function postLog(level, args) {
+                        const parsedArgs = Array.from(args).map(arg => {
+                            if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
+                            return String(arg);
+                        });
+                        window.parent.postMessage({ source: 'mini-console', level: level, payload: parsedArgs.join(' ') }, '*');
+                    }
+
+                    console.log = function(...args) { postLog('log', args); origLog.apply(console, args); };
+                    console.warn = function(...args) { postLog('warn', args); origWarn.apply(console, args); };
+                    console.error = function(...args) { postLog('error', args); origError.apply(console, args); };
+
+                    window.onerror = function(message, source, lineno, colno, error) {
+                        postLog('error', [message + ' (Line: ' + lineno + ')']);
+                    };
+                })();
+            <\/script>
+        `;
+
+        iframeDoc.open();
+        iframeDoc.write(consoleInterceptor + userCode);
+        iframeDoc.close();
+
+         // Extract Title and Favicon for the Browser Title Bar
+        const titleText = iframeDoc.title || "Untitled";
+        document.getElementById("browser-title-text").textContent = titleText;
+
+        // Look for <link rel="icon"> or <link rel="shortcut icon">
+        const faviconLink = iframeDoc.querySelector("link[rel~='icon']");
+        const faviconImg = document.getElementById("browser-favicon");
+        const defaultFavicon = document.getElementById("default-favicon");
+
+        if (faviconLink && faviconLink.getAttribute("href")) {
+            faviconImg.src = faviconLink.getAttribute("href");
+            faviconImg.style.display = "block";
+            defaultFavicon.style.display = "none";
         } else {
-            initialCode = document.getElementById("code-editor").value;
+            faviconImg.style.display = "none";
+            defaultFavicon.style.display = "block";
+        }
+    }
+
+    document.getElementById("run-btn").addEventListener("click", updateOutput);
+
+    window.addEventListener("message", (event) => {
+        if (event.data && event.data.source === "mini-console") {
+            const msgDiv = document.createElement("div");
+            msgDiv.className = `log-msg ${event.data.level}`;
+            msgDiv.textContent = `> ${event.data.payload}`;
+            consoleOutput.appendChild(msgDiv);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+
+            if (event.data.level === "error" && document.getElementById("mini-console").style.display !== "flex") {
+                document.getElementById("console-btn").click();
+            }
+        }
+    });
+
+    document.getElementById("clear-console-btn").addEventListener("click", () => {
+        consoleOutput.innerHTML = "";
+    });
+
+    updateOutput();
+
+    // --- FORMAT CODE ---
+    document.getElementById("format-btn").addEventListener("click", () => {
+        const unformattedCode = editor.getValue();
+        const formattedCode = html_beautify(unformattedCode, {
+            indent_size: indentConfig.size,
+            indent_with_tabs: indentConfig.useTabs, // Tells beautifier to use \t instead of spaces
+            wrap_line_length: 0,
+            preserve_newlines: true
+        });
+
+        // If the code is already perfect, do nothing
+        if (unformattedCode === formattedCode) {
+          showToast("No chnage, code is already clean.");
+          return;
         }
 
-        // Smarter Indent Sniffing: finds the smallest indentation level in the file
-        function detectIndent(code) {
-            const lines = code.split('\n');
-            let minSpaces = Infinity;
-            let usesTabs = false;
+        // Safely replace the text without ruining the Undo history or cursor position
+        const scrollInfo = editor.getScrollInfo();
+        editor.operation(() => {
+            editor.replaceRange(
+                formattedCode,
+                { line: 0, ch: 0 },
+                { line: editor.lineCount(), ch: 0 }
+            );
+        });
+        editor.scrollTo(scrollInfo.left, scrollInfo.top);
+        showToast("Applied proper line breaks, spacing, and indentation.");
+    });
 
-            for (let line of lines) {
-                if (line.match(/^\t/)) {
-                    usesTabs = true;
-                    break;
-                }
-                const match = line.match(/^(\s+)\S/); // Captures leading spaces before text
+
+    // --- TRIM TRAILING WHITESPACE LOGIC ---
+    document.getElementById("trim-btn").addEventListener("click", () => {
+        // editor.operation groups all these changes into a single "Undo" step
+        // and prevents the editor from visually flickering while it works.
+        editor.operation(() => {
+            const lineCount = editor.lineCount();
+            let linesTrimmed = 0;
+
+            for (let i = 0; i < lineCount; i++) {
+                const text = editor.getLine(i);
+                // Match 1 or more spaces/tabs exactly at the end of the line
+                const match = text.match(/[ \t]+$/);
+
                 if (match) {
-                    const spaces = match[1].length;
-                    if (spaces > 0 && spaces < minSpaces) {
-                        minSpaces = spaces;
-                    }
+                    // Delete just the matched whitespace at the end
+                    editor.replaceRange(
+                        "",
+                        { line: i, ch: text.length - match[0].length },
+                        { line: i, ch: text.length }
+                    );
+                    linesTrimmed++;
                 }
             }
 
-            if (usesTabs) return { useTabs: true, size: 4 };
-            if (minSpaces === 4) return { useTabs: false, size: 4 };
-            return { useTabs: false, size: 2 }; // Default fallback
+            // Show the toast notification!
+            if (linesTrimmed > 0) {
+                showToast(`Trimmed trailing whitespace from ${linesTrimmed} line(s).`);
+            } else {
+                showToast("No trailing whitespace found.");
+            }
+        });
+    });
+
+
+    // --- CONSOLE TOGGLE ---
+    const consoleBtn = document.getElementById("console-btn");
+    const hideConsoleBtn = document.getElementById("hide-console-btn");
+    const miniConsole = document.getElementById("mini-console");
+    const hDivider = document.getElementById("horizontal-divider");
+    let isConsoleOpen = false;
+
+    consoleBtn.addEventListener("click", () => {
+        isConsoleOpen = !isConsoleOpen;
+        miniConsole.style.display = isConsoleOpen ? "flex" : "none";
+        hDivider.style.display = isConsoleOpen ? "flex" : "none";
+        consoleBtn.innerHTML = isConsoleOpen ? '<i class="fas fa-laptop-code"></i> Toggle Console' : '<i class="fas fa-laptop"></i> Toggle Console';
+    });
+
+    hideConsoleBtn.addEventListener("click", () => {
+        isConsoleOpen = false;
+        miniConsole.style.display = "none";
+        hDivider.style.display = "none";
+        consoleBtn.innerHTML = '<i class="fas fa-laptop"></i> Toggle Console';
+    });
+
+    // --- TITLE BAR TOGGLE LOGIC ---
+    const titleToggleBtn = document.getElementById("title-toggle-btn");
+    const browserTitleBar = document.getElementById("browser-title-bar");
+    let isTitleBarOpen = false;
+
+    titleToggleBtn.addEventListener("click", () => {
+        isTitleBarOpen = !isTitleBarOpen;
+        browserTitleBar.style.display = isTitleBarOpen ? "flex" : "none";
+        titleToggleBtn.innerHTML = isTitleBarOpen ? '<i class="fas fa-window-maximize"></i> Toggle Title Bar' : '<i class="fas fa-window-maximize fa-rotate-180"></i> Toggle Title Bar';
+    });
+
+
+    // --- RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
+    const vDivider = document.getElementById("divider");
+    const leftPanel = document.getElementById("left-panel");
+
+    let isVDragging = false;
+    let isHDragging = false;
+
+    vDivider.addEventListener("mousedown", (e) => {
+        isVDragging = true;
+        vDivider.classList.add("dragging");
+        document.getElementById("output-frame").style.pointerEvents = "none";
+    });
+
+    hDivider.addEventListener("mousedown", (e) => {
+        isHDragging = true;
+        hDivider.classList.add("dragging");
+        document.getElementById("output-frame").style.pointerEvents = "none";
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (isVDragging) {
+            let newWidth = (e.clientX / window.innerWidth) * 100;
+            if (newWidth > 10 && newWidth < 90) leftPanel.style.flex = `0 0 ${newWidth}%`;
         }
-
-        const indentConfig = detectIndent(initialCode);
-
-        const indentInput = document.getElementById("indent-input");
-        indentInput.value = indentConfig.useTabs ? "tab" : indentConfig.size;
-
-        // --- INDENTATION INPUT LOGIC ---
-        indentInput.addEventListener("change", (e) => {
-            const val = e.target.value.trim().toLowerCase();
-            console.log(val)
-            if (val === "tab" || val === "tabs") {
-                indentConfig.useTabs = true;
-                indentConfig.size = 4; // Fallback size for CodeMirror tab width
-            } else {
-                const parsed = parseInt(val, 10);
-                if (!isNaN(parsed) && parsed > 0) {
-                    indentConfig.useTabs = false;
-                    indentConfig.size = parsed;
-                } else {
-                    // Invalid input: revert to previous state
-                    indentInput.value = indentConfig.useTabs ? "tab" : indentConfig.size;
-                    showToast("Invalid indent size.");
-                    return;
-                }
-            }
-
-            // Dynamically update CodeMirror settings
-            editor.setOption("indentUnit", indentConfig.size);
-            editor.setOption("tabSize", indentConfig.size);
-            editor.setOption("indentWithTabs", indentConfig.useTabs);
-            
-            showToast(`Indentation updated to ${indentConfig.useTabs ? 'Tabs' : indentConfig.size + ' spaces'}`);
-        });
-
-        const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
-            mode: "htmlmixed",
-            theme: "monokai",
-            lineNumbers: true,
-            lineWrapping: false,
-            indentUnit: indentConfig.size,
-            tabSize: indentConfig.size,
-            indentWithTabs: indentConfig.useTabs,
-
-            styleActiveLine: true,       // Highlights current line
-            matchBrackets: true,         // Highlights matching {} [] ()
-            autoCloseBrackets: true,     // Auto-types closing brackets
-            autoCloseTags: true,         // Auto-types closing HTML tags
-            foldGutter: true,            // Enables the folding arrows
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // Draws the folding column
-
-            extraKeys: {
-                "Tab": function(cm) {
-                    if (cm.somethingSelected()) {
-                        cm.indentSelection("add");
-                    } else {
-                        cm.replaceSelection(indentConfig.useTabs ? "\t" : " ".repeat(indentConfig.size));
-                    }
-                },
-                // "Shift-Tab": "indentLess",
-                "Shift-Tab": function(cm) {
-                    cm.indentSelection("subtract");
-                },
-                "Ctrl-/": "toggleComment",
-                "Cmd-/": "toggleComment",
-                "Ctrl-F": openSearch,
-                "Cmd-F": openSearch,
-                "Alt-Up": moveLineUp,
-                "Alt-Down": moveLineDown
-            }
-        });
-
-        editor.on("change", () => {
-            localStorage.setItem("HTMLDraft_Code", editor.getValue());
-        });
-
-        // --- RUN CODE & CONSOLE OVERRIDE ---
-        function updateOutput() {
-            consoleOutput.innerHTML = "";
-            const userCode = editor.getValue();
-
-            const oldIframe = document.getElementById("output-frame");
-            const newIframe = document.createElement("iframe");
-            newIframe.id = "output-frame";
-            oldIframe.parentNode.replaceChild(newIframe, oldIframe);
-
-            const iframeDoc = newIframe.contentDocument || newIframe.contentWindow.document;
-
-            const consoleInterceptor = `
-                <script>
-                    (function() {
-                        const origLog = console.log;
-                        const origWarn = console.warn;
-                        const origError = console.error;
-
-                        function postLog(level, args) {
-                            const parsedArgs = Array.from(args).map(arg => {
-                                if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
-                                return String(arg);
-                            });
-                            window.parent.postMessage({ source: 'mini-console', level: level, payload: parsedArgs.join(' ') }, '*');
-                        }
-
-                        console.log = function(...args) { postLog('log', args); origLog.apply(console, args); };
-                        console.warn = function(...args) { postLog('warn', args); origWarn.apply(console, args); };
-                        console.error = function(...args) { postLog('error', args); origError.apply(console, args); };
-
-                        window.onerror = function(message, source, lineno, colno, error) {
-                            postLog('error', [message + ' (Line: ' + lineno + ')']);
-                        };
-                    })();
-                <\/script>
-            `;
-
-            iframeDoc.open();
-            iframeDoc.write(consoleInterceptor + userCode);
-            iframeDoc.close();
-
-             // Extract Title and Favicon for the Browser Title Bar
-            const titleText = iframeDoc.title || "Untitled";
-            document.getElementById("browser-title-text").textContent = titleText;
-
-            // Look for <link rel="icon"> or <link rel="shortcut icon">
-            const faviconLink = iframeDoc.querySelector("link[rel~='icon']");
-            const faviconImg = document.getElementById("browser-favicon");
-            const defaultFavicon = document.getElementById("default-favicon");
-
-            if (faviconLink && faviconLink.getAttribute("href")) {
-                faviconImg.src = faviconLink.getAttribute("href");
-                faviconImg.style.display = "block";
-                defaultFavicon.style.display = "none";
-            } else {
-                faviconImg.style.display = "none";
-                defaultFavicon.style.display = "block";
+        if (isHDragging) {
+            let newHeight = window.innerHeight - e.clientY;
+            if (newHeight > 50 && newHeight < window.innerHeight - 50) {
+                miniConsole.style.height = `${newHeight}px`;
             }
         }
+    });
 
-        document.getElementById("run-btn").addEventListener("click", updateOutput);
+    document.addEventListener("mouseup", (e) => {
+        if (isVDragging || isHDragging) {
+            isVDragging = false;
+            isHDragging = false;
+            vDivider.classList.remove("dragging");
+            hDivider.classList.remove("dragging");
+            document.getElementById("output-frame").style.pointerEvents = "auto";
+        }
+    });
 
-        window.addEventListener("message", (event) => {
-            if (event.data && event.data.source === "mini-console") {
-                const msgDiv = document.createElement("div");
-                msgDiv.className = `log-msg ${event.data.level}`;
-                msgDiv.textContent = `> ${event.data.payload}`;
-                consoleOutput.appendChild(msgDiv);
-                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    // --- VIEW TOGGLE ---
+    const viewBtn = document.getElementById("view-btn");
+    const rightPanel = document.getElementById("right-panel");
+    let viewState = 0;
 
-                if (event.data.level === "error" && document.getElementById("mini-console").style.display !== "flex") {
-                    document.getElementById("console-btn").click();
-                }
+    viewBtn.addEventListener("click", () => {
+        viewState = (viewState + 1) % 3;
+        if (viewState === 0) {
+            viewBtn.innerText = "◫";
+            leftPanel.style.display = "flex";
+            rightPanel.style.display = "flex";
+            vDivider.style.display = "flex";
+            leftPanel.style.flex = "0 0 50%";
+        } else if (viewState === 1) {
+            viewBtn.innerText = "◧";
+            leftPanel.style.display = "flex";
+            rightPanel.style.display = "none";
+            vDivider.style.display = "none";
+            leftPanel.style.flex = "1";
+        } else if (viewState === 2) {
+            viewBtn.innerText = "◨";
+            leftPanel.style.display = "none";
+            rightPanel.style.display = "flex";
+            vDivider.style.display = "none";
+        }
+        setTimeout(() => editor.refresh(), 10);
+    });
+
+    // --- WRAP TOGGLE ---
+    const wrapBtn = document.getElementById("wrap-btn");
+    let isWrapped = false;
+    wrapBtn.addEventListener("click", () => {
+        isWrapped = !isWrapped;
+        editor.setOption("lineWrapping", isWrapped);
+        wrapBtn.innerHTML = isWrapped ? '<i class="fas fa-arrows-left-right-to-line"></i> Toggle Word Wrap' : '<i class="fas fa-arrow-right-long"></i> Toggle Word Wrap';
+    });
+
+
+    // --- WHITESPACE TOGGLE LOGIC ---
+    const whitespaceBtn = document.getElementById("whitespace-btn");
+    let isWhitespaceVisible = false;
+
+    // CodeMirror Overlay to specifically target space characters
+    const whitespaceOverlay = {
+        token: function(stream) {
+            if (stream.eatWhile(/ /)) return "space";
+            stream.next();
+            return null;
+        }
+    };
+
+    whitespaceBtn.addEventListener("click", () => {
+        isWhitespaceVisible = !isWhitespaceVisible;
+
+        if (isWhitespaceVisible) {
+            // Apply the overlay and CSS class
+            editor.addOverlay(whitespaceOverlay);
+            editor.getWrapperElement().classList.add("show-whitespaces");
+            whitespaceBtn.innerHTML = '<i class="fas fa-paragraph"></i> Show Whitespaces';
+        } else {
+            // Remove the overlay and CSS class
+            editor.removeOverlay(whitespaceOverlay);
+            editor.getWrapperElement().classList.remove("show-whitespaces");
+            whitespaceBtn.innerHTML = '<i class="fas fa-eraser"></i> Show Whitespaces';
+        }
+    });
+
+
+    // --- THEME TOGGLE ---
+    const themeBtn = document.getElementById("theme-btn");
+    let isDark = true;
+    themeBtn.addEventListener("click", () => {
+        isDark = !isDark;
+        editor.setOption("theme", isDark ? "monokai" : "default");
+        themeBtn.innerHTML = isDark ? '<i class="fas fa-moon"></i> Toggle Theme' : '<i class="fas fa-sun"></i> Toggle Theme';
+        if (isDark) {
+            document.body.classList.remove("light-theme");
+            document.body.style.backgroundColor = "#272822";
+        } else {
+            document.body.classList.add("light-theme");
+            document.body.style.backgroundColor = "#e0e0e0";
+        }
+    });
+
+    // --- AUTO-HIGHLIGHT SELECTION LOGIC ---
+    let autoSelectionMarks = [];
+
+    editor.on("cursorActivity", () => {
+        // 1. Clear any previous auto-highlights
+        autoSelectionMarks.forEach(m => m.clear());
+        autoSelectionMarks = [];
+
+        // 2. Skip if the Search Box is open (to prevent conflicting highlights)
+        if (document.getElementById("search-box").style.display === "flex") return;
+
+        // 3. Get the text the user just highlighted
+        const selectedText = editor.getSelection();
+
+        // 4. Only highlight if they selected 2 or more characters (and ignore multi-line selections)
+        if (selectedText.length >= 2 && !selectedText.includes('\n')) {
+
+            // Search the document for exact matches (case-sensitive)
+            let cursor = editor.getSearchCursor(selectedText, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: false});
+
+            while (cursor.findNext()) {
+                // Apply the CSS class to every match found
+                let mark = editor.markText(cursor.from(), cursor.to(), {className: "auto-highlight"});
+                autoSelectionMarks.push(mark);
             }
-        });
+        }
+    });
 
-        document.getElementById("clear-console-btn").addEventListener("click", () => {
-            consoleOutput.innerHTML = "";
-        });
-
-        updateOutput();
-
-        // --- FORMAT CODE ---
-        document.getElementById("format-btn").addEventListener("click", () => {
-            const unformattedCode = editor.getValue();
-            const formattedCode = html_beautify(unformattedCode, {
-                indent_size: indentConfig.size,
-                indent_with_tabs: indentConfig.useTabs, // Tells beautifier to use \t instead of spaces
-                wrap_line_length: 0,
-                preserve_newlines: true
-            });
-
-            // If the code is already perfect, do nothing
-            if (unformattedCode === formattedCode) {
-              showToast("No chnage, code is already clean.");
-              return;
-            }
-
-            // Safely replace the text without ruining the Undo history or cursor position
-            const scrollInfo = editor.getScrollInfo();
-            editor.operation(() => {
-                editor.replaceRange(
-                    formattedCode,
-                    { line: 0, ch: 0 },
-                    { line: editor.lineCount(), ch: 0 }
-                );
-            });
-            editor.scrollTo(scrollInfo.left, scrollInfo.top);
-            showToast("Applied proper line breaks, spacing, and indentation.");
-        });
-
-
-        // --- TRIM TRAILING WHITESPACE LOGIC ---
-        document.getElementById("trim-btn").addEventListener("click", () => {
-            // editor.operation groups all these changes into a single "Undo" step
-            // and prevents the editor from visually flickering while it works.
-            editor.operation(() => {
-                const lineCount = editor.lineCount();
-                let linesTrimmed = 0;
-
-                for (let i = 0; i < lineCount; i++) {
-                    const text = editor.getLine(i);
-                    // Match 1 or more spaces/tabs exactly at the end of the line
-                    const match = text.match(/[ \t]+$/);
-
-                    if (match) {
-                        // Delete just the matched whitespace at the end
-                        editor.replaceRange(
-                            "",
-                            { line: i, ch: text.length - match[0].length },
-                            { line: i, ch: text.length }
-                        );
-                        linesTrimmed++;
-                    }
-                }
-
-                // Show the toast notification!
-                if (linesTrimmed > 0) {
-                    showToast(`Trimmed trailing whitespace from ${linesTrimmed} line(s).`);
-                } else {
-                    showToast("No trailing whitespace found.");
-                }
-            });
-        });
-
-
-        // --- CONSOLE TOGGLE ---
-        const consoleBtn = document.getElementById("console-btn");
-        const hideConsoleBtn = document.getElementById("hide-console-btn");
-        const miniConsole = document.getElementById("mini-console");
-        const hDivider = document.getElementById("horizontal-divider");
-        let isConsoleOpen = false;
-
-        consoleBtn.addEventListener("click", () => {
-            isConsoleOpen = !isConsoleOpen;
-            miniConsole.style.display = isConsoleOpen ? "flex" : "none";
-            hDivider.style.display = isConsoleOpen ? "flex" : "none";
-            consoleBtn.innerHTML = isConsoleOpen ? '<i class="fas fa-laptop-code"></i>' : '<i class="fas fa-laptop"></i>';
-        });
-
-        hideConsoleBtn.addEventListener("click", () => {
-            isConsoleOpen = false;
-            miniConsole.style.display = "none";
-            hDivider.style.display = "none";
-            consoleBtn.innerHTML = '<i class="fas fa-laptop"></i>';
-        });
-
-        // --- TITLE BAR TOGGLE LOGIC ---
-        const titleToggleBtn = document.getElementById("title-toggle-btn");
-        const browserTitleBar = document.getElementById("browser-title-bar");
-        let isTitleBarOpen = false;
-
-        titleToggleBtn.addEventListener("click", () => {
-            isTitleBarOpen = !isTitleBarOpen;
-            browserTitleBar.style.display = isTitleBarOpen ? "flex" : "none";
-            titleToggleBtn.innerHTML = isTitleBarOpen ? '<i class="fas fa-window-maximize"></i>' : '<i class="fas fa-window-maximize fa-rotate-180"></i>';
-        });
-
-
-        // --- RESIZE LOGIC (VERTICAL & HORIZONTAL) ---
-        const vDivider = document.getElementById("divider");
-        const leftPanel = document.getElementById("left-panel");
-
-        let isVDragging = false;
-        let isHDragging = false;
-
-        vDivider.addEventListener("mousedown", (e) => {
-            isVDragging = true;
-            vDivider.classList.add("dragging");
-            document.getElementById("output-frame").style.pointerEvents = "none";
-        });
-
-        hDivider.addEventListener("mousedown", (e) => {
-            isHDragging = true;
-            hDivider.classList.add("dragging");
-            document.getElementById("output-frame").style.pointerEvents = "none";
-        });
-
-        document.addEventListener("mousemove", (e) => {
-            if (isVDragging) {
-                let newWidth = (e.clientX / window.innerWidth) * 100;
-                if (newWidth > 10 && newWidth < 90) leftPanel.style.flex = `0 0 ${newWidth}%`;
-            }
-            if (isHDragging) {
-                let newHeight = window.innerHeight - e.clientY;
-                if (newHeight > 50 && newHeight < window.innerHeight - 50) {
-                    miniConsole.style.height = `${newHeight}px`;
-                }
-            }
-        });
-
-        document.addEventListener("mouseup", (e) => {
-            if (isVDragging || isHDragging) {
-                isVDragging = false;
-                isHDragging = false;
-                vDivider.classList.remove("dragging");
-                hDivider.classList.remove("dragging");
-                document.getElementById("output-frame").style.pointerEvents = "auto";
-            }
-        });
-
-        // --- VIEW TOGGLE ---
-        const viewBtn = document.getElementById("view-btn");
-        const rightPanel = document.getElementById("right-panel");
-        let viewState = 0;
-
-        viewBtn.addEventListener("click", () => {
-            viewState = (viewState + 1) % 3;
-            if (viewState === 0) {
-                viewBtn.innerText = "◫";
-                leftPanel.style.display = "flex";
-                rightPanel.style.display = "flex";
-                vDivider.style.display = "flex";
-                leftPanel.style.flex = "0 0 50%";
-            } else if (viewState === 1) {
-                viewBtn.innerText = "◧";
-                leftPanel.style.display = "flex";
-                rightPanel.style.display = "none";
-                vDivider.style.display = "none";
-                leftPanel.style.flex = "1";
-            } else if (viewState === 2) {
-                viewBtn.innerText = "◨";
-                leftPanel.style.display = "none";
-                rightPanel.style.display = "flex";
-                vDivider.style.display = "none";
-            }
-            setTimeout(() => editor.refresh(), 10);
-        });
-
-        // --- WRAP TOGGLE ---
-        const wrapBtn = document.getElementById("wrap-btn");
-        let isWrapped = false;
-        wrapBtn.addEventListener("click", () => {
-            isWrapped = !isWrapped;
-            editor.setOption("lineWrapping", isWrapped);
-            wrapBtn.innerHTML = isWrapped ? '<i class="fas fa-arrows-left-right-to-line"></i>' : '<i class="fas fa-arrow-right-long"></i>';
-        });
-
-
-        // --- WHITESPACE TOGGLE LOGIC ---
-        const whitespaceBtn = document.getElementById("whitespace-btn");
-        let isWhitespaceVisible = false;
-
-        // CodeMirror Overlay to specifically target space characters
-        const whitespaceOverlay = {
-            token: function(stream) {
-                if (stream.eatWhile(/ /)) return "space";
-                stream.next();
-                return null;
-            }
-        };
-
-        whitespaceBtn.addEventListener("click", () => {
-            isWhitespaceVisible = !isWhitespaceVisible;
-
-            if (isWhitespaceVisible) {
-                // Apply the overlay and CSS class
-                editor.addOverlay(whitespaceOverlay);
-                editor.getWrapperElement().classList.add("show-whitespaces");
-                whitespaceBtn.innerHTML = '<i class="fas fa-paragraph"></i>';
-            } else {
-                // Remove the overlay and CSS class
-                editor.removeOverlay(whitespaceOverlay);
-                editor.getWrapperElement().classList.remove("show-whitespaces");
-                whitespaceBtn.innerHTML = '<i class="fas fa-eraser"></i>';
-            }
-        });
-
-
-        // --- THEME TOGGLE ---
-        const themeBtn = document.getElementById("theme-btn");
-        let isDark = true;
-        themeBtn.addEventListener("click", () => {
-            isDark = !isDark;
-            editor.setOption("theme", isDark ? "monokai" : "default");
-            themeBtn.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-            if (isDark) {
-                document.body.classList.remove("light-theme");
-                document.body.style.backgroundColor = "#272822";
-            } else {
-                document.body.classList.add("light-theme");
-                document.body.style.backgroundColor = "#e0e0e0";
-            }
-        });
-
-        // --- AUTO-HIGHLIGHT SELECTION LOGIC ---
-        let autoSelectionMarks = [];
-
-        editor.on("cursorActivity", () => {
-            // 1. Clear any previous auto-highlights
-            autoSelectionMarks.forEach(m => m.clear());
-            autoSelectionMarks = [];
-
-            // 2. Skip if the Search Box is open (to prevent conflicting highlights)
-            if (document.getElementById("search-box").style.display === "flex") return;
-
-            // 3. Get the text the user just highlighted
-            const selectedText = editor.getSelection();
-
-            // 4. Only highlight if they selected 2 or more characters (and ignore multi-line selections)
-            if (selectedText.length >= 2 && !selectedText.includes('\n')) {
-
-                // Search the document for exact matches (case-sensitive)
-                let cursor = editor.getSearchCursor(selectedText, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: false});
-
-                while (cursor.findNext()) {
-                    // Apply the CSS class to every match found
-                    let mark = editor.markText(cursor.from(), cursor.to(), {className: "auto-highlight"});
-                    autoSelectionMarks.push(mark);
-                }
-            }
-        });
-
-    </script>
-    <!-- Toast Notification Container -->
-    <div id="toast-container"></div>
+  </script>
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
 </body>
 
 </html>
