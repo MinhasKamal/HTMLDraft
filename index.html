@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/matchesonscrollbar.css">
 
   <style>
     body {
@@ -33,7 +34,7 @@
       background: rgba(30, 30, 30, 0.9);
       color: #fff;
       border: 1px solid #555;
-      padding: 4px 8px;
+      padding: 6px 10px;
       cursor: pointer;
       border-radius: 6px;
       font-size: 13px;
@@ -42,8 +43,10 @@
       backdrop-filter: blur(5px);
       transition: all 0.2s;
     }
-
-    #view-btn:hover { background-color: #444; border-color: #777; }
+    #view-btn:hover {
+      background-color: #444;
+      border-color: #777;
+    }
 
     #title {
       color: #409050;
@@ -57,7 +60,7 @@
       background-color: #444;
       color: #fff;
       border: 1px solid #555;
-      padding: 4px 8px;
+      padding: 6px 10px;
       cursor: pointer;
       border-radius: 4px;
       font-size: 13px;
@@ -65,11 +68,18 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
+    .toolbar-btn:hover {
+      background-color: #555;
+      border-color: #777;
+    }
 
-    .toolbar-btn:hover { background-color: #555; border-color: #777; }
-
-    #run-btn { background-color: #409050; border-color: #45a049; }
-    #run-btn:hover { background-color: #4FAF5F; }
+    #run-btn {
+      background-color: #409050;
+      border-color: #45a049;
+    }
+    #run-btn:hover {
+      background-color: #4FAF5F;
+    }
 
     /* Left Panel & Toolbar */
     #left-panel {
@@ -151,7 +161,6 @@
       padding: 8px 0;
       flex-direction: column;
     }
-
     .menu-dropdown.show {
       display: flex;
     }
@@ -167,16 +176,14 @@
       font-size: 13px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       width: 100%;
       transition: background 0.2s;
     }
-
     .menu-item i {
       width: 16px; /* Aligns all the icons perfectly */
       text-align: center;
     }
-
     .menu-item:hover {
       background-color: #444;
       color: #fff;
@@ -188,7 +195,6 @@
       margin: 4px 0;
       width: 100%;
     }
-
     body.light-theme .menu-separator {
       background-color: #ddd;
     }
@@ -206,6 +212,7 @@
         border-color: #ccc;
         box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
     }
+
     body.light-theme .menu-item,
     body.light-theme .menu-row {
         color: #333;
@@ -216,7 +223,6 @@
     body.light-theme .menu-row {
         border-top-color: #ddd;
     }
-
 
     /* Vertical Draggable Divider */
     #divider {
@@ -229,8 +235,13 @@
       transition: background-color 0.2s;
       z-index: 10;
     }
-    #divider:hover, #divider.dragging { background-color: #4CAF50 !important; }
-    #divider::after { content: "⋮"; color: #888; font-size: 20px; }
+    #divider:hover, #divider.dragging {
+      background-color: #4CAF50 !important;
+    }
+    #divider::after {
+      content: "⋮"; color: #888;
+      font-size: 20px;
+    }
 
     /* Right Panel */
     #right-panel {
@@ -244,13 +255,13 @@
 
     /* --- INSTRUCTIONS PANE --- */
     #instructions-pane {
-      display: none; 
+      display: none;
       position: absolute;
       top: 20px;
       bottom: 20px;
       left: 20px;
       right: 20px;
-      background-color: #1e1e1e; 
+      background-color: #1e1e1e;
       color: #ccc;
       z-index: 2000;
       padding: 40px;
@@ -258,7 +269,7 @@
       overflow-y: auto;
       font-family: sans-serif;
       border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
       border: 1px solid #444;
     }
 
@@ -273,7 +284,6 @@
       cursor: pointer;
       transition: color 0.2s;
     }
-
     #close-instructions-btn:hover {
       color: #fff;
     }
@@ -284,18 +294,15 @@
       border-bottom: 1px solid #444;
       padding-bottom: 10px;
     }
-
     .instructions-content h3 {
       color: #4CAF50; /* Green accent */
       margin-top: 30px;
       margin-bottom: 15px;
     }
-
     .instructions-content ul {
       line-height: 1.8;
       padding-left: 20px;
     }
-
     .instructions-content kbd {
       background-color: #333;
       border: 1px solid #555;
@@ -314,7 +321,6 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       border-color: #ccc;
     }
-
     body.light-theme .instructions-content h2 {
       color: #111;
       border-bottom-color: #ddd;
@@ -331,7 +337,6 @@
       box-shadow: 0 2px 0 #aaa;
       color: #333;
     }
-
 
     #editor-container {
       flex: 1;
@@ -375,7 +380,6 @@
       color: #333;
       border-bottom: 1px solid #ccc;
     }
-
 
     /* Horizontal Draggable Divider (Console Resizer) */
     #horizontal-divider {
@@ -431,7 +435,9 @@
       padding: 2px 8px;
       font-size: 11px;
     }
-    .console-bar-btn:hover { background: #444; }
+    .console-bar-btn:hover {
+      background: #444;
+    }
 
     #console-output {
       flex: 1;
@@ -439,9 +445,17 @@
       padding: 8px;
     }
 
-    .log-msg { padding: 4px 0; border-bottom: 1px solid #333; word-wrap: break-word; }
-    .log-msg.error { color: #ff6b6b; }
-    .log-msg.warn { color: #feca57; }
+    .log-msg {
+      padding: 4px 0;
+      border-bottom: 1px solid #333;
+      word-wrap: break-word;
+    }
+    .log-msg.error {
+      color: #ff6b6b;
+    }
+    .log-msg.warn {
+      color: #feca57;
+    }
 
     /* Search Box Styling */
     #search-box {
@@ -467,31 +481,94 @@
       outline: none;
       font-family: inherit;
     }
-    #search-input:focus { border-color: #4CAF50; }
-    .search-highlight { background-color: rgba(250, 250, 10, 0.2); }
-    /*.CodeMirror-selected { background-color: rgba(255, 255, 255, 0.2) !important; }*/
+    #search-input:focus {
+      border-color: #4CAF50;
+    }
+    .search-highlight {
+      background-color: rgba(250, 250, 10, 0.2);
+    }
+
+    #search-box #search-stats{
+      color:#aaa;
+      font-size:12px;
+      margin: 0 4px;
+      white-space:nowrap;
+    }
+
+    #search-box #match-case{
+      color:#ddd;
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      gap:4px;
+      margin-right:4px;
+    }
 
     /* Light Theme Adjustments */
-    body.light-theme #divider, body.light-theme #horizontal-divider { background-color: #ccc; }
-    body.light-theme #toolbar { background-color: #f5f5f5; border-bottom: 1px solid #ddd; }
-    body.light-theme .toolbar-btn { background-color: #e0e0e0; color: #333; border-color: #ccc; }
-    body.light-theme .toolbar-btn:hover { background-color: #d0d0d0; }
-    body.light-theme #run-btn { background-color: #4CAF50; color: white; border-color: #4CAF50; }
+    body.light-theme #divider, body.light-theme #horizontal-divider {
+      background-color: #ccc;
+    }
+    body.light-theme #toolbar {
+      background-color: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+    }
+    body.light-theme .toolbar-btn {
+      background-color: #e0e0e0;
+      color: #333;
+      border-color: #ccc;
+    }
+    body.light-theme .toolbar-btn:hover {
+      background-color: #d0d0d0;
+    }
+    body.light-theme #run-btn {
+      background-color: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
 
-    body.light-theme #mini-console { background-color: #f9f9f9; color: #333; }
-    body.light-theme #console-header { background: #e0e0e0; border-bottom: 1px solid #ccc; color: #333; }
-    body.light-theme #console-bar-btn { color: #333; border-color: #999; }
-    body.light-theme #console-bar-btn:hover { background: #d0d0d0; }
-    body.light-theme .log-msg { border-bottom: 1px solid #eee; }
+    body.light-theme #mini-console {
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    body.light-theme #console-header {
+      background: #e0e0e0;
+      border-bottom: 1px solid #ccc;
+      color: #333;
+    }
+    body.light-theme #console-bar-btn {
+      color: #333;
+      border-color: #999;
+    }
+    body.light-theme #console-bar-btn:hover {
+      background: #d0d0d0;
+    }
+    body.light-theme .log-msg {
+      border-bottom: 1px solid #eee;
+    }
 
-    body.light-theme #search-box { background: #f5f5f5; border-color: #ddd; }
-    body.light-theme #search-input { background: #fff; color: #333; border-color: #ccc; }
+    body.light-theme #search-box {
+      background: #f5f5f5;
+      border-color: #ddd;
+    }
+    body.light-theme #search-input {
+      background: #fff;
+      color: #333;
+      border-color: #ccc;
+    }
 
-    a { color: inherit; text-decoration: inherit; }
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
 
     /* Auto-highlight selected text matches */
-    .auto-highlight { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
-    body.light-theme .auto-highlight { background-color: rgba(0, 0, 0, 0.15); }
+    .auto-highlight {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+    }
+    body.light-theme .auto-highlight {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
 
     /* --- WHITESPACE VISIBILITY --- */
     /* Spaces: A tiny gray dot repeating every 1 character width */
@@ -512,7 +589,6 @@
       text-align: center;
       color: rgba(128, 128, 128, 0.3);
       pointer-events: none;
-      /* FIX: Inherit the exact line height of the code */
       line-height: inherit;
     }
 
@@ -565,6 +641,10 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
+    .cm-trailingspace {
+      background-color: rgba(255, 0, 0, 0.1);
+    }
+
   </style>
 </head>
 
@@ -578,7 +658,7 @@
       <div id="button-group">
         <!-- Dropdown Menu Container -->
         <div class="menu-container">
-<!--           <button id="menu-btn" class="toolbar-btn" title="Open Menu"><i class="fas fa-bars"></i></button> -->
+          <!--           <button id="menu-btn" class="toolbar-btn" title="Open Menu"><i class="fas fa-bars"></i></button> -->
           <div id="menu-dropdown" class="menu-dropdown">
             <button id="theme-btn" class="menu-item"><i class="fas fa-moon"></i> Toggle Theme</button>
             <button id="wrap-btn" class="menu-item"><i class="fas fa-arrow-right-long"></i> Toggle Word Wrap</button>
@@ -598,15 +678,15 @@
           </div>
         </div>
         <button id="menu-btn" class="toolbar-btn" title="Open Menu"><i class="fas fa-bars"></i></button>
-<!--         <span id="indent-label"><i class="fas fa-indent"></i></span> -->
-<!--         <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" /> | -->
-<!--         <button id="format-btn" class="toolbar-btn" title="Apply Proper Line Breaks, Spacing, and Indentation"><i class="fas fa-broom"></i></button> -->
-<!--         <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button> | -->
-<!--         <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button> -->
-<!--         <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button> -->
-<!--         <button id="whitespace-btn" class="toolbar-btn" title="Toggle Show Whitespaces"><i class="fas fa-low-vision"></i></button> | -->
-<!--         <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button> -->
-<!--         <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button> | -->
+        <!--         <span id="indent-label"><i class="fas fa-indent"></i></span> -->
+        <!--         <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" /> | -->
+        <!--         <button id="format-btn" class="toolbar-btn" title="Apply Proper Line Breaks, Spacing, and Indentation"><i class="fas fa-broom"></i></button> -->
+        <!--         <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button> | -->
+        <!--         <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button> -->
+        <!--         <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button> -->
+        <!--         <button id="whitespace-btn" class="toolbar-btn" title="Toggle Show Whitespaces"><i class="fas fa-low-vision"></i></button> | -->
+        <!--         <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button> -->
+        <!--         <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button> | -->
         <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
       </div>
     </div>
@@ -615,8 +695,8 @@
       <!-- Floating Search Box with Stats -->
       <div id="search-box">
         <input type="text" id="search-input" placeholder="Find...">
-        <span id="search-stats" style="color:#aaa; font-size:12px; margin: 0 4px; white-space:nowrap;">0/0</span>
-        <label style="color:#ddd; font-size:12px; display:flex; align-items:center; gap:4px; margin-right:4px;" title="Match Case">
+        <span id="search-stats">0/0</span>
+        <label id="match-case" title="Match Case">
           <input type="checkbox" id="match-case-cb">
           <div style="color:#aaa; font-weight:bold;">Aa</div>
         </label>
@@ -669,6 +749,8 @@
           <li><kbd>Ctrl</kbd> + <kbd>F</kbd> Find / Search</li>
           <li><kbd>Alt</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> Move Line Up/Down</li>
           <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> / <kbd>Y</kbd> Undo / Redo</li>
+          <li><kbd>Ctrl</kbd> + <kbd>Click</kbd> Multi Cursor</li>
+          <li><kbd>Atl</kbd> + <kbd>Select</kbd> Vertical or Column Select and Edit</li>
         </ul>
 
         <h3><i class="fas fa-bolt"></i> Power Features</h3>
@@ -724,6 +806,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/brace-fold.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/xml-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/matchtags.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/trailingspace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/comment-fold.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/scroll/annotatescrollbar.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/matchesonscrollbar.js"></script>
 
   <script>
     const consoleOutput = document.getElementById("console-output");
@@ -813,6 +900,7 @@
     let searchCursor = null;
     let searchMarks = [];
     let allMatches = []; // Keeps track of match locations for numbering
+    let searchScrollbarMarks = null; // Tracks scrollbar marks for the search box
 
     function clearSearchMarks() {
       searchMarks.forEach(m => m.clear());
@@ -886,6 +974,17 @@
       } else {
           searchStats.textContent = `0/0`;
       }
+
+      // Clear previous search scrollbar marks
+      if (searchScrollbarMarks) {
+          searchScrollbarMarks.clear();
+          searchScrollbarMarks = null;
+      }
+
+      if (query.length > 0) {
+        searchScrollbarMarks = editor.showMatchesOnScrollbar(query, caseFold);
+      }
+
     }
 
     searchInput.addEventListener("input", () => doSearch(false, true));
@@ -904,9 +1003,14 @@
     document.getElementById("search-close").addEventListener("click", closeSearch);
 
     function closeSearch() {
-        searchBox.style.display = "none";
-        clearSearchMarks();
-        editor.focus();
+      searchBox.style.display = "none";
+      clearSearchMarks();
+      editor.focus();
+
+      if (searchScrollbarMarks) {
+        searchScrollbarMarks.clear();
+        searchScrollbarMarks = null;
+      }
     }
 
     // --- INITIALIZE EDITOR & AUTO-DETECT INDENT ---
@@ -993,7 +1097,8 @@
         autoCloseTags: true,         // Auto-types closing HTML tags
         foldGutter: true,            // Enables the folding arrows
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // Draws the folding column
-
+        matchTags: {bothTags: true}, // Highlights matching HTML tags
+        showTrailingSpace: true,     // Highlights useless spaces at line ends
         extraKeys: {
             "Tab": function(cm) {
                 if (cm.somethingSelected()) {
@@ -1327,33 +1432,42 @@
 
     // --- AUTO-HIGHLIGHT SELECTION LOGIC ---
     let autoSelectionMarks = [];
+    let scrollbarMarks = null;
 
     editor.on("cursorActivity", () => {
-        // 1. Clear any previous auto-highlights
-        autoSelectionMarks.forEach(m => m.clear());
-        autoSelectionMarks = [];
+      // 1. Clear any previous auto-highlights
+      autoSelectionMarks.forEach(m => m.clear());
+      autoSelectionMarks = [];
 
-        // 2. Skip if the Search Box is open (to prevent conflicting highlights)
-        if (document.getElementById("search-box").style.display === "flex") return;
+      if (scrollbarMarks) {
+        scrollbarMarks.clear();
+        scrollbarMarks = null;
+      }
 
-        // 3. Get the text the user just highlighted
-        const selectedText = editor.getSelection();
+      // 2. Skip if the Search Box is open (to prevent conflicting highlights)
+      if (document.getElementById("search-box").style.display === "flex") return;
 
-        // 4. Only highlight if they selected 2 or more characters (and ignore multi-line selections)
-        if (selectedText.length >= 2 && !selectedText.includes('\n')) {
+      // 3. Get the text the user just highlighted
+      const selectedText = editor.getSelection();
 
-            // Search the document for exact matches (case-sensitive)
-            let cursor = editor.getSearchCursor(selectedText, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: false});
+      // 4. Only highlight if they selected 2 or more characters (and ignore multi-line selections)
+      if (selectedText.length >= 2 && !selectedText.includes('\n')) {
 
-            while (cursor.findNext()) {
-                // Apply the CSS class to every match found
-                let mark = editor.markText(cursor.from(), cursor.to(), {className: "auto-highlight"});
-                autoSelectionMarks.push(mark);
-            }
+          // Search the document for exact matches (case-sensitive)
+        let cursor = editor.getSearchCursor(selectedText, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: false});
+
+        while (cursor.findNext()) {
+          // Apply the CSS class to every match found
+          let mark = editor.markText(cursor.from(), cursor.to(), {className: "auto-highlight"});
+          autoSelectionMarks.push(mark);
         }
+
+        scrollbarMarks = editor.showMatchesOnScrollbar(selectedText, false);
+      }
     });
 
   </script>
+
   <!-- Toast Notification Container -->
   <div id="toast-container"></div>
 </body>
