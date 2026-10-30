@@ -793,6 +793,50 @@
         text-decoration: none !important; /* <--- NEW: Removes the white line */
         border-bottom: 1px solid #cc5500 !important;
     }
+    
+    /* Make room for the diff column */
+    .CodeMirror-gutters {
+        border-right: 1px solid #ddd;
+    }
+
+    /* Set the width of our custom diff gutter */
+    .diff-gutter {
+        width: 8px !important;
+        background: transparent;
+    }
+
+    /* The visual markers */
+    .diff-marker {
+        width: 4px;
+        height: 1.4em;
+        margin-left: 2px;
+        border-radius: 2px;
+    }
+
+
+    /* Green for added lines */
+    .diff-added {
+        background-color: #2ea043;
+    }
+
+    /* Blue for modified lines */
+    .diff-modified {
+        background-color: #3182ce;
+    }
+
+    /* Red triangle for deleted lines (rendered on the adjacent line) */
+    .diff-deleted {
+        width: 0;
+        height: 0;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 6px solid #f85149;
+        position: relative;
+        top: -4px; /* Shift it up slightly so it sits between lines */
+        margin-left: 0px;
+        background-color: transparent;
+    }
+
 
   </style>
 </head>
@@ -829,6 +873,7 @@
           </div>
         </div>
         <button id="menu-btn" class="toolbar-btn" title="Open Menu"><i class="fas fa-bars"></i></button>
+        <button id="stage-btn" class="toolbar-btn" title="Clear Change Marks"><i class="fas fa-check-double"></i></button>
         <!--         <span id="indent-label"><i class="fas fa-indent"></i></span> -->
         <!--         <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" /> | -->
         <!--         <button id="format-btn" class="toolbar-btn" title="Apply Proper Line Breaks, Spacing, and Indentation"><i class="fas fa-broom"></i></button> -->
@@ -969,6 +1014,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/scroll/annotatescrollbar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/matchesonscrollbar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/scroll/simplescrollbars.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/diff@5.2.0/dist/diff.min.js"></script>
 
   <script>
     const consoleOutput = document.getElementById("console-output");
@@ -1010,6 +1056,14 @@
         menuDropdown.classList.remove("show");
       }
     });
+
+    // --- STAGE BTN ---
+    document.getElementById("stage-btn").addEventListener("click", () => {
+        baselineText = editor.getValue();
+        editor.clearGutter("diff-gutter");
+        showToast("Changes staged.");
+    });
+
 
     // --- INSTRUCTIONS PANE LOGIC ---
     const instructionsBtn = document.getElementById("instructions-btn");
@@ -1260,7 +1314,7 @@
       autoCloseBrackets: true,     // Auto-types closing brackets
       autoCloseTags: true,         // Auto-types closing HTML tags
       foldGutter: true,            // Enables the folding arrows
-      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], // Draws the folding column
+      gutters: ["CodeMirror-linenumbers", "diff-gutter", "CodeMirror-foldgutter"], // Draws the folding column
       matchTags: {bothTags: true}, // Highlights matching HTML tags
       showTrailingSpace: true,     // Highlights useless spaces at line ends
       scrollbarStyle: "simple",    // Use modern scrollbars to fix highlight alignment
@@ -1586,20 +1640,20 @@
         if (isMinimapVisible) {
             // Show the minimap
             minimapContainer.style.display = "block";
-            minimapBtn.innerHTML = '<i class="fas fa-map"></i> Hide Minimap';
+            minimapBtn.innerHTML = '<i class="fas fa-map"></i> Toggle Minimap';
 
             setTimeout(() => {
-                editor.refresh(); // <--- NEW: Tells main editor to recalculate its new smaller width
+                editor.refresh();
                 minimap.refresh();
                 syncMinimapWrap();
             }, 10);
         } else {
             // Hide the minimap
             minimapContainer.style.display = "none";
-            minimapBtn.innerHTML = '<i class="far fa-map"></i> Show Minimap';
+            minimapBtn.innerHTML = '<i class="far fa-map"></i> Toggle Minimap';
 
             setTimeout(() => {
-                editor.refresh(); // <--- NEW: Tells main editor to recalculate its new larger width
+                editor.refresh();
             }, 10);
         }
     });
@@ -1782,7 +1836,9 @@
     let isDark = true;
     themeBtn.addEventListener("click", () => {
       isDark = !isDark;
-      editor.setOption("theme", isDark ? "monokai" : "default");
+      const newTheme = isDark ? "monokai" : "default";
+      editor.setOption("theme", newTheme);
+      minimap.setOption("theme", newTheme);
       themeBtn.innerHTML = isDark ? '<i class="fas fa-moon"></i> Toggle Theme' : '<i class="fas fa-sun"></i> Toggle Theme';
       if (isDark) {
         document.body.classList.remove("light-theme");
@@ -1883,6 +1939,63 @@
             updateBookmarkScrollbar();
         }
     });
+
+    // --- CHANGE TRACKING ENGINE (GIT-STYLE GUTTER) ---
+
+    let baselineText = editor.getValue();
+    let diffTimeout = null;
+
+    function updateDiffMarkers() {
+        // 1. Clear previous markers
+        editor.clearGutter("diff-gutter");
+
+        const currentText = editor.getValue();
+        if (currentText === baselineText) return; // No changes!
+
+        // 2. Calculate the difference line-by-line
+        const diffs = Diff.diffLines(baselineText, currentText);
+        let currentLineIdx = 0;
+
+        for (let i = 0; i < diffs.length; i++) {
+            const part = diffs[i];
+
+            if (part.added) {
+                // If the previous block was a deletion, this is actually a "Modification"
+                const isModification = (i > 0 && diffs[i - 1].removed);
+
+                for (let j = 0; j < part.count; j++) {
+                    const marker = document.createElement("div");
+                    marker.className = isModification ? "diff-marker diff-modified" : "diff-marker diff-added";
+                    editor.setGutterMarker(currentLineIdx + j, "diff-gutter", marker);
+                }
+                currentLineIdx += part.count;
+
+            } else if (part.removed) {
+                // If it's a pure deletion (not followed by an addition), put a red arrow marker
+                const isFollowedByAddition = (i < diffs.length - 1 && diffs[i + 1].added);
+                if (!isFollowedByAddition) {
+                    const marker = document.createElement("div");
+                    marker.className = "diff-marker diff-deleted";
+
+                    // Attach it to the line directly below the deletion (or the last line if at EOF)
+                    const targetLine = Math.min(currentLineIdx, editor.lineCount() - 1);
+                    editor.setGutterMarker(targetLine, "diff-gutter", marker);
+                }
+            } else {
+                // Unchanged lines, simply advance the index
+                currentLineIdx += part.count;
+            }
+        }
+    }
+
+    // 3. Listen for changes (Debounced by 300ms for performance)
+    editor.on("change", () => {
+        clearTimeout(diffTimeout);
+        diffTimeout = setTimeout(updateDiffMarkers, 300);
+    });
+
+    // 4. Run once on load just in case auto-save restored changed code
+    updateDiffMarkers();
 
 
   </script>
