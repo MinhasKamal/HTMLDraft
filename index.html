@@ -673,7 +673,6 @@
       transform: translateY(0);
     }
 
-    /* Light Theme Adjustment */
     body.light-theme .toast {
       background-color: #fff;
       color: #333;
@@ -686,17 +685,56 @@
 
     /* --- GUTTER NUMBER HIGHLIGHTING --- */
     .cm-highlighted-gutter {
-        background-color: #ff9800 !important; /* Orange highlight */
+        background-color: #ff6600 !important; /* Orange highlight */
     }
-
     body.light-theme .cm-highlighted-gutter {
-        background-color: #ffb74d !important;
+        background-color: #ffbb66 !important;
     }
 
     .CodeMirror-linenumbers {
         cursor: pointer;
     }
 
+    /* --- SCROLLBAR BOOKMARK MARKERS --- */
+    .cm-bookmark-scrollbar-mark {
+        background-color: #ff6600;
+        height: 3px !important;
+        border-radius: 2px;
+        opacity: 0.9;
+    }
+    body.light-theme .cm-bookmark-scrollbar-mark {
+        background-color: #ffbb66;
+    }
+
+    /* --- MATCHING TAG UNDERLINE --- */
+    .CodeMirror-matchingtag {
+        background: transparent !important; /* Removes the default highlight block */
+        border-bottom: 1px solid #00eecc !important; /* Bright blue underline */
+    }
+    body.light-theme .CodeMirror-matchingtag {
+        border-bottom: 1px solid #00eecc !important; /* Slightly darker blue for contrast */
+    }
+
+    /* --- MATCHING BRACKET UNDERLINE --- */
+    .CodeMirror-matchingbracket {
+        background: transparent !important;
+        color: inherit !important;
+        text-decoration: none !important; /* <--- NEW: Removes the white line */
+        border-bottom: 1px solid #00eecc !important; 
+    }
+
+    /* Light Theme */
+    body.light-theme .CodeMirror-matchingbracket {
+        text-decoration: none !important; 
+        border-bottom: 1px solid #00eecc !important;
+    }
+
+    /* Red underline for broken/unmatched brackets */
+    .CodeMirror-nonmatchingbracket {
+        color: inherit !important;
+        text-decoration: none !important; /* <--- NEW: Removes the white line */
+        border-bottom: 1px solid #cc5500 !important;
+    }
 
   </style>
 </head>
@@ -714,8 +752,9 @@
           <!--           <button id="menu-btn" class="toolbar-btn" title="Open Menu"><i class="fas fa-bars"></i></button> -->
           <div id="menu-dropdown" class="menu-dropdown">
             <button id="theme-btn" class="menu-item"><i class="fas fa-moon"></i> Toggle Theme</button>
-            <button id="wrap-btn" class="menu-item"><i class="fas fa-arrow-right-long"></i> Toggle Word Wrap</button>
+            <button id="wrap-btn" class="menu-item"><i class="fa-solid fa-arrows-left-right"></i> Toggle Word Wrap</button>
             <button id="whitespace-btn" class="menu-item"><i class="fas fa-low-vision"></i> Toggle Show Whitespaces</button>
+            <button id="fold-btn" class="menu-item"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Toggle Fold All</button>
             <div class="menu-separator"></div>
             <button id="console-btn" class="menu-item"><i class="fas fa-laptop"></i> Toggle Console</button>
             <button id="title-toggle-btn" class="menu-item"><i class="fas fa-window-maximize fa-rotate-180"></i> Toggle Title Bar</button>
@@ -1445,7 +1484,7 @@
     wrapBtn.addEventListener("click", () => {
       isWrapped = !isWrapped;
       editor.setOption("lineWrapping", isWrapped);
-      wrapBtn.innerHTML = isWrapped ? '<i class="fas fa-arrows-left-right-to-line"></i> Toggle Word Wrap' : '<i class="fas fa-arrow-right-long"></i> Toggle Word Wrap';
+      wrapBtn.innerHTML = isWrapped ? '<i class="fas fa-arrows-left-right-to-line"></i> Toggle Word Wrap' : '<i class="fa-solid fa-arrows-left-right"></i> Toggle Word Wrap';
     });
 
 
@@ -1476,6 +1515,33 @@
         editor.getWrapperElement().classList.remove("show-whitespaces");
         whitespaceBtn.innerHTML = '<i class="fas fa-low-vision"></i> Toggle Show Whitespaces';
       }
+    });
+
+    // --- TOGGLE FOLD/UNFOLD ALL LOGIC ---
+    const toggleFoldBtn = document.getElementById("fold-btn");
+    let isAllFolded = false; // Tracks the current state
+
+    toggleFoldBtn.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent default if it's an <a> tag
+
+        isAllFolded = !isAllFolded; // Toggle the state
+        const action = isAllFolded ? "fold" : "unfold"; // Determine what to do
+
+        // Update button text/icon to reflect the next action
+        if (isAllFolded) {
+            toggleFoldBtn.innerHTML = '<i class="fa-solid fa-down-left-and-up-right-to-center"></i> Toggle Fold All';
+        } else {
+            toggleFoldBtn.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i> Toggle Fold All';
+        }
+
+        // editor.operation groups all folding into a single, instant DOM update
+        editor.operation(() => {
+            const totalLines = editor.lineCount();
+            for (let i = 0; i < totalLines; i++) {
+                // foldCode takes: (position, options, force action)
+                editor.foldCode(CodeMirror.Pos(i, 0), null, action);
+            }
+        });
     });
 
 
@@ -1531,19 +1597,74 @@
       }
     });
 
-    // --- GUTTER CLICK LINE HIGHLIGHTING ---
+//     // --- GUTTER CLICK LINE HIGHLIGHTING ---
+//     editor.on("gutterClick", (cm, line, gutter) => {
+//         if (gutter === "CodeMirror-linenumbers") {
+
+//             const lineHandle = cm.getLineHandle(line);
+
+//             if (lineHandle.isGutterHighlighted) {
+//                 cm.removeLineClass(line, "gutter", "cm-highlighted-gutter");
+//                 lineHandle.isGutterHighlighted = false;
+//             } else {
+//                 cm.addLineClass(line, "gutter", "cm-highlighted-gutter");
+//                 lineHandle.isGutterHighlighted = true;
+//             }
+//         }
+//     });
+
+    // --- GUTTER CLICK & SCROLLBAR MARKERS ---
+    // Initialize the custom scrollbar annotation channel
+    const bookmarkAnnotation = editor.annotateScrollbar("cm-bookmark-scrollbar-mark");
+    const bookmarkedLines = new Set(); // Stores our active lines
+
+    // Function to redraw all scrollbar marks based on active lines
+    function updateBookmarkScrollbar() {
+        let ranges = [];
+
+        bookmarkedLines.forEach(lineHandle => {
+            let lineNo = editor.getLineNumber(lineHandle);
+
+            if (lineNo === null) {
+                bookmarkedLines.delete(lineHandle);
+            } else {
+                ranges.push({
+                    from: CodeMirror.Pos(lineNo, 0),
+                    to: CodeMirror.Pos(lineNo + 1, 0)
+                });
+            }
+        });
+
+        ranges.sort((a, b) => a.from.line - b.from.line);
+
+        bookmarkAnnotation.update(ranges);
+    }
+
+    // The Click Toggle Listener
     editor.on("gutterClick", (cm, line, gutter) => {
         if (gutter === "CodeMirror-linenumbers") {
-
             const lineHandle = cm.getLineHandle(line);
 
             if (lineHandle.isGutterHighlighted) {
+                // Turn off
                 cm.removeLineClass(line, "gutter", "cm-highlighted-gutter");
                 lineHandle.isGutterHighlighted = false;
+                bookmarkedLines.delete(lineHandle);
             } else {
+                // Turn on
                 cm.addLineClass(line, "gutter", "cm-highlighted-gutter");
                 lineHandle.isGutterHighlighted = true;
+                bookmarkedLines.add(lineHandle);
             }
+
+            updateBookmarkScrollbar();
+        }
+    });
+
+    // Keep scrollbar marks aligned if the user types (adds/deletes newlines)
+    editor.on("change", () => {
+        if (bookmarkedLines.size > 0) {
+            updateBookmarkScrollbar();
         }
     });
 
