@@ -684,6 +684,20 @@
       background-color: rgba(255, 0, 0, 0.1);
     }
 
+    /* --- GUTTER NUMBER HIGHLIGHTING --- */
+    .cm-highlighted-gutter {
+        background-color: #ff9800 !important; /* Orange highlight */
+    }
+
+    body.light-theme .cm-highlighted-gutter {
+        background-color: #ffb74d !important;
+    }
+
+    .CodeMirror-linenumbers {
+        cursor: pointer;
+    }
+
+
   </style>
 </head>
 
@@ -965,6 +979,12 @@
       }
     }
 
+    // --- CUSTOM SAVE POPUP (CTRL+S) ---
+    function triggerManualSave(cm) {
+        localStorage.setItem("HTMLDraft_Code", cm.getValue());
+        showToast("Code is automatically saved to local memory.");
+    }
+
     function openSearch(cm) {
       searchBox.style.display = "flex";
       searchInput.focus();
@@ -1155,6 +1175,9 @@
         },
         "Ctrl-/": "toggleComment",
         "Cmd-/": "toggleComment",
+//         "Ctrl-Space": "autocomplete",
+        "Ctrl-S": triggerManualSave,
+        "Cmd-S": triggerManualSave,
         "Ctrl-F": openSearch,
         "Cmd-F": openSearch,
         "Alt-Up": moveLineUp,
@@ -1507,6 +1530,23 @@
         scrollbarMarks = editor.showMatchesOnScrollbar(selectedText, false);
       }
     });
+
+    // --- GUTTER CLICK LINE HIGHLIGHTING ---
+    editor.on("gutterClick", (cm, line, gutter) => {
+        if (gutter === "CodeMirror-linenumbers") {
+
+            const lineHandle = cm.getLineHandle(line);
+
+            if (lineHandle.isGutterHighlighted) {
+                cm.removeLineClass(line, "gutter", "cm-highlighted-gutter");
+                lineHandle.isGutterHighlighted = false;
+            } else {
+                cm.addLineClass(line, "gutter", "cm-highlighted-gutter");
+                lineHandle.isGutterHighlighted = true;
+            }
+        }
+    });
+
 
   </script>
 
