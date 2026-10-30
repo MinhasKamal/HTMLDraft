@@ -339,11 +339,14 @@
       color: #333;
     }
 
+    /* --- EDITOR --- */
     #editor-container {
-      flex: 1;
+      flex: 1 !important;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      display: flex !important;
+      flex-direction: row !important;
+      position: relative;
+      min-width: 0;
     }
 
     .CodeMirror {
@@ -390,6 +393,61 @@
     body.light-theme .CodeMirror-simplescroll-vertical div:hover {
       background: #aaa !important;
     }
+
+    /* --- MINIMAP STYLING --- */
+    #minimap-container {
+        position: relative !important;
+        top: 0;
+        right: 0; /* Leaves room for your main scrollbar */
+        width: 100px;
+        height: 100%;
+        border-left: 1px solid #333;
+        background: #1e1e1e;
+        z-index: 10;
+        overflow: hidden;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+        flex-shrink: 0;
+    }
+    body.light-theme #minimap-container {
+        background: #f9f9f9;
+        border-left: 1px solid #ddd;
+    }
+
+    /* Shrink the CodeMirror instance inside the minimap */
+    #minimap-container .CodeMirror {
+        font-size: 3px !important;
+        line-height: 4px !important;
+        height: 100%;
+        background: transparent;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+    }
+
+    #minimap-container .CodeMirror,
+    #minimap-container .CodeMirror-scroll,
+    #minimap-container .CodeMirror-lines {
+        -webkit-user-select: none !important;
+        user-select: none !important;
+        cursor: pointer !important;
+    }
+
+
+    /* The Viewport Slider Box */
+    #minimap-slider {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        z-index: 20;
+        pointer-events: none;
+    }
+    body.light-theme #minimap-slider {
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
 
     #output-frame {
       flex: 1;
@@ -720,12 +778,12 @@
         background: transparent !important;
         color: inherit !important;
         text-decoration: none !important; /* <--- NEW: Removes the white line */
-        border-bottom: 1px solid #00eecc !important; 
+        border-bottom: 1px solid #00eecc !important;
     }
 
     /* Light Theme */
     body.light-theme .CodeMirror-matchingbracket {
-        text-decoration: none !important; 
+        text-decoration: none !important;
         border-bottom: 1px solid #00eecc !important;
     }
 
@@ -756,6 +814,7 @@
             <button id="whitespace-btn" class="menu-item"><i class="fas fa-low-vision"></i> Toggle Show Whitespaces</button>
             <button id="fold-btn" class="menu-item"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Toggle Fold All</button>
             <div class="menu-separator"></div>
+            <button id="minimap-btn" class="menu-item"><i class="fas fa-map"></i> Toggle Minimap</button>
             <button id="console-btn" class="menu-item"><i class="fas fa-laptop"></i> Toggle Console</button>
             <button id="title-toggle-btn" class="menu-item"><i class="fas fa-window-maximize fa-rotate-180"></i> Toggle Title Bar</button>
             <div class="menu-separator"></div>
@@ -782,7 +841,7 @@
         <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
       </div>
     </div>
-    <div id="editor-container" style="position: relative;">
+    <div id="editor-container">
 
       <!-- Floating Search Box with Stats -->
       <div id="search-box">
@@ -820,7 +879,13 @@
   console.error("...here.");
 </script>
       </textarea>
+
+      <div id="minimap-container">
+        <textarea id="minimap-textarea"></textarea>
+        <div id="minimap-slider"></div>
+      </div>
     </div>
+
   </div>
 
   <div id="divider"></div>
@@ -1375,6 +1440,171 @@
     });
 
 
+    // --- DOCUMENT MINIMAP ENGINE ---
+    const minimapContainer = document.getElementById("minimap-container");
+    const minimapSlider = document.getElementById("minimap-slider");
+
+    // 1. Initialize the read-only Map
+    const minimap = CodeMirror.fromTextArea(document.getElementById("minimap-textarea"), {
+        mode: "htmlmixed",
+        theme: "monokai", // Make sure this matches your default theme!
+        readOnly: "nocursor",
+        lineNumbers: false,
+        foldGutter: false,
+        matchBrackets: false,
+        scrollbarStyle: "null", // Hide scrollbars on the minimap
+        lineWrapping: editor.getOption("lineWrapping")
+    });
+
+    // 2. Advanced Text & Fold Syncing
+
+    // A. Use Native LinkedDoc (Shares text memory instantly, zero lag, preserves folds)
+    minimap.swapDoc(editor.getDoc().linkedDoc({sharedHist: false}));
+
+    // B. Mirror Fold and Unfold actions instantly using exact coordinates
+    editor.on("fold", (cm, from, to) => {
+        minimap.foldCode(from, {
+            rangeFinder: () => { return { from: from, to: to }; }
+        }, "fold");
+    });
+
+    editor.on("unfold", (cm, from, to) => {
+        minimap.foldCode(from, {
+            rangeFinder: () => { return { from: from, to: to }; }
+        }, "unfold");
+    });
+
+    // 3. Pixel-Perfect Slider Engine (Mapped to Actual Line Renders)
+    function updateMinimapSlider() {
+        const info = editor.getScrollInfo();
+        const mapInfo = minimap.getScrollInfo();
+
+        if (info.height === 0) return;
+
+        // A. Sync the minimap's internal scroll position
+        let mapScrollTop = 0;
+        if (mapInfo.height > mapInfo.clientHeight) {
+            const scrollPct = info.top / (info.height - info.clientHeight);
+            mapScrollTop = scrollPct * (mapInfo.height - mapInfo.clientHeight);
+        }
+        minimap.scrollTo(0, mapScrollTop);
+
+        // B. Ask the MAIN editor exactly which lines are visible at the top and bottom of the screen
+        // "local" mode measures relative to the very top of the document's text
+        const firstVisibleLine = editor.lineAtHeight(info.top, "local");
+
+        // Subtract 1 pixel from the bottom to prevent fetching the line just outside the viewport
+        const lastVisibleLine = editor.lineAtHeight(info.top + info.clientHeight - 1, "local");
+
+        // C. Ask the MINIMAP exactly where it painted those specific lines
+        // .top gives the top edge of the first line, .bottom gives the bottom edge of the last line
+        const yTop = minimap.charCoords({line: firstVisibleLine, ch: 0}, "local").top;
+        const yBottom = minimap.charCoords({line: lastVisibleLine, ch: 0}, "local").bottom;
+
+        // D. The slider height is now purely the physical height of the text block, completely ignoring empty space!
+        const sliderHeight = yBottom - yTop;
+
+        // E. The visual position is the text's coordinate minus the scroll offset
+        const visualTop = yTop - mapScrollTop;
+
+        minimapSlider.style.top = `${visualTop}px`;
+        minimapSlider.style.height = `${sliderHeight}px`;
+    }
+
+    // Trigger the recalculation when scrolling, folding, resizing, or typing
+    editor.on("scroll", updateMinimapSlider);
+    editor.on("viewportChange", updateMinimapSlider);
+
+    // Also ensure it runs once on load
+    setTimeout(updateMinimapSlider, 50);
+
+
+    // 4. Perfect Proportional Word Wrap Engine
+    function syncMinimapWrap() {
+        const mainWrapper = editor.getWrapperElement();
+        const miniWrapper = minimap.getWrapperElement();
+
+        // 1. Get the current physical width of the main editor
+        const editorWidth = mainWrapper.clientWidth;
+
+        // 2. Get the actual font sizes being rendered by the browser
+        const mainFontSize = parseFloat(window.getComputedStyle(mainWrapper).fontSize) || 14;
+        const miniFontSize = parseFloat(window.getComputedStyle(miniWrapper).fontSize) || 3;
+
+        // 3. Calculate the exact proportion
+        const ratio = miniFontSize / mainFontSize;
+
+        // 4. Force the minimap text box to be exactly that proportional width
+        const targetWidth = editorWidth * ratio;
+
+        // Set the width (Height remains 100% of the container)
+        minimap.setSize(targetWidth, "100%");
+        minimap.refresh();
+    }
+
+    // Run the proportion calculation on load
+    setTimeout(syncMinimapWrap, 10);
+
+    // Update it seamlessly when the user resizes their window
+    const editorResizeObserver = new ResizeObserver(() => {
+        if (minimapContainer.style.display !== "none") {
+            syncMinimapWrap();
+        }
+    });
+    editorResizeObserver.observe(editor.getWrapperElement());
+
+    // 5. Click-to-Scroll Integration
+    minimap.on("mousedown", (cm, e) => {
+        // Prevent the minimap from stealing focus or selecting text
+        e.preventDefault();
+
+        // A. Figure out exactly which line was clicked on the screen
+        const pos = cm.coordsChar({ left: e.clientX, top: e.clientY }, "window");
+
+        // B. Find the exact pixel height of that line in the MAIN editor
+        const mainY = editor.charCoords({ line: pos.line, ch: 0 }, "local").top;
+
+        // C. Calculate the center of the main editor's screen
+        const halfScreenHeight = editor.getScrollInfo().clientHeight / 2;
+
+        // D. Scroll the main editor so the clicked line lands right in the middle
+        editor.scrollTo(null, mainY - halfScreenHeight);
+
+        // Focus the main editor so you can immediately start typing
+        editor.focus();
+    });
+
+
+    // --- MINIMAP TOGGLE LOGIC ---
+    const minimapBtn = document.getElementById("minimap-btn");
+    let isMinimapVisible = true; // Matches the default CSS state
+
+    minimapBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        isMinimapVisible = !isMinimapVisible;
+
+        if (isMinimapVisible) {
+            // Show the minimap
+            minimapContainer.style.display = "block";
+            minimapBtn.innerHTML = '<i class="fas fa-map"></i> Hide Minimap';
+
+            setTimeout(() => {
+                editor.refresh(); // <--- NEW: Tells main editor to recalculate its new smaller width
+                minimap.refresh();
+                syncMinimapWrap();
+            }, 10);
+        } else {
+            // Hide the minimap
+            minimapContainer.style.display = "none";
+            minimapBtn.innerHTML = '<i class="far fa-map"></i> Show Minimap';
+
+            setTimeout(() => {
+                editor.refresh(); // <--- NEW: Tells main editor to recalculate its new larger width
+            }, 10);
+        }
+    });
+
+
     // --- CONSOLE TOGGLE ---
     const consoleBtn = document.getElementById("console-btn");
     const hideConsoleBtn = document.getElementById("hide-console-btn");
@@ -1485,6 +1715,8 @@
       isWrapped = !isWrapped;
       editor.setOption("lineWrapping", isWrapped);
       wrapBtn.innerHTML = isWrapped ? '<i class="fas fa-arrows-left-right-to-line"></i> Toggle Word Wrap' : '<i class="fa-solid fa-arrows-left-right"></i> Toggle Word Wrap';
+      minimap.setOption("lineWrapping", editor.getOption("lineWrapping"));
+
     });
 
 
@@ -1596,22 +1828,6 @@
         scrollbarMarks = editor.showMatchesOnScrollbar(selectedText, false);
       }
     });
-
-//     // --- GUTTER CLICK LINE HIGHLIGHTING ---
-//     editor.on("gutterClick", (cm, line, gutter) => {
-//         if (gutter === "CodeMirror-linenumbers") {
-
-//             const lineHandle = cm.getLineHandle(line);
-
-//             if (lineHandle.isGutterHighlighted) {
-//                 cm.removeLineClass(line, "gutter", "cm-highlighted-gutter");
-//                 lineHandle.isGutterHighlighted = false;
-//             } else {
-//                 cm.addLineClass(line, "gutter", "cm-highlighted-gutter");
-//                 lineHandle.isGutterHighlighted = true;
-//             }
-//         }
-//     });
 
     // --- GUTTER CLICK & SCROLLBAR MARKERS ---
     // Initialize the custom scrollbar annotation channel
