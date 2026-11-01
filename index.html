@@ -183,7 +183,7 @@
       transition: background 0.2s;
     }
     .menu-item i {
-      width: 16px; /* Aligns all the icons perfectly */
+      width: 16px;
       text-align: center;
     }
     .menu-item:hover {
@@ -359,10 +359,10 @@
 
     /* --- CUSTOM SCROLLBAR STYLING --- */
     .CodeMirror-simplescroll-horizontal{
-      height: 15px;
+      height: 10px;
     }
     .CodeMirror-simplescroll-vertical {
-      width: 15px;
+      width: 10px;
     }
     .CodeMirror-simplescroll-horizontal,
     .CodeMirror-simplescroll-vertical,
@@ -399,7 +399,7 @@
     #minimap-container {
         position: relative !important;
         top: 0;
-        right: 0; /* Leaves room for your main scrollbar */
+        right: 0;
         width: 100px;
         height: 100%;
         border-left: 1px solid #333;
@@ -459,7 +459,7 @@
 
     /* Browser Title Bar Styling */
     #browser-title-bar {
-      display: none; /* Hidden by default */
+      display: none;
       background-color: #2d2d2d;
       color: #ccc;
       padding: 8px 15px;
@@ -471,7 +471,7 @@
     #browser-favicon {
       width: 14px;
       height: 14px;
-      display: none; /* Hidden until a custom favicon is found */
+      display: none;
     }
     body.light-theme #browser-title-bar {
       background-color: #e0e0e0;
@@ -481,7 +481,7 @@
 
     /* Horizontal Draggable Divider (Console Resizer) */
     #horizontal-divider {
-      height: 6px;
+      height: 4px;
       background-color: #1e1e1e;
       cursor: row-resize;
       display: none; /* Hidden by default */
@@ -496,18 +496,18 @@
     #horizontal-divider::after {
       content: "⋯";
       color: #888;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 0px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       font-weight: bold;
     }
 
     /* Mini Console Styling */
     #mini-console {
-      height: 30%; /* Default starting height */
+      height: 30%;
       background-color: #1e1e1e;
       color: #ddd;
-      display: none; /* Hidden by default */
+      display: none;
       flex-direction: column;
       font-family: 'Courier New', Courier, monospace;
       font-size: 13px;
@@ -710,7 +710,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      pointer-events: none; /* Lets clicks pass through to the editor */
+      pointer-events: none;
     }
 
     .toast {
@@ -721,7 +721,7 @@
       font-size: 13px;
       font-family: sans-serif;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-      border-left: 4px solid #4CAF50; /* Green accent */
+      border-left: 4px solid #4CAF50;
       opacity: 0;
       transform: translateY(15px);
       transition: opacity 0.3s ease, transform 0.3s ease;
@@ -744,7 +744,7 @@
 
     /* --- GUTTER NUMBER HIGHLIGHTING --- */
     .cm-highlighted-gutter {
-        background-color: #ff6600 !important; /* Orange highlight */
+        background-color: #ff6600 !important;
     }
     body.light-theme .cm-highlighted-gutter {
         background-color: #ffbb66 !important;
@@ -778,7 +778,7 @@
     .CodeMirror-matchingbracket {
         background: transparent !important;
         color: inherit !important;
-        text-decoration: none !important; /* <--- NEW: Removes the white line */
+        text-decoration: none !important; /* <--- Removes the white line */
         border-bottom: 1px solid #00eecc !important;
     }
 
@@ -791,7 +791,7 @@
     /* Red underline for broken/unmatched brackets */
     .CodeMirror-nonmatchingbracket {
         color: inherit !important;
-        text-decoration: none !important; /* <--- NEW: Removes the white line */
+        text-decoration: none !important; /* <--- Removes the white line */
         border-bottom: 1px solid #cc5500 !important;
     }
     
@@ -875,15 +875,6 @@
         </div>
         <button id="menu-btn" class="toolbar-btn" title="Open Menu"><i class="fas fa-bars"></i></button>
         <button id="stage-btn" class="toolbar-btn" title="Clear Change Marks"><i class="fas fa-check-double"></i></button>
-        <!--         <span id="indent-label"><i class="fas fa-indent"></i></span> -->
-        <!--         <input type="text" id="indent-input" class="toolbar-input" title="Type 'tab' or a number for space" /> | -->
-        <!--         <button id="format-btn" class="toolbar-btn" title="Apply Proper Line Breaks, Spacing, and Indentation"><i class="fas fa-broom"></i></button> -->
-        <!--         <button id="trim-btn" class="toolbar-btn" title="Trim Trailing Whitespace"><i class="fas fa-strikethrough"></i></button> | -->
-        <!--         <button id="theme-btn" class="toolbar-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button> -->
-        <!--         <button id="wrap-btn" class="toolbar-btn" title="Toggle Word Wrap"><i class="fas fa-arrow-right-long"></i></button> -->
-        <!--         <button id="whitespace-btn" class="toolbar-btn" title="Toggle Show Whitespaces"><i class="fas fa-low-vision"></i></button> | -->
-        <!--         <button id="console-btn" class="toolbar-btn" title="Toggle Console View"><i class="fas fa-laptop"></i></button> -->
-        <!--         <button id="title-toggle-btn" class="toolbar-btn" title="Toggle Title Bar"><i class="fas fa-window-maximize fa-rotate-180"></i></button> | -->
         <button id="run-btn" class="toolbar-btn" title="Run Code">Run <i class="fas fa-play"></i></button>
       </div>
     </div>
@@ -1327,8 +1318,9 @@
                 if (!code.trim()) continue; 
 
                 let codeStartIndex = match.index + match[0].indexOf(code);
-                let prefix = text.substring(0, codeStartIndex);
-                let lineOffset = prefix.split('\n').length - 1;
+//                 let prefix = text.substring(0, codeStartIndex);
+//                 let lineOffset = prefix.split('\n').length - 1;
+                let lineOffset = editor.posFromIndex(codeStartIndex).line;
 
                 // Use the cleanOptions instead of CodeMirror's global options
                 let errors = lintFn(code, cleanOptions, editor);
@@ -1406,10 +1398,6 @@
         "Alt-Up": moveLineUp,
         "Alt-Down": moveLineDown
       }
-    });
-
-    editor.on("change", () => {
-        localStorage.setItem("HTMLDraft_Code", editor.getValue());
     });
 
     // --- RUN CODE & CONSOLE OVERRIDE ---
@@ -1626,16 +1614,23 @@
         // E. The visual position is the text's coordinate minus the scroll offset
         const visualTop = yTop - mapScrollTop;
 
-        minimapSlider.style.top = `${visualTop}px`;
+        //minimapSlider.style.top = `${visualTop}px`;
+        minimapSlider.style.transform = `translateY(${visualTop}px)`;
         minimapSlider.style.height = `${sliderHeight}px`;
     }
 
+    let scrollRaf = null;
+    function requestSliderUpdate() {
+        if (scrollRaf) cancelAnimationFrame(scrollRaf);
+        scrollRaf = requestAnimationFrame(updateMinimapSlider);
+    }
+
     // Trigger the recalculation when scrolling, folding, resizing, or typing
-    editor.on("scroll", updateMinimapSlider);
-    editor.on("viewportChange", updateMinimapSlider);
+    editor.on("scroll", requestSliderUpdate);
+    editor.on("viewportChange", requestSliderUpdate);
 
     // Also ensure it runs once on load
-    setTimeout(updateMinimapSlider, 50);
+    setTimeout(updateMinimapSlider, 100);
 
 
     // 4. Perfect Proportional Word Wrap Engine
@@ -1917,38 +1912,37 @@
     // --- AUTO-HIGHLIGHT SELECTION LOGIC ---
     let autoSelectionMarks = [];
     let scrollbarMarks = null;
+    let highlightTimeout = null;
 
     editor.on("cursorActivity", () => {
-      // 1. Clear any previous auto-highlights
-      autoSelectionMarks.forEach(m => m.clear());
-      autoSelectionMarks = [];
-
-      if (scrollbarMarks) {
-        scrollbarMarks.clear();
-        scrollbarMarks = null;
-      }
-
-      // 2. Skip if the Search Box is open (to prevent conflicting highlights)
-      if (document.getElementById("search-box").style.display === "flex") return;
-
-      // 3. Get the text the user just highlighted
-      const selectedText = editor.getSelection();
-
-      // 4. Only highlight if they selected 2 or more characters (and ignore multi-line selections)
-      if (selectedText.length >= 2 && !selectedText.includes('\n')) {
-
-        // Search the document for exact matches (case-sensitive)
-        let cursor = editor.getSearchCursor(selectedText, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: false});
-
-        while (cursor.findNext()) {
-          // Apply the CSS class to every match found
-          let mark = editor.markText(cursor.from(), cursor.to(), {className: "auto-highlight"});
-          autoSelectionMarks.push(mark);
+        // 1. Instantly clear old marks without lag
+        autoSelectionMarks.forEach(m => m.clear());
+        autoSelectionMarks = [];
+        if (scrollbarMarks) {
+            scrollbarMarks.clear();
+            scrollbarMarks = null;
         }
 
-        scrollbarMarks = editor.showMatchesOnScrollbar(selectedText, false);
-      }
+        // 2. Debounce the heavy searching logic
+        clearTimeout(highlightTimeout);
+        highlightTimeout = setTimeout(() => {
+            if (document.getElementById("search-box").style.display === "flex") return;
+
+            const selectedText = editor.getSelection();
+            if (selectedText.length >= 2 && !selectedText.includes('\n')) {
+                // Batch DOM updates
+                editor.operation(() => {
+                    let cursor = editor.getSearchCursor(selectedText, CodeMirror.Pos(editor.firstLine(), 0), {caseFold: false});
+                    while (cursor.findNext()) {
+                        let mark = editor.markText(cursor.from(), cursor.to(), {className: "auto-highlight"});
+                        autoSelectionMarks.push(mark);
+                    }
+                });
+                scrollbarMarks = editor.showMatchesOnScrollbar(selectedText, false);
+            }
+        }, 300);
     });
+
 
     // --- GUTTER CLICK & SCROLLBAR MARKERS ---
     // Initialize the custom scrollbar annotation channel
@@ -1998,69 +1992,68 @@
         }
     });
 
-    // Keep scrollbar marks aligned if the user types (adds/deletes newlines)
-    editor.on("change", () => {
-        if (bookmarkedLines.size > 0) {
-            updateBookmarkScrollbar();
-        }
-    });
-
     // --- CHANGE TRACKING ENGINE (GIT-STYLE GUTTER) ---
 
     let baselineText = editor.getValue();
-    let diffTimeout = null;
 
     function updateDiffMarkers() {
-        // 1. Clear previous markers
-        editor.clearGutter("diff-gutter");
-
         const currentText = editor.getValue();
-        if (currentText === baselineText) return; // No changes!
-
-        // 2. Calculate the difference line-by-line
-        const diffs = Diff.diffLines(baselineText, currentText);
-        let currentLineIdx = 0;
-
-        for (let i = 0; i < diffs.length; i++) {
-            const part = diffs[i];
-
-            if (part.added) {
-                // If the previous block was a deletion, this is actually a "Modification"
-                const isModification = (i > 0 && diffs[i - 1].removed);
-
-                for (let j = 0; j < part.count; j++) {
-                    const marker = document.createElement("div");
-                    marker.className = isModification ? "diff-marker diff-modified" : "diff-marker diff-added";
-                    editor.setGutterMarker(currentLineIdx + j, "diff-gutter", marker);
-                }
-                currentLineIdx += part.count;
-
-            } else if (part.removed) {
-                // If it's a pure deletion (not followed by an addition), put a red arrow marker
-                const isFollowedByAddition = (i < diffs.length - 1 && diffs[i + 1].added);
-                if (!isFollowedByAddition) {
-                    const marker = document.createElement("div");
-                    marker.className = "diff-marker diff-deleted";
-
-                    // Attach it to the line directly below the deletion (or the last line if at EOF)
-                    const targetLine = Math.min(currentLineIdx, editor.lineCount() - 1);
-                    editor.setGutterMarker(targetLine, "diff-gutter", marker);
-                }
-            } else {
-                // Unchanged lines, simply advance the index
-                currentLineIdx += part.count;
-            }
+        if (currentText === baselineText) {
+             editor.clearGutter("diff-gutter");
+             return;
         }
+
+        const diffs = Diff.diffLines(baselineText, currentText);
+
+        // Wrap all gutter changes in a single DOM operation
+        editor.operation(() => {
+            editor.clearGutter("diff-gutter");
+            let currentLineIdx = 0;
+
+            for (let i = 0; i < diffs.length; i++) {
+                const part = diffs[i];
+
+                if (part.added) {
+                    const isModification = (i > 0 && diffs[i - 1].removed);
+                    for (let j = 0; j < part.count; j++) {
+                        const marker = document.createElement("div");
+                        marker.className = isModification ? "diff-marker diff-modified" : "diff-marker diff-added";
+                        editor.setGutterMarker(currentLineIdx + j, "diff-gutter", marker);
+                    }
+                    currentLineIdx += part.count;
+
+                } else if (part.removed) {
+                    const isFollowedByAddition = (i < diffs.length - 1 && diffs[i + 1].added);
+                    if (!isFollowedByAddition) {
+                        const marker = document.createElement("div");
+                        marker.className = "diff-marker diff-deleted";
+                        const targetLine = Math.min(currentLineIdx, editor.lineCount() - 1);
+                        editor.setGutterMarker(targetLine, "diff-gutter", marker);
+                    }
+                } else {
+                    currentLineIdx += part.count;
+                }
+            }
+        });
     }
 
-    // 3. Listen for changes (Debounced by 300ms for performance)
+
+    // Run once on load just in case auto-save restored changed code
+    updateDiffMarkers();
+
+    // --- WHILE TYPING ---
+    let editorOnChangeTimeout = null;
     editor.on("change", () => {
-        clearTimeout(diffTimeout);
-        diffTimeout = setTimeout(updateDiffMarkers, 300);
+        clearTimeout(editorOnChangeTimeout);
+        editorOnChangeTimeout = setTimeout(() => {
+          localStorage.setItem("HTMLDraft_Code", editor.getValue());
+          updateDiffMarkers();
+          if (bookmarkedLines.size > 0) {
+            updateBookmarkScrollbar();
+          }
+        }, 300);
     });
 
-    // 4. Run once on load just in case auto-save restored changed code
-    updateDiffMarkers();
 
   </script>
 
