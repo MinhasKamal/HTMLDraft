@@ -21,6 +21,7 @@
       padding: 0;
       display: flex;
       height: 100vh;
+      height: 100dvh; /*for Safari/Chrome mobile*/
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #272822;
       overflow: hidden;
@@ -794,7 +795,7 @@
         text-decoration: none !important; /* <--- Removes the white line */
         border-bottom: 1px solid #cc5500 !important;
     }
-    
+
     /* Make room for the diff column */
     .CodeMirror-gutters {
         border-right: 1px solid #ddd;
@@ -1136,10 +1137,23 @@
       }
     }
 
-    // --- CUSTOM SAVE POPUP (CTRL+S) ---
+    // --- SAVE FUNCTION ---
+    function storeInLocalMemory(editor) {
+        try {
+            localStorage.setItem("HTMLDraft_Code", editor.getValue());
+        } catch (e) {
+            console.warn("Cannot save to LocalStorage!");
+            return false;
+        }
+        return true;
+    }
+
     function triggerManualSave(cm) {
-        localStorage.setItem("HTMLDraft_Code", cm.getValue());
-        showToast("Code is automatically saved to local memory.");
+        if (storeInLocalMemory(cm)) {
+            showToast("Code is automatically saved to local memory.");
+        } else {
+            showToast("Cannot save to LocalStorage!");
+        }
     }
 
     function openSearch(cm) {
@@ -1243,7 +1257,7 @@
 
     // Smarter Indent Sniffing: finds the smallest indentation level in the file
     function detectIndent(code) {
-        const lines = code.split('\n');
+        const lines = code.split('\n', 500);
         let minSpaces = Infinity;
         let usesTabs = false;
 
@@ -1461,7 +1475,22 @@
         }
     }
 
-    document.getElementById("run-btn").addEventListener("click", updateOutput);
+    document.getElementById("run-btn").addEventListener("click", () => {
+        const viewerContainer = document.getElementById("right-panel");
+
+        if (viewerContainer.style.display === "none" || viewerContainer.offsetWidth === 0) {
+            document.getElementById("view-btn").click();
+
+            setTimeout(() => {
+                updateOutput();
+            }, 100);
+
+            return;
+        }
+
+        updateOutput();
+    });
+
 
     window.addEventListener("message", (event) => {
         if (event.data && event.data.source === "mini-console") {
@@ -2046,7 +2075,7 @@
     editor.on("change", () => {
         clearTimeout(editorOnChangeTimeout);
         editorOnChangeTimeout = setTimeout(() => {
-          localStorage.setItem("HTMLDraft_Code", editor.getValue());
+          storeInLocalMemory(editor);
           updateDiffMarkers();
           if (bookmarkedLines.size > 0) {
             updateBookmarkScrollbar();
