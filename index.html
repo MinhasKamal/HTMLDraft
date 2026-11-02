@@ -1100,7 +1100,7 @@
           toast.classList.remove("show");
           // Wait for the fade-out animation to finish before removing from DOM
           setTimeout(() => toast.remove(), 300);
-      }, 3000);
+      }, 5000);
     }
 
     // --- SEARCH, HIGHLIGHT & STATS LOGIC ---
@@ -1138,9 +1138,9 @@
     }
 
     // --- SAVE FUNCTION ---
-    function storeInLocalMemory(editor) {
+    function storeInLocalMemory(editorText) {
         try {
-            localStorage.setItem("HTMLDraft_Code", editor.getValue());
+            localStorage.setItem("HTMLDraft_Code", editorText);
         } catch (e) {
             console.warn("Cannot save to LocalStorage!");
             return false;
@@ -1149,11 +1149,13 @@
     }
 
     function triggerManualSave(cm) {
-        if (storeInLocalMemory(cm)) {
+        if (storeInLocalMemory(cm.getValue())) {
             showToast("Code is automatically saved to local memory.");
         } else {
             showToast("Cannot save to LocalStorage!");
         }
+
+        document.getElementById("run-btn").click();
     }
 
     function openSearch(cm) {
@@ -1483,7 +1485,7 @@
 
             setTimeout(() => {
                 updateOutput();
-            }, 100);
+            }, 200);
 
             return;
         }
@@ -1501,7 +1503,9 @@
             consoleOutput.scrollTop = consoleOutput.scrollHeight;
 
             if (event.data.level === "error" && document.getElementById("mini-console").style.display !== "flex") {
-                document.getElementById("console-btn").click();
+                setTimeout(() => {
+                    document.getElementById("console-btn").click();
+                }, 900);
             }
         }
     });
@@ -1955,7 +1959,7 @@
         // 2. Debounce the heavy searching logic
         clearTimeout(highlightTimeout);
         highlightTimeout = setTimeout(() => {
-            if (document.getElementById("search-box").style.display === "flex") return;
+//             if (document.getElementById("search-box").style.display === "flex") return;
 
             const selectedText = editor.getSelection();
             if (selectedText.length >= 2 && !selectedText.includes('\n')) {
@@ -2025,14 +2029,13 @@
 
     let baselineText = editor.getValue();
 
-    function updateDiffMarkers() {
-        const currentText = editor.getValue();
-        if (currentText === baselineText) {
+    function updateDiffMarkers(editorText) {
+        if (editorText === baselineText) {
              editor.clearGutter("diff-gutter");
              return;
         }
 
-        const diffs = Diff.diffLines(baselineText, currentText);
+        const diffs = Diff.diffLines(baselineText, editorText);
 
         // Wrap all gutter changes in a single DOM operation
         editor.operation(() => {
@@ -2068,21 +2071,30 @@
 
 
     // Run once on load just in case auto-save restored changed code
-    updateDiffMarkers();
+    updateDiffMarkers(editor.getValue());
 
     // --- WHILE TYPING ---
     let editorOnChangeTimeout = null;
     editor.on("change", () => {
         clearTimeout(editorOnChangeTimeout);
         editorOnChangeTimeout = setTimeout(() => {
-          storeInLocalMemory(editor);
-          updateDiffMarkers();
+          const editorText = editor.getValue();
+          storeInLocalMemory(editorText);
+          updateDiffMarkers(editorText);
           if (bookmarkedLines.size > 0) {
             updateBookmarkScrollbar();
           }
         }, 300);
     });
 
+    // --- LOADING DIFFERENT COMPONENTS OF THE EDITOR ---
+    setTimeout(() => {
+        document.getElementById("whitespace-btn").click();
+    }, 300);
+
+    setTimeout(() => {
+        document.getElementById("title-toggle-btn").click();
+    }, 600);
 
   </script>
 
