@@ -157,7 +157,7 @@
       background-color: #2d2d2d;
       min-width: 220px;
       box-shadow: 0px 8px 16px rgba(0,0,0,0.5);
-      z-index: 1000;
+      z-index: 9000;
       border-radius: 4px;
       margin-top: 8px;
       border: 1px solid #444;
@@ -396,6 +396,17 @@
       background: #aaa !important;
     }
 
+    .CodeMirror-search-match {
+        background: rgba(100, 200, 0, 0.8);
+        border-top: none;
+        border-bottom: none;
+    }
+    .search-box-scrollbar-mark {
+        background: rgba(200, 100, 0, 0.8);
+        border-top: 1px solid orange;
+        border-bottom: 1px solid orange;
+    }
+
     /* --- MINIMAP STYLING --- */
     #minimap-container {
         position: relative !important;
@@ -558,7 +569,6 @@
 
     /* Search Box Styling */
     #search-box {
-      display: none; /* Hidden until Ctrl+F is pressed */
       position: absolute;
       top: 10px;
       right: 20px;
@@ -568,10 +578,17 @@
       border-radius: 6px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       border: 1px solid #444;
+      align-items: left;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .search-row {
+      display: flex;
       align-items: center;
       gap: 5px;
     }
-    #search-input {
+    .search-row input[type="text"] {
       padding: 5px 8px;
       border: 1px solid #555;
       background: #2d2d2d;
@@ -580,7 +597,7 @@
       outline: none;
       font-family: inherit;
     }
-    #search-input:focus {
+    .search-row input[type="text"]:focus {
       border-color: #4CAF50;
     }
     .search-highlight {
@@ -745,10 +762,10 @@
 
     /* --- GUTTER NUMBER HIGHLIGHTING --- */
     .cm-highlighted-gutter {
-        background-color: #ff6600 !important;
+        background-color: #ee00ff !important;
     }
     body.light-theme .cm-highlighted-gutter {
-        background-color: #ffbb66 !important;
+        background-color: #ff99ff !important;
     }
 
     .CodeMirror-linenumbers {
@@ -757,13 +774,13 @@
 
     /* --- SCROLLBAR BOOKMARK MARKERS --- */
     .cm-bookmark-scrollbar-mark {
-        background-color: #ff6600;
+        background-color: #ee00ff;
         height: 3px !important;
         border-radius: 2px;
         opacity: 0.9;
     }
     body.light-theme .cm-bookmark-scrollbar-mark {
-        background-color: #ffbb66;
+        background-color: #ff99ff;
     }
 
     /* --- MATCHING TAG UNDERLINE --- */
@@ -883,15 +900,24 @@
 
       <!-- Floating Search Box with Stats -->
       <div id="search-box">
-        <input type="text" id="search-input" placeholder="Find...">
-        <span id="search-stats">0/0</span>
-        <label id="match-case" title="Match Case">
-          <input type="checkbox" id="match-case-cb">
-          <div style="color:#aaa; font-weight:bold;">Aa</div>
-        </label>
-        <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
-        <button id="search-next" class="toolbar-btn" title="Next"><i class="fas fa-chevron-down"></i></button>
-        <button id="search-close" class="toolbar-btn" title="Close"><i class="fas fa-times"></i></button>
+        <div class="search-row">
+          <input type="text" id="search-input" placeholder="Find...">
+          <div style="flex:1"></div>
+          <span id="search-stats">0/0</span>
+          <label id="match-case" title="Match Case">
+            <input type="checkbox" id="match-case-cb">
+            <div style="color:#aaa; font-weight:bold;">Aa</div>
+          </label>
+          <button id="search-prev" class="toolbar-btn" title="Previous"><i class="fas fa-chevron-up"></i></button>
+          <button id="search-next" class="toolbar-btn" title="Next"><i class="fas fa-chevron-down"></i></button>
+          <button id="search-close" class="toolbar-btn" title="Close"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="search-row">
+          <input type="text" id="replace-input" placeholder="Replace..." autocomplete="off">
+          <div style="flex:1"></div>
+          <button id="replace-btn" class="toolbar-btn">Replace</button>
+          <button id="replace-all-btn" class="toolbar-btn">Replace All</button>
+        </div>
       </div>
 
       <textarea id="code-editor">
@@ -1158,8 +1184,12 @@
         document.getElementById("run-btn").click();
     }
 
+    // --- FIND AND REPLACE ENGINE ---
+    let searchIsDirty = false;
+
     function openSearch(cm) {
       searchBox.style.display = "flex";
+      searchIsDirty = false;
       searchInput.focus();
       const selection = cm.getSelection();
       if (selection) {
@@ -1215,7 +1245,7 @@
       }
 
       if (query.length >= 2) {
-        searchScrollbarMarks = editor.showMatchesOnScrollbar(query, caseFold);
+        searchScrollbarMarks = editor.showMatchesOnScrollbar(query, caseFold, { className: "search-box-scrollbar-mark" });
       }
 
     }
@@ -1226,13 +1256,22 @@
     searchInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            doSearch(e.shiftKey);
+            doSearch(e.shiftKey, searchIsDirty);
+            searchIsDirty = false;
         }
         if (e.key === "Escape") closeSearch();
     });
 
-    document.getElementById("search-next").addEventListener("click", () => doSearch(false));
-    document.getElementById("search-prev").addEventListener("click", () => doSearch(true));
+    document.getElementById("search-next").addEventListener("click", () => {
+        doSearch(false, searchIsDirty);
+        searchIsDirty = false;
+    });
+
+    document.getElementById("search-prev").addEventListener("click", () => {
+        doSearch(true, searchIsDirty);
+        searchIsDirty = false;
+    });
+
     document.getElementById("search-close").addEventListener("click", closeSearch);
 
     function closeSearch() {
@@ -1245,6 +1284,64 @@
         searchScrollbarMarks = null;
       }
     }
+
+    document.getElementById("replace-btn").addEventListener("click", () => {
+        const query = searchInput.value;
+        const replaceInput = document.getElementById("replace-input"); // Make sure this matches your HTML ID
+        const replaceText = replaceInput ? replaceInput.value : "";
+        if (!query) return;
+
+        const selectedText = editor.getSelection();
+        const caseFold = !matchCaseCb.checked;
+
+        // 1. Check if the currently highlighted text perfectly matches the search query
+        let isMatch = false;
+        if (caseFold) {
+            isMatch = selectedText.toLowerCase() === query.toLowerCase();
+        } else {
+            isMatch = selectedText === query;
+        }
+
+        if (isMatch) {
+            // 2. Replace the text
+            editor.replaceSelection(replaceText);
+
+            // 3. Force your existing engine to recalculate stats and jump to the next match!
+            doSearch(false, true);
+        } else {
+            // If they clicked replace but aren't currently highlighting a match, just jump to the next one
+            doSearch(false);
+        }
+    });
+
+    document.getElementById("replace-all-btn").addEventListener("click", () => {
+        const query = searchInput.value;
+        const replaceInput = document.getElementById("replace-input");
+        const replaceText = replaceInput ? replaceInput.value : "";
+        if (!query) return;
+
+        const caseFold = !matchCaseCb.checked;
+        let replaceCount = 0;
+
+        // 1. Use editor.operation to freeze the UI and batch all replacements instantly
+        editor.operation(() => {
+            let cursor = editor.getSearchCursor(query, CodeMirror.Pos(editor.firstLine(), 0), { caseFold: caseFold });
+
+            while (cursor.findNext()) {
+                cursor.replace(replaceText);
+                replaceCount++;
+            }
+        });
+
+        // 2. Notify the user and refresh your search engine stats
+        if (replaceCount > 0) {
+            showToast(`Replaced ${replaceCount} occurrence(s).`);
+            doSearch(false, true); // Refreshes the highlights and stat counters to 0/0
+        } else {
+            showToast("No matches found to replace.");
+        }
+    });
+
 
     // --- INITIALIZE EDITOR & AUTO-DETECT INDENT ---
     const savedCode = localStorage.getItem("HTMLDraft_Code");
@@ -1959,9 +2056,14 @@
         // 2. Debounce the heavy searching logic
         clearTimeout(highlightTimeout);
         highlightTimeout = setTimeout(() => {
-//             if (document.getElementById("search-box").style.display === "flex") return;
-
             const selectedText = editor.getSelection();
+
+            if (document.getElementById("search-box").style.display === "flex"){
+                if (selectedText === searchInput.value){
+                    return;
+                }
+            }
+
             if (selectedText.length >= 2 && !selectedText.includes('\n')) {
                 // Batch DOM updates
                 editor.operation(() => {
@@ -2085,6 +2187,8 @@
             updateBookmarkScrollbar();
           }
         }, 300);
+
+        searchIsDirty = true;
     });
 
     // --- LOADING DIFFERENT COMPONENTS OF THE EDITOR ---
